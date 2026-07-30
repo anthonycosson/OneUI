@@ -13,12 +13,12 @@
 #  tu es sûr.
 #
 #  Usage :
-#      bash scripts/tag-release.sh 0.2.0
-#      bash scripts/tag-release.sh 0.2.0 --push
+#      bash dev/scripts/tag-release.sh 0.2.0
+#      bash dev/scripts/tag-release.sh 0.2.0 --push
 # =========================================================================
 
 set -euo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 
 VERSION="${1:-}"
 PUSH="${2:-}"
@@ -26,7 +26,7 @@ PUSH="${2:-}"
 die() { echo "✗ $*" >&2; exit 1; }
 step() { echo; echo "── $* ──"; }
 
-[[ -n "$VERSION" ]] || die "usage : bash scripts/tag-release.sh <version> [--push]   (ex. 0.2.0)"
+[[ -n "$VERSION" ]] || die "usage : bash dev/scripts/tag-release.sh <version> [--push]   (ex. 0.2.0)"
 [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "version attendue au format X.Y.Z, reçu « $VERSION »"
 
 TAG="v$VERSION"
@@ -42,7 +42,7 @@ echo "✓ arbre propre, $TAG disponible"
 # -------------------------------------------------------------------------
 step "vérifications"
 # -------------------------------------------------------------------------
-bash scripts/lint-local.sh || die "les vérifications échouent — rien n'a été modifié"
+bash dev/scripts/lint-local.sh || die "les vérifications échouent — rien n'a été modifié"
 
 # -------------------------------------------------------------------------
 step "CHANGELOG"
@@ -68,11 +68,11 @@ echo "✓ $TAG créé"
 # -------------------------------------------------------------------------
 step "aperçu du paquet"
 # -------------------------------------------------------------------------
-rm -rf .release/OneUI
-bash .release/release.sh -d -o -z >/dev/null 2>&1 || true
-if [[ -f .release/OneUI/OneUI.toc ]]; then
-    grep -E '^## (Version|Author|Interface|X-Curse-Project-ID)' .release/OneUI/OneUI.toc
-    echo "✓ $(find .release/OneUI -type f | wc -l) fichiers dans le paquet"
+rm -rf dev/build/OneUI
+bash dev/packager/release.sh -d -o -z -r "$PWD/dev/build" >/dev/null 2>&1 || true
+if [[ -f dev/build/OneUI/OneUI.toc ]]; then
+    grep -E '^## (Version|Author|Interface|X-Curse-Project-ID)' dev/build/OneUI/OneUI.toc
+    echo "✓ $(find dev/build/OneUI -type f | wc -l) fichiers dans le paquet"
 else
     echo "— aperçu indisponible (packager non exécuté)"
 fi
