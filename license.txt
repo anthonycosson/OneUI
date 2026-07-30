@@ -1,6 +1,6 @@
 Custom License for: OneUI (OneUI)
 
-Copyright (c) 2026 OneUI. All rights reserved.
+Copyright (c) 2026 Anthony Cosson. All rights reserved.
 
 The contents of this addon, excluding third-party resources, are copyrighted to
 their authors with all rights reserved.
