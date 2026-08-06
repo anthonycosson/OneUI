@@ -6,6 +6,7 @@
 --      OneUIDB = {
 --          schema   = 1,
 --          profiles = { ["Default"] = { modules = { Quest = { autoAccept = true } } } },
+--          seen     = { loginHint = true },   -- voir DB:Seen
 --      }
 --
 --  Forme du SavedVariables (personnage) :
@@ -509,6 +510,36 @@ local function onLogout()
 end
 
 BUI:RegisterEvent("PLAYER_LOGOUT", onLogout)
+
+-- =========================================================================
+--  Mémoire de compte
+-- =========================================================================
+-- Ce qui n'est pas un réglage mais qu'il faut retenir d'une session à l'autre :
+-- « ce message a déjà été lu ».
+--
+-- **Hors des profils**, à deux titres. Changer de profil ne fait pas oublier ce
+-- qu'on a lu — ce n'est pas une préférence, c'est un fait. Et le nettoyage de
+-- sortie ne connaît que des réglages et leurs défauts : une clé rangée là
+-- disparaîtrait du fichier au premier `PLAYER_LOGOUT`.
+
+--- Clé du message de connexion, partagée entre celui qui l'écrit et celui qui
+--- l'éteint.
+DB.HINT_LOGIN = "loginHint"
+
+---@param key string
+---@return boolean
+function DB:Seen(key)
+    return OneUIDB ~= nil
+       and OneUIDB.seen ~= nil
+       and OneUIDB.seen[key] == true
+end
+
+---@param key string
+function DB:MarkSeen(key)
+    OneUIDB = OneUIDB or {}
+    OneUIDB.seen = OneUIDB.seen or {}
+    OneUIDB.seen[key] = true
+end
 
 -- =========================================================================
 --  Défauts
