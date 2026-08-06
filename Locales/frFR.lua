@@ -27,6 +27,7 @@ BUI:RegisterLocale("frFR", {
     ["Yes"]                     = "Oui",
     ["Cancel"]                  = "Annuler",
     ["Open OneUI"]         = "Ouvrir OneUI",
+    ["Login hint"]              = "Tapez /bui pour ouvrir les options.",
     ["Cannot open in combat"]   = "La fenêtre d'options ne peut pas être ouverte en combat.",
     ["Module disabled tooltip"] = "Ce module est désactivé.",
     ["Version"]                 = true,
