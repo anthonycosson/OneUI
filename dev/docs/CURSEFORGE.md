@@ -156,8 +156,8 @@ endorsed by Blizzard Entertainment, Inc.
 |---|---|
 | Nom | OneUI |
 | Licence | All Rights Reserved (option « Custom License », coller `license.txt`) |
-| Source | l'URL du dépôt GitLab, si tu veux le rendre public |
-| Issues | l'URL des issues GitLab |
+| Source | `https://github.com/anthonycosson/OneUI`, si tu le rends public |
+| Issues | `https://github.com/anthonycosson/OneUI/issues`, si le dépôt est public |
 
 ### Catégories
 
