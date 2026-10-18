@@ -27,7 +27,7 @@ jonction NTFS posée une fois pour toutes.
 ```
 C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\OneUI
         ↓ jonction NTFS (ce n'est pas une copie, c'est le même dossier)
-C:\Users\Cosso\Documents\Claude\OneUI
+%USERPROFILE%\Documents\Claude\OneUI
 ```
 
 Conséquence pratique : **éditer un fichier, puis `/reload` en jeu.** C'est toute
@@ -36,7 +36,7 @@ la boucle de développement. Rien à compiler, rien à copier.
 Pour recréer la jonction, après un clone ou un déplacement du dépôt :
 
 ```bash
-cmd //c mklink /J "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\OneUI" "C:\Users\Cosso\Documents\Claude\OneUI"
+cmd //c mklink /J "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\OneUI" "%USERPROFILE%\Documents\Claude\OneUI"
 ```
 
 > ### ⚠ Ne jamais installer OneUI UI depuis CurseForge sur cette machine
@@ -230,7 +230,7 @@ Deux skills sont versionnés dans `.claude/skills/` :
 | `/buiprod` | choisit le numéro de version, prépare le tag, demande confirmation, publie sur CurseForge et suit la pipeline jusqu'à l'envoi effectif. |
 
 Étant versionnés dans le dépôt, ils ne sont chargés que dans les sessions
-**ouvertes depuis ce dossier** (`C:\Users\Cosso\Documents\Claude\OneUI`). C'est le
+**ouvertes depuis ce dossier** (`%USERPROFILE%\Documents\Claude\OneUI`). C'est le
 répertoire de travail à utiliser pour développer l'addon.
 
 ## 8. Commandes utiles

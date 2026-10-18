@@ -203,7 +203,7 @@ Le dépôt est monté dans le jeu par une jonction NTFS :
 
 ```
 C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\OneUI
-  -> C:\Users\Cosso\Documents\Claude\OneUI
+  -> %USERPROFILE%\Documents\Claude\OneUI
 ```
 
 Une seconde jonction, identique, part de

@@ -160,7 +160,7 @@ Une seconde jonction, sur le modèle de celle de retail :
 
 ```
 C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\OneUI
-  -> C:\Users\Cosso\Documents\Claude\OneUI
+  -> %USERPROFILE%\Documents\Claude\OneUI
 ```
 
 Le même dépôt se teste donc sur les deux clients, par `/reload`.
