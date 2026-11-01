@@ -1,14 +1,23 @@
-## 2.0.12 — 2026-10-29
+## 2.0.13 — 2026-11-02
 
-### Retiré
-- **Correctifs de la bêta** (*Forever*) : la page et sa catégorie disparaissent
-  avec la bêta. Blizzard a corrigé les infobulles de caractéristiques de la
-  fiche de personnage, et la relecture des anciennes macros `BUIconfig` n'a
-  plus d'objet.
+### Ajouté
+- **Pêche**, nouvelle page (Qualité de vie), sur les deux clients : une
+  touche qui lance la ligne puis ferre le bouchon, le double clic droit pour
+  lancer, et un son qui laisse entendre le bouchon plonger.
+- **Scintillements**, nouvelle page (Qualité de vie, *Forever*) : l'étincelle
+  des objets de quête gardée malgré les préréglages graphiques, et l'icône du
+  jeu sur l'herbe, le filon ou le coffre le plus proche.
 
 ### Interne
-- Nouveau guide `dev/docs/SETUP.md` : installer le dépôt sur un nouvel
-  ordinateur, du clone au premier `/reload`. `lint-local.sh` cherche
-  désormais `luac5.1` en priorité, comme `check-design.sh`, et fonctionne
-  aussi hors Windows.
+- Un prêteur de CVars commun (`Core/CVars.lua`) : deux modules peuvent
+  emprunter le même réglage du client, et ce qui est emprunté est rendu même
+  après un `/reload`.
+- Un contrôle « touche » pour les pages d'options (`UI/Widgets/KeyBind.lua`).
+- Ménage : code mort retiré (`W.BoundRow`, `DB:LoadedEmpty`, `U.Count`,
+  trois entrées du thème, un texte), et l'analyse locale ne signale plus rien.
+
+### Retiré
+- **Suivi des buffs** et **Liste BIS** (*Forever*) : deux pages restées en
+  chantier, retirées plutôt que laissées grisées. La commande `/bui bis`
+  part avec elles.
 

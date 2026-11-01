@@ -2,6 +2,8 @@
 
 ## Non publié
 
+## 2.0.13 — 2026-11-02
+
 ### Ajouté
 - **Pêche**, nouvelle page (Qualité de vie), sur les deux clients : une
   touche qui lance la ligne puis ferre le bouchon, le double clic droit pour
