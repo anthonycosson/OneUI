@@ -6,6 +6,9 @@
 - **Pêche**, nouvelle page (Qualité de vie), sur les deux clients : une
   touche qui lance la ligne puis ferre le bouchon, le double clic droit pour
   lancer, et un son qui laisse entendre le bouchon plonger.
+- **Scintillements**, nouvelle page (Qualité de vie, *Forever*) : l'étincelle
+  des objets de quête gardée malgré les préréglages graphiques, et l'icône du
+  jeu sur l'herbe, le filon ou le coffre le plus proche.
 
 ### Interne
 - Un prêteur de CVars commun (`Core/CVars.lua`) : deux modules peuvent

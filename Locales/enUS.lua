@@ -1325,4 +1325,16 @@ BUI:RegisterLocale("enUS", {
     ["Fishing sound tip"] =
         "While fishing, sound effects go to maximum and music and ambience go quiet. "
         .. "Your volumes come back a few seconds after the last catch.",
+
+    -- Module Sparkles (Forever)
+    ["Sparkles"]                       = "Sparkles",
+    ["Loot"]                           = "Loot",
+    ["Quest item sparkles"]            = "Quest items sparkle",
+    ["Quest item sparkles tip"] =
+        "Keeps the sparkle on quest items, even after a graphics preset turns it off. "
+        .. "Turns the object outlines off. Unticking needs a game restart.",
+    ["Nearest object icon"]            = "Icon on the nearest object",
+    ["Nearest object icon tip"] =
+        "Shows the game's icon above the closest herb, ore, chest or quest object. The game "
+        .. "stops at about 15 yards.",
 })

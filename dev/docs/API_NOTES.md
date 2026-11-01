@@ -5452,3 +5452,16 @@ La documentation du client appelle son premier argument `eventName`
 (`ConsoleDocumentation.lua`), et c'est historiquement un nom d'événement, pas
 toujours celui de la CVar. Le prêteur (`Core/CVars.lua`) ne s'y fie donc pas :
 à chaque annonce, il relit les quelques CVars qu'il prête.
+
+## L'étincelle de butin des objets de quête (Forever)
+
+Les objets de quête au sol scintillent, sauf quand le **mode contour** est
+actif — ce que les préréglages graphiques allument. Le client garde
+l'étincelle avec les contours éteints si
+`outlineModeShowLootEffectWhenDisabled = 1`. Les CVars en jeu :
+`graphicsOutlineMode`, `raidGraphicsOutlineMode` (présentes dans
+`Blizzard_SettingsDefinitions_Shared/Graphics.lua`), `OutlineEngineMode`,
+`RAIDOutlineEngineMode` et `outlineModeShowLootEffectWhenDisabled`, qui
+n'apparaissent pas dans le code Lua du client : ce sont des CVars du moteur,
+qu'on teste avant d'écrire. Revenir en arrière demande un redémarrage du jeu.
+Forever Loot Sparkles procède ainsi ; lu, pas repris.

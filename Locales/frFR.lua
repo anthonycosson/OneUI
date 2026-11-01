@@ -1359,4 +1359,17 @@ BUI:RegisterLocale("frFR", {
     ["Fishing sound tip"] =
         "Pendant la pêche, les effets sonores passent au maximum, la musique et l'ambiance "
         .. "se taisent. Vos volumes reviennent quelques secondes après la dernière prise.",
+
+    -- Module Sparkles (Forever)
+    ["Sparkles"]                       = "Scintillements",
+    ["Loot"]                           = "Butin",
+    ["Quest item sparkles"]            = "Faire scintiller les objets de quête",
+    ["Quest item sparkles tip"] =
+        "Garde l'étincelle sur les objets de quête, même après un préréglage graphique "
+        .. "qui l'éteint. Éteint les contours des objets. Décocher demande de redémarrer "
+        .. "le jeu.",
+    ["Nearest object icon"]            = "Icône sur l'objet le plus proche",
+    ["Nearest object icon tip"] =
+        "Affiche l'icône du jeu au-dessus de l'herbe, du filon, du coffre ou de l'objet "
+        .. "de quête le plus proche. Le jeu s'arrête vers 15 mètres.",
 })

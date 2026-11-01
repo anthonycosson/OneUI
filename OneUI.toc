@@ -145,8 +145,10 @@ Modules\Chat.lua
 # que cette ligne ne l'y garde : le mécanisme est la liste des suivis de
 # minicarte, que retail publie de la même façon.
 Modules\Professions.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
-# La pêche charge partout.
+# La pêche charge partout ; les scintillements règlent des CVars graphiques
+# propres à Forever, dont les préréglages éteignent l'étincelle de butin.
 Modules\Fishing.lua
+Modules\Sparkles.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
 Modules\Bags.lua
 Modules\AuctionHouse.lua [AllowLoadGameType standard]
 Modules\Quest.lua
