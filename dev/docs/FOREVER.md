@@ -1,10 +1,11 @@
-# Porter OneUI sur *World of Warcraft: Forever*
+# OneUI sur *World of Warcraft: Forever*
 
 *World of Warcraft: Forever* — le « Classic+ » annoncé le 12 septembre 2026,
-bêta le 17 septembre, sortie le 4 novembre — est un **client séparé**
-(`_forever_`, produit `wowf` ; `_classic_beta_` du temps de la bêta), plafonné au niveau 60.
+en bêta du 17 septembre à sa sortie fin octobre — est un **client séparé**
+(`_forever_`, produit `wowf`), plafonné au niveau 60.
 
-Cette note dit ce qui est décidé, ce qui ne l'est pas, et où chercher.
+Cette note dit comment l'addon sert les deux clients, et où chercher une
+réponse sur celui-ci.
 
 ---
 
@@ -49,14 +50,15 @@ mécanisme de Blizzard lui-même, et celui d'Auctionator.
 Écartés aujourd'hui : `ClassResource`, `RaidCooldowns`, `NameplatesPage`,
 `Nameplates`, `AuctionHouse`, `Keystones`, `GroupFinder`, `Teleports`,
 `MythicTimer`, `Emotes`. Les autres modules chargent sur les deux clients, **tels
-quels** — le tri de leurs options, un module à la fois, vient ensuite.
+quels** ; leurs options ont été triées une à une, et ce que Forever n'a pas
+est retiré par `Core/Forever.lua` (ci-dessous).
 
-L'inverse existe aussi : `Professions` ne charge que
-sur Forever, `[AllowLoadGameType camelot] [ExcludeLoadGameType standard]`. **Les deux directives sont nécessaires** : le client retail ne
-connaît pas `camelot` et charge une ligne qui n'a que la première — constaté
-en jeu le 19 septembre 2026, où le suivi des buffs apparaissait sur retail et
-`Core/Forever.lua` y retirait des options. `standard`, lui, retail le connaît. Il y prend la place
-de `RaidCooldowns` sous un autre nom de module — ce nom est une clé de base.
+L'inverse existe aussi : `Professions` et `Sparkles` ne chargent que sur
+Forever, `[AllowLoadGameType camelot] [ExcludeLoadGameType standard]`. **Les
+deux directives sont nécessaires** : le client retail ne connaît pas `camelot`
+et charge une ligne qui n'a que la première — constaté en jeu le
+19 septembre 2026, où un module de Forever apparaissait sur retail et
+`Core/Forever.lua` y retirait des options. `standard`, lui, retail le connaît.
 
 La règle qui va avec est dans `CLAUDE.md` §1.
 
@@ -76,12 +78,13 @@ n'y est pas encore vérifié s'affiche grisé, comme un module `preview`.
 Dans cet ordre :
 
 1. **Le code du client.** Le miroir `Gethe/wow-ui-source` a une branche
-   `forever`, au build près de la bêta. Ce sont les fichiers que Blizzard livre
+   `forever`, au build près. Ce sont les fichiers que Blizzard livre
    dans le client, extraits sans retouche, y compris
    `Blizzard_APIDocumentationGenerated` — la documentation que `/api` affiche
    en jeu. Les `.toc` de Blizzard y disent quel fichier charge sur `camelot`.
 2. **Le jeu.** La sonde ci-dessous, ou `/api` et `/fstack` en jeu.
-3. warcraft.wiki.gg, en dernier : communautaire, et en retard sur une bêta.
+3. warcraft.wiki.gg, en dernier : communautaire, et souvent en retard sur
+   Forever.
 
 Un nom de cadre ne se trouve pas toujours par recherche de texte : Blizzard
 écrit `$parentToT`, pas `TargetFrameToT`. Pour un cadre, la sonde a raison
@@ -89,14 +92,10 @@ contre le grep.
 
 ## Publication
 
-Tant que la bêta dure, le travail Forever reste sur GitHub, sans publication.
-
-**Avant la prochaine `/buiprod`**, le packager doit connaître Forever : notre
-copie de `dev/packager/release.sh` classe toute interface inconnue en
-« retail », et enverrait donc `16001` à CurseForge comme une version retail
-`1.60.1`. Resynchroniser depuis l'amont BigWigs, vérifier que CurseForge a
-ouvert la version de jeu Forever — ou retirer `16001` de la ligne le temps de
-la release.
+Une seule release sert les deux clients : le packager envoie le zip à
+CurseForge avec les versions de jeu des deux, `1.60.1` comprise. Comment on y
+est arrivé : `dev/docs/API_NOTES.md`, « CurseForge ne connaissait pas la
+version de jeu de Forever ».
 
 ---
 
