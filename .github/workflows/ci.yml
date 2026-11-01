@@ -26,7 +26,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Installer luacheck
         run: |
@@ -53,7 +53,7 @@ jobs:
       CF_API_KEY: ${{ secrets.CF_API_KEY }}
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Le packager déduit la version et le changelog de l'historique git :
           # un clone superficiel le priverait des tags.
@@ -82,7 +82,7 @@ jobs:
           fi
 
       - name: Conserver le zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: OneUI-${{ github.ref_name }}
           path: dev/build/*.zip
