@@ -82,7 +82,6 @@ UI\Widgets\ChatTools.lua
 # donc avant les pièces qui s'appuient dessus.
 UI\Widgets\Panel.lua
 UI\Widgets\IconTracker.lua
-UI\Widgets\BuffList.lua
 UI\Widgets\MarkerBar.lua
 # Le cadre de la catégorie « Suivi des temps restants » : un nombre doré, rien
 # d'autre. Deux modules s'en servent, c'est ce qui les garde identiques.
@@ -97,12 +96,6 @@ UI\Widgets\ResourceBar.lua
 # ici pour rester à côté des pièces de la même page.
 UI\Widgets\KeyThresholds.lua
 UI\Widgets\GroupFilterPanel.lua
-# La liste BIS : sa fenêtre assemble la recherche, qui charge donc d'abord.
-# Chargées sur les deux clients comme tout `UI/` — c'est le `.toc` du module qui
-# choisit le client, jamais un `if` (CLAUDE.md §1) ; une pièce que personne
-# n'instancie ne coûte rien.
-UI\Widgets\BisSearch.lua
-UI\Widgets\BisWindow.lua
 # La fenêtre de copie assemble une fenêtre et une zone défilante : elle vient
 # après les deux.
 UI\Widgets\CopyWindow.lua
@@ -159,14 +152,6 @@ Modules\GroupFinder.lua [AllowLoadGameType standard]
 Modules\Queue.lua
 Modules\Teleports.lua [AllowLoadGameType standard]
 Modules\RaidCooldowns.lua [AllowLoadGameType standard]
-# Sur Forever, le suivi des buffs prend sa place : la page décrit, puis le
-# moteur agit.
-Modules\BuffTrackerData.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
-Modules\BuffTracker.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
-# La liste BIS. L'index des objets sait, le module décide : l'index charge
-# d'abord, le module le récupère dans `ns` au moment où il s'écrit.
-Modules\BisIndex.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
-Modules\BisList.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
 # Suivi des temps restants : le vol et le craft, sur une seule page. Elle
 # charge partout — rien n'y dépend du client, tout dépend de ce qu'il publie.
 Modules\Timers.lua
@@ -181,9 +166,7 @@ Modules\Annoyances.lua
 # liste comme sa catégorie ferme la barre latérale.
 Modules\Emotes.lua [AllowLoadGameType standard]
 
-# `Modules/Upcoming.lua` a disparu : un module annoncé n'est plus une déclaration
-# sans code, c'est son propre fichier avec `preview = true` en tête. Le core
-# refuse alors de l'allumer, et sa page s'affiche grisée. Retirer cette ligne est
-# le seul geste qui la livre — `BisList` est le seul à en porter aujourd'hui, le
-# temps de vérifier en jeu que le client publie bien sa table d'objets
-# (`/bui bis`, qui reste utilisable module grisé).
+
+# Un module annoncé est son propre fichier avec `preview = true` en tête : le
+# core refuse alors de l'allumer, et sa page s'affiche grisée. Aucun ne
+# l'est aujourd'hui.

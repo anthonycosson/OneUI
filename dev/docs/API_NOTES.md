@@ -5415,4 +5415,4 @@ que chaque classe porte : les maîtrises sont des sorts passifs
 (`IsPlayerSpell(750)` pour les plaques, `9077` le cuir, `201` les épées à une
 main…), et un sort que le client ne connaît pas ne doit rien filtrer.
 
-Lu par `Modules/BisIndex.lua`.
+Lu par `Modules/BisIndex.lua`, retiré avec la liste BIS en novembre 2026.

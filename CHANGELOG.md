@@ -2,6 +2,11 @@
 
 ## Non publié
 
+### Retiré
+- **Suivi des buffs** et **Liste BIS** (*Forever*) : deux pages restées en
+  chantier, retirées plutôt que laissées grisées. La commande `/bui bis`
+  part avec elles.
+
 ## 2.0.12 — 2026-10-29
 
 ### Retiré

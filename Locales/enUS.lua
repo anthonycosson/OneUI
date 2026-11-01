@@ -606,69 +606,12 @@ BUI:RegisterLocale("enUS", {
     ["3v3"]                            = "3v3",
     ["Dungeons"]                       = "Dungeons",
     ["Raids"]                          = "Raids",
-    -- Module BuffTracker (Forever)
-    ["Buff tracking"]                  = "Buff tracking (Work in progress)",
-    ["Enable buff tracking"]           = "Track missing buffs",
-    ["Enable buff tracking tip"] =
-        "Shows the lines ticked below in a panel: green when you have the buff, white when "
-        .. "it is missing.",
-    ["Buff panel title"]               = "Buffs",
-    ["Buff separator"]                 = " / ",
+    -- Module Bags : le ramassage
     ["Looting"]                        = "Looting",
     ["Fast loot"]                      = "Fast loot",
     ["Fast loot tip"] =
         "Takes everything the moment a corpse is opened, so the loot window never appears. "
         .. "Only when auto-loot is already on, or its modifier key is held.",
-    ["Buff giver"]                     = "%s (%s)",
-    ["Benefit mark"]                   = "Armor, stats and resistances",
-    ["Benefit kings"]                  = "All stats (%)",
-    ["Benefit melee AP"]               = "Melee attack power",
-    ["Benefit melee AP shout"]         = "Melee attack power (stacks)",
-    ["Benefit shadow resistance"]      = "Shadow resistance",
-    ["Benefit threat"]                 = "Less threat",
-    ["Benefit healing received"]       = "Healing received",
-    ["Benefit ranged AP"]              = "Ranged attack power",
-    ["Buffs header"]                   = "Buffs",
-    ["Weapon"]                         = "Weapon",
-    ["Scrolls"]                        = "Scrolls",
-    ["Buff pending scrolls"]           = "Set aside: nobody uses them.",
-    ["Buff kinds"]                     = "Depending on the item: %s",
-    ["Consumables"]                    = "Consumables",
-    ["Pending buffs"]                  = "Set aside",
-    ["World buffs"]                    = "World buffs",
-    ["Future version"]                 = "Planned for a future version.",
-    ["Buff pending no stat"]           = "Set aside: gives no stat.",
-    ["Buff pending tent"]              = "Set aside: rested experience, once, not a stat.",
-    ["Buff pending undecided"]         = "Not decided yet.",
-    ["Stat strength"]                  = "Strength",
-    ["Stat agility"]                   = "Agility",
-    ["Stat stamina"]                   = "Stamina",
-    ["Stat intellect"]                 = "Intellect",
-    ["Stat spirit"]                    = "Spirit",
-    ["Stat critical"]                  = "Critical strike",
-    ["Stat health"]                    = "Health",
-    ["Stat armor"]                     = "Armor",
-    ["Stat attack power"]              = "Attack power",
-    ["Stat spell power"]               = "Spell damage",
-    ["Stat healing"]                   = "Healing",
-    ["Stat mana regen"]                = "Mana regeneration",
-    ["Stat resistance"]                = "Resistances",
-    ["Well fed"]                       = "Well fed",
-    ["Flask"]                          = "Flask",
-    ["Elixir"]                         = "Elixir",
-    ["Weapon enhancement"]             = "Weapon enhancement",
-    ["Sharpening stone"]               = "Sharpening stone",
-    ["Weightstone"]                    = "Weightstone",
-    ["Weapon oil"]                     = "Weapon oil",
-    ["Scope"]                          = "Scope",
-    ["Weapon temp note"] =
-        "A shaman weapon or a rogue poison counts too: it takes the same place and does not "
-        .. "stack.",
-    ["Buff source class"]              = "Class: %s",
-    ["Buff source profession"]         = "Profession: %s",
-    ["Buff source campfire"]           = "Place it near a campfire and sit down.",
-    ["Buff via camp"]                  = "%s (camp object, %s)",
-    ["Buff via profession"]            = "%s (%s)",
     -- Module RaidCooldowns
     ["Bloodlust and battle res"]       = "Bloodlust and battle res",
     ["Battle resurrections"]           = "Battle resurrections",
@@ -962,7 +905,6 @@ BUI:RegisterLocale("enUS", {
     ["Name diagnostic"]                = "Name diagnostic:",
     ["Sheet diagnostic"]               = "Character sheet diagnostic:",
     ["Sheet diagnostic unavailable"]   = "The Character sheet module is not running.",
-    ["BIS diagnostic unavailable"]     = "The BIS list module is not running.",
     ["No enchantable slot"]            = "No enchantable slot carries an item.",
 
     ["Auras paused"]                   = "Paused while size and offsets get fixed.",
@@ -1362,122 +1304,4 @@ BUI:RegisterLocale("enUS", {
     ["Emote watch"]                    = "Emote watch:",
     ["Emote seen"]                     = "emote:",
     ["Emote module unavailable"]       = "The Emotes module is not running.",
-
-    -- Module BisList (Forever) : la page, la fenêtre, la recherche.
-    ["BIS list"]                       = "BIS list",
-    ["Enable the BIS list"]            = "Keep a BIS list",
-    ["Enable the BIS list tip"] =
-        "Ctrl + left-click on the minimap button opens it. Ticking this also builds the "
-        .. "item index the search needs.",
-    ["Open the BIS list"]              = "Open the BIS list",
-    ["Open"]                           = "Open",
-    ["Open the BIS list tip"] =
-        "One line per slot, three picks each. Ctrl + left-click on the minimap button "
-        .. "opens it too.",
-    -- Ligne rouge et non infobulle : la surprise arrive en jeu, pas au survol.
-    ["BIS index filling"] =
-        "The item index fills over a few minutes: a search made right away may miss items.",
-    ["Item index"]                     = "Item index",
-    ["Rebuild the index"]              = "Rebuild the item index",
-    ["Rebuild"]                        = "Rebuild",
-    ["Rebuild the index tip"] =
-        "Throws the index away and looks at every item again. Only useful if you think it "
-        .. "has gone stale.",
-    ["Rebuild the index confirm"]      = "Rebuild the item index from scratch?",
-
-    ["BIS rank"]                       = "BIS %d",
-    ["Choose an item"]                 = "Choose…",
-    ["Empty pick"]                     = "Nothing picked",
-    ["Empty pick tip"]                 = "Left-click to search for an item.",
-    ["Unknown item"]                   = "Item %d",
-    ["Index ready"]                    = "%d items indexed.",
-    -- Écrit dans le chat, une seule fois, et seulement quand la passe a
-    -- vraiment travaillé : c'est le seul « c'est prêt » qu'on reçoive sans
-    -- avoir la fenêtre sous les yeux.
-    ["Index done"]                     = "Item index ready: %d items.",
-    -- `/bui bis` : la sonde de l'index. Les noms de champs qu'elle écrit sont
-    -- ceux de l'API et ne se traduisent pas ; seules ces deux lignes-là sont
-    -- des phrases.
-    ["BIS diagnostic"]                 = "BIS index diagnostic:",
-    ["Nothing equipped"]               = "This character is wearing nothing to compare against.",
-    ["No"]                             = "No",
-    ["Still indexing suffix"]          = " — the index is still filling",
-    ["Index sweeping"]                 = "Reading the client item table: %d / %d.",
-    ["Index loading"]                  = "Loading item data: %d / %d.",
-    ["Index idle"]                     = "The item index has not been built yet.",
-
-    ["Back to list"]                   = "Back to the list",
-    ["Slot"]                           = "Slot",
-    ["Any slot"]                       = "Any slot",
-    ["Slot filter tip"]                = "Only items that go in this slot.",
-    ["Armor type"]                     = "Armor type",
-    ["Any armor type"]                 = "Any armor type",
-    ["Armor type tip"]                 = "Cloth, leather, mail, plate or shield.",
-    ["Required level at most"]         = "Required level at most",
-    ["Required level at most tip"] =
-        "Hides items you could not wear before that level. Leave empty for no limit.",
-    ["Item level"]                     = "Item level",
-    ["Item level filter tip"] =
-        "At least the left number, at most the right one. Leave a box empty for no limit.",
-    ["Equippable only"]                = "This character can wear it",
-    ["Equippable only tip"] =
-        "Drops what your class cannot use: wrong armour, wrong weapon, class-locked items.",
-    ["Name contains"]                  = "Name contains",
-    ["Name contains hint"]             = "Part of a name…",
-    ["Wanted stats"]                   = "Wanted stats",
-    ["No item matches"]                = "No item matches these filters.",
-    ["Indexing in progress"]           = "The index is still filling.",
-    ["Results count"]                  = "%d items",
-    ["Results capped"]                 = "Best %d of %d items",
-    ["Item row levels"]                = "ilvl %d · lvl %d",
-
-    -- Intitulés des dix-sept lignes. Les nôtres et non ceux du client : deux
-    -- portent un numéro, que le client n'écrit nulle part.
-    ["Head"]                           = "Head",
-    ["Neck"]                           = "Neck",
-    ["Shoulder"]                       = "Shoulder",
-    ["Back"]                           = "Back",
-    ["Chest"]                          = "Chest",
-    ["Wrist"]                          = "Wrist",
-    ["Hands"]                          = "Hands",
-    ["Waist"]                          = "Waist",
-    ["Legs"]                           = "Legs",
-    ["Feet"]                           = "Feet",
-    ["Ring 1"]                         = "Ring 1",
-    ["Ring 2"]                         = "Ring 2",
-    ["Trinket 1"]                      = "Trinket 1",
-    ["Trinket 2"]                      = "Trinket 2",
-    ["Main hand"]                      = "Main hand",
-    ["Off hand"]                       = "Off hand",
-    ["Ranged"]                         = "Ranged",
-
-    -- Replis des intitulés de stats : le client les publie sous ces noms-là
-    -- (`ITEM_MOD_STRENGTH_SHORT`…), et c'est lui qu'on lit en premier. Ces
-    -- clés ne servent que le jour où il ne les publierait plus.
-    ["Strength"]                       = "Strength",
-    ["Agility"]                        = "Agility",
-    ["Stamina"]                        = "Stamina",
-    ["Intellect"]                      = "Intellect",
-    ["Spirit"]                         = "Spirit",
-    ["Armor"]                          = "Armor",
-    ["Attack power"]                   = "Attack power",
-    ["Ranged attack power"]            = "Ranged attack power",
-    ["Spell power"]                    = "Spell power",
-    ["Spell penetration"]              = "Spell penetration",
-    ["Critical strike"]                = "Critical strike",
-    ["Hit"]                            = "Hit",
-    ["Haste"]                          = "Haste",
-    ["Mana per 5 sec"]                 = "Mana per 5 sec",
-    ["Health per 5 sec"]               = "Health per 5 sec",
-    ["Defense"]                        = "Defense",
-    ["Dodge"]                          = "Dodge",
-    ["Parry"]                          = "Parry",
-    ["Block"]                          = "Block",
-    ["Block value"]                    = "Block value",
-    ["Holy resistance"]                = "Holy resistance",
-    ["Fire resistance"]                = "Fire resistance",
-    ["Nature resistance"]              = "Nature resistance",
-    ["Frost resistance"]               = "Frost resistance",
-    ["Shadow resistance"]              = "Shadow resistance",
-    ["Arcane resistance"]              = "Arcane resistance",
 })

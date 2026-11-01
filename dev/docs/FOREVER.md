@@ -51,8 +51,7 @@ mécanisme de Blizzard lui-même, et celui d'Auctionator.
 `MythicTimer`, `Emotes`. Les autres modules chargent sur les deux clients, **tels
 quels** — le tri de leurs options, un module à la fois, vient ensuite.
 
-L'inverse existe aussi : `BuffTracker` (et ses données, `BuffTrackerData`),
-`Professions` et la liste BIS (`BisIndex` + `BisList`) ne chargent que
+L'inverse existe aussi : `Professions` ne charge que
 sur Forever, `[AllowLoadGameType camelot] [ExcludeLoadGameType standard]`. **Les deux directives sont nécessaires** : le client retail ne
 connaît pas `camelot` et charge une ligne qui n'a que la première — constaté
 en jeu le 19 septembre 2026, où le suivi des buffs apparaissait sur retail et
