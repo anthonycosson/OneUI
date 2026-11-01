@@ -1338,4 +1338,25 @@ BUI:RegisterLocale("frFR", {
     ["Emote watch"]                    = "Veille des emotes :",
     ["Emote seen"]                     = "emote :",
     ["Emote module unavailable"]       = "Le module Emotes ne tourne pas.",
+
+    -- Contrôle « touche » des pages d'options
+    ["Not bound"]                      = "Aucune touche",
+    ["Press a key"]                    = "Appuyez sur une touche…",
+
+    -- Module Fishing
+    ["Fishing"]                        = "Pêche",
+    ["Casting"]                        = "Lancer",
+    ["Fishing key"]                    = "Touche pour pêcher et ferrer",
+    ["Fishing key tip"] =
+        "Une touche lance la ligne, puis ferre le bouchon pendant la pêche. Clic gauche "
+        .. "pour choisir une touche, clic droit pour la retirer.",
+    ["Double right-click to fish"]     = "Double clic droit pour lancer",
+    ["Double right-click to fish tip"] =
+        "Un double clic droit rapide dans le monde lance la ligne. Pas sur un personnage "
+        .. "survolé, ni pendant la pêche.",
+    ["Sound"]                          = "Son",
+    ["Fishing sound"]                  = "Entendre le bouchon",
+    ["Fishing sound tip"] =
+        "Pendant la pêche, les effets sonores passent au maximum, la musique et l'ambiance "
+        .. "se taisent. Vos volumes reviennent quelques secondes après la dernière prise.",
 })

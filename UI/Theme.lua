@@ -92,6 +92,7 @@ T.SIZE = {
                             -- nombre, et lui seul, qui aligne les cases à
                             -- cocher entre toutes les pages
     CONTROL_W      = 160,   -- largeur des dropdowns / sliders
+    HIDDEN_BUTTON  = 1,     -- bouton sécurisé invisible (`W.SecureCaster`)
     LABEL_INDENT   = 8,
 
     -- Retrait supplémentaire d'une **sous-option** : une ligne qui ne veut rien
@@ -871,6 +872,16 @@ T.TIMING = {
     -- pour qu'un désaccord entre deux addons reste une oscillation lente et
     -- observable au lieu d'une boucle.
     CVAR_SETTLE   = 0.5,
+
+    -- Pêche. Le double clic se mesure entre deux appuis du bouton droit : plus
+    -- large, deux clics de caméra espacés lanceraient la ligne. Le clic armé
+    -- se désarme seul s'il n'a pas servi, pour ne pas laisser le bouton droit
+    -- pris. Et ce que la pêche emprunte au son et au ciblage reste emprunté
+    -- un moment après la prise : relancer la ligne ne doit pas faire monter et
+    -- descendre le volume à chaque prise.
+    FISH_DOUBLE_CLICK = 0.4,
+    FISH_ARM          = 1,
+    FISH_LINGER       = 10,
 
     -- Cadence des panneaux de raid. Ils affichent des secondes : les rafraîchir
     -- à chaque image serait payer soixante fois le même texte (règle 7).

@@ -2,6 +2,17 @@
 
 ## Non publié
 
+### Ajouté
+- **Pêche**, nouvelle page (Qualité de vie), sur les deux clients : une
+  touche qui lance la ligne puis ferre le bouchon, le double clic droit pour
+  lancer, et un son qui laisse entendre le bouchon plonger.
+
+### Interne
+- Un prêteur de CVars commun (`Core/CVars.lua`) : deux modules peuvent
+  emprunter le même réglage du client, et ce qui est emprunté est rendu même
+  après un `/reload`.
+- Un contrôle « touche » pour les pages d'options (`UI/Widgets/KeyBind.lua`).
+
 ### Retiré
 - **Suivi des buffs** et **Liste BIS** (*Forever*) : deux pages restées en
   chantier, retirées plutôt que laissées grisées. La commande `/bui bis`

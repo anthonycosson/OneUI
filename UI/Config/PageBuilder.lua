@@ -19,6 +19,9 @@
 --      { type = "color",       key = ..., text = ... }
 --          la valeur est une table `{ r = , g = , b = }` ; le sélecteur est
 --          celui du client (voir `UI/Widgets/ColorSwatch.lua`).
+--      { type = "keybind",     key = ..., text = ... }
+--          la valeur est une touche au format des liaisons (`ALT-F`), ou ""
+--          quand il n'y en a pas (voir `UI/Widgets/KeyBind.lua`).
 --      { type = "button",      text = ..., label = ..., onClick = function() end }
 --      { type = "description", text = ..., font = ... }
 --          `font` est un objet de police **du thème** (`T.FONT.…`), pour la
@@ -131,6 +134,15 @@ local function buildWidget(page, mod, descriptor)
 
     elseif kind == "color" then
         return W.ColorSwatch(page, {
+            text    = descriptor.text,
+            tooltip = descriptor.tooltip,
+            indent  = descriptor.indent,
+            get     = get,
+            set     = set,
+        })
+
+    elseif kind == "keybind" then
+        return W.KeyBind(page, {
             text    = descriptor.text,
             tooltip = descriptor.tooltip,
             indent  = descriptor.indent,

@@ -38,6 +38,9 @@ Locales\frFR.lua
 
 Core\DB.lua
 Core\Module.lua
+# Le prêt de CVars : un seul registre pour tous les modules qui empruntent un
+# réglage du client. Après `Module.lua`, dont il lit l'état des modules.
+Core\CVars.lua
 # Les réglages que Forever n'a pas. Lu par `RegisterModule`, donc avant tout
 # module ; absent de retail, où la liste est simplement vide.
 Core\Forever.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
@@ -52,6 +55,7 @@ UI\Widgets\SearchBox.lua
 UI\Widgets\Toggle.lua
 UI\Widgets\Slider.lua
 UI\Widgets\ColorSwatch.lua
+UI\Widgets\KeyBind.lua
 # La maquette de barre d'infos du client, reprise dans notre page d'options.
 # Elle ne dépend que du thème : rangée ici, près des autres pièces de la fabrique.
 UI\Widgets\PlatePreview.lua
@@ -141,6 +145,8 @@ Modules\Chat.lua
 # que cette ligne ne l'y garde : le mécanisme est la liste des suivis de
 # minicarte, que retail publie de la même façon.
 Modules\Professions.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
+# La pêche charge partout.
+Modules\Fishing.lua
 Modules\Bags.lua
 Modules\AuctionHouse.lua [AllowLoadGameType standard]
 Modules\Quest.lua

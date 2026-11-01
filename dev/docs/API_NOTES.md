@@ -5416,3 +5416,39 @@ que chaque classe porte : les maîtrises sont des sorts passifs
 main…), et un sort que le client ne connaît pas ne doit rien filtrer.
 
 Lu par `Modules/BisIndex.lua`, retiré avec la liste BIS en novembre 2026.
+
+## La pêche : un lancer, un ferrage, et le métier qui change de place
+
+**Le métier se reconnaît à sa ligne de compétence, jamais à son rang.**
+`GetProfessions()` ne rend pas la même chose sur les deux clients : retail
+rend cinq indices à place fixe (`prof1, prof2, arch, fish, cook`), *Forever*
+en rend sept (`prim1, prim2, sec1 … sec5`, voir
+`Blizzard_Professions/Camelot/Blizzard_ProfessionsFrame.lua`) et range la
+pêche parmi ses secondaires. Le septième retour de `GetProfessionInfo(index)`
+est la ligne de compétence : la pêche y vaut `356` partout. Les retours de
+`GetProfessions()` ont des trous : on les parcourt par `select("#", …)`.
+
+**Lancer par le nom du sort**, celui que `GetProfessionInfo` rend : *Forever*
+a un sort par rang de pêche, et le nom prend le plus haut des rangs appris.
+
+**Le ferrage est l'action « Interagir avec la cible »** (`INTERACTTARGET`,
+présente dans `Bindings_Camelot.xml`), servie par le ciblage doux :
+`SoftTargetInteract = 3` vise l'objet le plus proche en permanence, le
+bouchon compris. Better Fishing procède ainsi ; on l'a lu pour savoir quoi
+appeler, rien n'en est repris.
+
+**Un bouton sécurisé cliqué par une liaison agit au relâchement** dès qu'il
+porte `useOnKeyDown = false` (`SecureActionButton_ShouldUseOnKeyDown`, dans
+`Blizzard_FrameXML/SecureTemplates.lua`). C'est ce qui rend le double clic
+droit possible : la liaison du bouton droit est posée pendant le second
+appui, et seul le relâchement reste pour la déclencher.
+
+**À vérifier en jeu** : que le double clic lance bien la ligne au
+relâchement, et que le bouton droit retrouve la caméra ensuite.
+
+## `CVAR_UPDATE` ne nomme pas toujours la CVar
+
+La documentation du client appelle son premier argument `eventName`
+(`ConsoleDocumentation.lua`), et c'est historiquement un nom d'événement, pas
+toujours celui de la CVar. Le prêteur (`Core/CVars.lua`) ne s'y fie donc pas :
+à chaque annonce, il relit les quelques CVars qu'il prête.

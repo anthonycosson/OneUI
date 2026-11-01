@@ -120,6 +120,35 @@ function W.ClickTarget(globalName, onClick)
     return button
 end
 
+--- Bouton sécurisé, nommé et invisible, fait pour être cliqué **par une
+--- liaison** (`SetOverrideBindingClick`) : c'est ainsi qu'une touche choisie
+--- dans l'addon lance un sort, ce que du code Lua ordinaire ne peut pas faire.
+---
+--- Montré, mais transparent et sourd à la souris : on ne parie pas sur ce que
+--- le client fait d'une liaison qui vise un bouton caché.
+---
+--- Le clic est pris au **relâchement** seulement, quelle que soit la CVar
+--- « lancer à l'enfoncement » : une liaison posée pendant un appui — le double
+--- clic de la pêche — n'a que le relâchement pour se déclencher.
+---
+--- L'appelant écrit les attributs d'action, hors combat (voir
+--- `UI/Widgets/SecureMenu.lua`). Rend `nil` si le client n'a pas le template.
+---@param globalName string
+---@return table|nil
+function W.SecureCaster(globalName)
+    local template = T.Template("SECURE_ACTION")
+    if not template then return nil end
+
+    local button = CreateFrame("Button", globalName, UIParent, template)
+    button:SetSize(T.SIZE.HIDDEN_BUTTON, T.SIZE.HIDDEN_BUTTON)
+    button:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 0, 0)
+    button:SetAlpha(0)
+    button:EnableMouse(false)
+    button:RegisterForClicks("AnyUp")
+    button:SetAttribute("useOnKeyDown", false)
+    return button
+end
+
 --- Ferme un panneau au premier clic posé **ailleurs**.
 ---
 --- Le client annonce chaque appui de souris, où qu'il tombe

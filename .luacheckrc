@@ -145,6 +145,8 @@ read_globals = {
     "GetLocale", "GetTime", "GetBuildInfo", "InCombatLockdown",
     "IsShiftKeyDown", "IsControlKeyDown", "IsAltKeyDown", "IsModifierKeyDown",
     "IsInInstance",
+    "SetOverrideBinding", "SetOverrideBindingClick", "ClearOverrideBindings",
+    "GetBindingText",
     "hooksecurefunc", "geterrorhandler", "CallErrorHandler", "securecallfunction", "issecretvalue",
     "debugstack", "issecurevariable",
 

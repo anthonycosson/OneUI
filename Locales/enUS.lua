@@ -1304,4 +1304,25 @@ BUI:RegisterLocale("enUS", {
     ["Emote watch"]                    = "Emote watch:",
     ["Emote seen"]                     = "emote:",
     ["Emote module unavailable"]       = "The Emotes module is not running.",
+
+    -- Contrôle « touche » des pages d'options (`UI/Widgets/KeyBind.lua`).
+    ["Not bound"]                      = "Not bound",
+    ["Press a key"]                    = "Press a key…",
+
+    -- Module Fishing
+    ["Fishing"]                        = "Fishing",
+    ["Casting"]                        = "Casting",
+    ["Fishing key"]                    = "Fish and hook key",
+    ["Fishing key tip"] =
+        "One key casts the line, then hooks the bobber while you fish. Left-click to pick "
+        .. "a key, right-click to clear it.",
+    ["Double right-click to fish"]     = "Double right-click to cast",
+    ["Double right-click to fish tip"] =
+        "A quick double right-click in the world casts the line. Not on a character you "
+        .. "hover, nor while fishing.",
+    ["Sound"]                          = "Sound",
+    ["Fishing sound"]                  = "Louder splash",
+    ["Fishing sound tip"] =
+        "While fishing, sound effects go to maximum and music and ambience go quiet. "
+        .. "Your volumes come back a few seconds after the last catch.",
 })
