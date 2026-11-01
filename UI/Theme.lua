@@ -251,7 +251,6 @@ T.SIZE = {
     GRIP            = 16,   -- poignée de redimensionnement, coin bas-droit
     GRIP_INSET      = 4,    -- retrait de la poignée par rapport au coin
 
-    ICON            = 16,
     SCROLLBAR_W     = 20,   -- réservé à droite du contenu défilant
     THUMB_W         = 6,    -- largeur du curseur, une fois l'ascenseur dépouillé
     THUMB_MIN       = 24,   -- hauteur plancher du curseur d'ascenseur
@@ -2084,7 +2083,6 @@ end
 
 T.ATLAS = {
     ARROW_RIGHT = "NPE_ArrowRight",
-    CHECK       = "common-icon-checkmark",
 
     -- Pastilles des lignes du suivi d'objectifs : la coche d'un objectif rempli et
     -- la puce d'un objectif en cours. Ce sont celles que le client pose lui-même sur
@@ -2150,12 +2148,6 @@ T.TEXTURE = {
     -- à l'écrire. Ronde, celle de la minicarte juste au-dessus déborderait
     -- dans les coins.
     ICON_HIGHLIGHT    = "Interface\\Buttons\\ButtonHilight-Square",
-
-    -- L'icône de ce qu'on n'a pas encore choisi, et de ce dont le client ne
-    -- publie pas l'illustration. Celle du client lui-même pour un objet
-    -- inconnu : un carré vide se lirait comme un défaut d'affichage, un point
-    -- d'interrogation se lit comme une question.
-    QUESTION_MARK     = "Interface\\Icons\\INV_Misc_QuestionMark",
 
     -- Logo de l'addon, également déclaré comme icône du compartiment d'addons
     -- dans le `.toc`. Son disque alpha est **cuit dans la texture** : le trou de

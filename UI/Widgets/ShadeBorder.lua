@@ -264,28 +264,22 @@ function W.ShadeBorder(icon)
     -- l'image de son cadre.
     border.skipCrop = auraRing
 
-    --- `color` sert là où le contour **dit** quelque chose en plus d'habiller.
-    --- Une vignette de la rangée d'auras des barres d'infos est le seul cas
-    --- rencontré : la nature de l'aura — entrave, débuff, buff — était portée par
-    --- un liseré carré d'un pixel, que ce contour-ci remplace. Sans teinte, poser
-    --- le contour aurait effacé l'information ; avec, elle passe dans le trait.
-    ---
-    --- Sans couleur, le blanc : la multiplication ne donne alors que le gris du
-    --- facteur, ce qu'attendent le mode sombre et le suivi de Bloodlust.
-    --- `side` est le côté de l'icône, quand l'appelant le connaît déjà — il vient
-    --- alors d'un réglage, et non d'une mesure. C'est le cas de la rangée d'auras
-    --- des barres d'infos, qui vient de poser cette taille elle-même : la donner
-    --- évite une lecture que le client refuse sur une plaque (voir
-    --- `smallestSide`), et garde le retrait proportionnel à l'icône — sur une
-    --- vignette de cinquante pixels, le repli fixe donnerait un trait trop
-    --- maigre.
-    ---@param factor number  multiplicateur de couleur, voir `T.SHADE_FACTOR`
-    ---@param color? ColorMixin  teinte du trait, blanc par défaut
-    ---@param side? number  côté de l'icône, à défaut de pouvoir le mesurer
     --- La teinte que le dernier `Draw` a demandée, pour que la repose rejoue
     --- le même trait. Le facteur, lui, se relit à la source à chaque repose
     --- (voir `repost`) : c'est lui qui dit si la repose a encore lieu d'être.
     local lastColor
+
+    --- L'anneau a-t-il sa place sur ce bouton ? Partout, sauf quand le
+    --- liseré d'enchantement d'arme est affiché : il tient lieu de cadre.
+    ---@return boolean
+    local function ringWanted()
+        local enchant = owner.TempEnchantBorder
+        if type(enchant) == "table" and type(enchant.IsShown) == "function" then
+            local ok, shown = pcall(enchant.IsShown, enchant)
+            if ok and not U.IsSecret(shown) and shown then return false end
+        end
+        return true
+    end
 
     --- L'anneau d'aura, teinté **sans bouger** : ni ancrage, ni coordonnées —
     --- l'anneau du client est taillé au pixel pour la région qui le porte, et
@@ -304,18 +298,6 @@ function W.ShadeBorder(icon)
     --- serait un de trop. Et la réponse aux écritures de visibilité du
     --- client part dans le même souffle que les siennes (voir les hooks
     --- `Hide`/`Show` plus bas), jamais au battement suivant.
-    --- L'anneau a-t-il sa place sur ce bouton ? Partout, sauf quand le
-    --- liseré d'enchantement d'arme est affiché : il tient lieu de cadre.
-    ---@return boolean
-    local function ringWanted()
-        local enchant = owner.TempEnchantBorder
-        if type(enchant) == "table" and type(enchant.IsShown) == "function" then
-            local ok, shown = pcall(enchant.IsShown, enchant)
-            if ok and not U.IsSecret(shown) and shown then return false end
-        end
-        return true
-    end
-
     ---@param factor number
     ---@param color? ColorMixin
     ---@return boolean
@@ -388,6 +370,24 @@ function W.ShadeBorder(icon)
         watchAuraUtil()
     end
 
+    --- `color` sert là où le contour **dit** quelque chose en plus d'habiller.
+    --- Une vignette de la rangée d'auras des barres d'infos est le seul cas
+    --- rencontré : la nature de l'aura — entrave, débuff, buff — était portée par
+    --- un liseré carré d'un pixel, que ce contour-ci remplace. Sans teinte, poser
+    --- le contour aurait effacé l'information ; avec, elle passe dans le trait.
+    ---
+    --- Sans couleur, le blanc : la multiplication ne donne alors que le gris du
+    --- facteur, ce qu'attendent le mode sombre et le suivi de Bloodlust.
+    --- `side` est le côté de l'icône, quand l'appelant le connaît déjà — il vient
+    --- alors d'un réglage, et non d'une mesure. C'est le cas de la rangée d'auras
+    --- des barres d'infos, qui vient de poser cette taille elle-même : la donner
+    --- évite une lecture que le client refuse sur une plaque (voir
+    --- `smallestSide`), et garde le retrait proportionnel à l'icône — sur une
+    --- vignette de cinquante pixels, le repli fixe donnerait un trait trop
+    --- maigre.
+    ---@param factor number  multiplicateur de couleur, voir `T.SHADE_FACTOR`
+    ---@param color? ColorMixin  teinte du trait, blanc par défaut
+    ---@param side? number  côté de l'icône, à défaut de pouvoir le mesurer
     function border:Draw(factor, color, side)
         lastColor = color
 

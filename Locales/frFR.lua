@@ -840,7 +840,6 @@ BUI:RegisterLocale("frFR", {
     ["Overlap tip"] =
         "Place que chaque barre d'infos garde autour d'elle avant que le jeu ne "
         .. "pousse la suivante. Plus haut les écarte, plus bas les resserre.",
-    ["Spacing and distance"]           = "Espacement et distance",
 
     ["Nameplate style"]                = "Style",
     ["Nameplate style tip"] =

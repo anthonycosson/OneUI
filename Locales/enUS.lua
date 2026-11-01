@@ -837,7 +837,6 @@ BUI:RegisterLocale("enUS", {
     ["Overlap tip"] =
         "How much room each nameplate keeps around itself before the game pushes "
         .. "the next one aside. Higher spreads them out, lower packs them tighter.",
-    ["Spacing and distance"]           = "Spacing and distance",
 
     ["Nameplate style"]                = "Style",
     ["Nameplate style tip"] =

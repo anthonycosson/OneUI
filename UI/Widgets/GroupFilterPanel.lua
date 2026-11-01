@@ -67,12 +67,17 @@ local W    = BUI.Widgets
 --- recherche de la liste BIS a voulu les mêmes cases : la pièce est partie dans
 --- la fabrique, le panneau ne fait plus que s'en servir.
 
+---@class BUI.ListRowBinding
+---@field get? fun(): boolean
+---@field set? fun(value: boolean)
+
 --- Ligne à cocher **reliable** : ses `get`/`set` et son libellé se remplacent
 --- sans reconstruire la frame. C'est ce qui permet à la liste des instances de
 --- changer de contenu à chaque recherche avec un jeu de lignes fixe.
 ---@param parent table
 ---@return table row
 local function listRow(parent)
+    ---@type BUI.ListRowBinding
     local binding = {}
 
     -- Sans retrait : ces lignes ne sont pas des sous-options de l'en-tête,
@@ -85,7 +90,7 @@ local function listRow(parent)
     })
 
     --- Relie la ligne à une entrée : libellé, infobulle, lecture, écriture.
-    ---@param entry { text: string, tooltip?: string, get: fun(): boolean, set: fun(value: boolean) }
+    ---@param entry { text: string, tooltip?: string, get: (fun(): boolean), set: fun(value: boolean) }
     function row:Bind(entry)
         binding.get = entry.get
         binding.set = entry.set

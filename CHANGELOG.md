@@ -15,6 +15,8 @@
   emprunter le même réglage du client, et ce qui est emprunté est rendu même
   après un `/reload`.
 - Un contrôle « touche » pour les pages d'options (`UI/Widgets/KeyBind.lua`).
+- Ménage : code mort retiré (`W.BoundRow`, `DB:LoadedEmpty`, `U.Count`,
+  trois entrées du thème, un texte), et l'analyse locale ne signale plus rien.
 
 ### Retiré
 - **Suivi des buffs** et **Liste BIS** (*Forever*) : deux pages restées en

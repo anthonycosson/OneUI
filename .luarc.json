@@ -21,7 +21,7 @@
     "UISpecialFrames",
 
     "strjoin", "strtrim", "strlower", "strupper", "strsplit",
-    "tostringall", "wipe", "tinsert", "tremove",
+    "tostringall", "wipe", "tinsert", "tremove", "date", "time",
 
     "CreateFrame", "UIParent", "GameTooltip",
     "GameTooltip_SetTitle", "GameTooltip_AddNormalLine", "GameTooltip_AddErrorLine",

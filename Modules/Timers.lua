@@ -240,8 +240,7 @@ end
 --- L'atterrissage : c'est ici que la mesure se retient.
 ---
 --- Au **compte** (`AccountData`) et non au personnage : un trajet ne dépend
---- d'aucun des deux, et la bêta de *Forever* ne relit de toute façon jamais le
---- SavedVariables d'un personnage (voir `dev/docs/API_NOTES.md`).
+--- pas de qui le fait, et ce qu'un personnage a mesuré sert à tous les autres.
 ---@param mod table
 local function endFlight(mod)
     if flight.key then

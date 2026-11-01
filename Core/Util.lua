@@ -61,15 +61,6 @@ function U.StripDefaults(target, defaults)
     end
 end
 
---- Nombre d'entrées d'une table associative.
----@param t table
----@return integer
-function U.Count(t)
-    local n = 0
-    for _ in pairs(t) do n = n + 1 end
-    return n
-end
-
 --- Clés triées d'une table, pour un affichage déterministe.
 ---@param t table
 ---@param comparator? fun(a: any, b: any): boolean

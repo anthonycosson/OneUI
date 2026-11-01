@@ -9,7 +9,7 @@
 --
 --  Née dans `GroupFilterPanel.lua`, sortie le jour où la recherche de la liste
 --  BIS a voulu les mêmes cases. Deux fabriques : la case seule, pour qui la
---  place lui-même, et les deux lignes qui s'en servent — une borne, ou deux.
+--  place lui-même, et la ligne de deux bornes qui s'en sert.
 -- =========================================================================
 
 local _, ns = ...
@@ -104,36 +104,6 @@ function W.RangeRow(parent, desc)
     function row:Refresh()
         minBox:Refresh()
         maxBox:Refresh()
-    end
-
-    row:Refresh()
-    return row
-end
-
----@class BUI.BoundRowDesc
----@field text string
----@field tooltip? string
----@field indent? boolean
----@field hint string
----@field get fun(): number|nil
----@field set fun(value: number|nil)
-
---- Ligne « libellé + une borne ». Le filigrane est à l'appelant : c'est lui qui
---- sait si la case attend un plancher ou un plafond.
----@param parent table
----@param desc BUI.BoundRowDesc
----@return table row
-function W.BoundRow(parent, desc)
-    local row = W.Row(parent, desc.text, desc.indent)
-
-    local box = W.BoundBox(row, desc.hint, desc.get, desc.set)
-    W.PlaceControl(row, box)
-
-    row:EnableMouse(true)
-    W.Tooltip(row, desc.text, desc.tooltip)
-
-    function row:Refresh()
-        box:Refresh()
     end
 
     row:Refresh()

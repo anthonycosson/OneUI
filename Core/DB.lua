@@ -53,10 +53,6 @@ local defaultsRegistry = {}
 
 local initialized = false
 
---- Vrai quand le client n'a rien rendu au chargement : la base était absente,
---- et l'addon est reparti de ses défauts. Voir `DB:LoadedEmpty`.
-local loadedEmpty = false
-
 -- =========================================================================
 --  Accès interne
 -- =========================================================================
@@ -172,9 +168,6 @@ end
 function DB:Initialize()
     if initialized then return end
 
-    -- Avant toute création de table : ensuite, `OneUIDB` existe toujours.
-    loadedEmpty = (OneUIDB == nil)
-
     OneUIDB     = OneUIDB     or {}
     OneUICharDB = OneUICharDB or {}
 
@@ -190,23 +183,6 @@ function DB:Initialize()
     if characterKey() then applyAllDefaults() end
 
     initialized = true
-end
-
---- L'addon est-il reparti de zéro, faute d'avoir reçu sa base ?
----
---- Vrai à la première installation, et faux après un `/reload` d'une session
---- déjà chargée : ce qui est en mémoire y survit.
----
---- **Personne ne l'appelle aujourd'hui, et c'est une bonne nouvelle.** Elle a
---- été écrite pour la bêta de *Forever*, qui du 20 au 27 septembre 2026
---- n'exécutait jamais le SavedVariables d'un addon au lancement : tous
---- repartaient de leurs défauts à chaque session. Le client le fait de nouveau
---- (voir `Core/Forever.lua`), le contournement est parti avec le bug, et il ne
---- reste que ce constat — trois lignes, pour le jour où il faudrait de nouveau
---- savoir si le client a rendu quelque chose.
----@return boolean
-function DB:LoadedEmpty()
-    return loadedEmpty
 end
 
 --- Attache la base au personnage connecté. Appelé à `PLAYER_LOGIN`, **avant**
