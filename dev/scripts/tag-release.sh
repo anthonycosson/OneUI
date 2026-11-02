@@ -47,13 +47,13 @@ bash dev/scripts/lint-local.sh || die "les vérifications échouent — rien n'a
 # -------------------------------------------------------------------------
 step "CHANGELOG"
 # -------------------------------------------------------------------------
-grep -q '^## Non publié' CHANGELOG.md \
-    || die "CHANGELOG.md doit contenir une section « ## Non publié » décrivant cette version"
+grep -q '^## Unreleased' CHANGELOG.md \
+    || die "CHANGELOG.md doit contenir une section « ## Unreleased » décrivant cette version"
 
 # La section en cours devient la version, et une nouvelle section vide la
 # remplace pour le travail suivant.
 tmp=$(mktemp)
-sed "s|^## Non publié$|## Non publié\n\n## $VERSION — $TODAY|" CHANGELOG.md > "$tmp"
+sed "s|^## Unreleased$|## Unreleased\n\n## $VERSION — $TODAY|" CHANGELOG.md > "$tmp"
 mv "$tmp" CHANGELOG.md
 echo "✓ section $VERSION datée du $TODAY"
 
@@ -68,7 +68,7 @@ awk -v version="## $VERSION — $TODAY" '
     inside && /^## / { exit }
     inside { print }
 ' CHANGELOG.md > CHANGELOG-release.md
-[[ -s CHANGELOG-release.md ]] || die "notes de version vides — CHANGELOG.md n'a rien sous « ## Non publié »"
+[[ -s CHANGELOG-release.md ]] || die "notes de version vides — CHANGELOG.md n'a rien sous « ## Unreleased »"
 echo "✓ notes de la version seules dans CHANGELOG-release.md ($(wc -l < CHANGELOG-release.md) lignes)"
 
 # -------------------------------------------------------------------------

@@ -1,76 +1,70 @@
 ﻿# OneUI
 
-**L'interface de base, en mieux, et toute la QOL dont vous avez besoin au même endroit.**
+**The UI you know, only better, with all the QoL you need in one place.**
 
-✅ Compatible **Retail** et **WoW Forever**.
+✅ Works on **Retail** and **WoW Forever**.
 
-**[Télécharger sur CurseForge](https://www.curseforge.com/projects/1631877)**
+**[Download on CurseForge](https://www.curseforge.com/projects/1631877)**
 
-OneUI garde l'interface que vous connaissez et la rend plus agréable au
-quotidien : mode sombre, cadres d'unité plus lisibles, fenêtres que vous placez
-où vous voulez, nameplates à votre goût, ventes et réparations automatiques,
-quêtes acceptées et rendues pour vous. Vous activez seulement ce qui vous plaît.
+OneUI keeps the interface you know and makes it nicer to use every day: dark
+mode, clearer unit frames, windows you can place anywhere, nameplates the way
+you like them, auto-sell and auto-repair, quests accepted and turned in for
+you. Turn on only what you like.
 
-Un seul addon. Aucune dépendance. Rien ne change tant que vous ne l'avez pas
-choisi.
+One addon. No dependencies. Nothing changes until you choose.
 
-## Ce qu'il contient
+## What's inside
 
 **Interface**
-- Mode sombre pour les barres d'action, les cadres d'unité, les auras, la barre
-  d'incantation et les infobulles
-- Cadres d'unité aux couleurs de classe, avec icônes de spécialisation, et
-  cadres de groupe et d'arène plus grands
-- Nameplates à votre goût : taille, couleur selon le type de PNJ ou la menace,
-  rangées d'auras
-- Une barre de ressource de classe avec des couleurs par palier et un effet
-  lumineux
-- Une fiche de personnage qui affiche le niveau d'objet, l'amélioration, les
-  enchantements et les gemmes de chaque pièce
+- Dark mode for action bars, unit frames, auras, cast bar and tooltips
+- Unit frames in class colours, with specialization icons, and bigger party and
+  arena frames
+- Nameplates your way: size, colour by NPC type or threat, aura rows
+- A class resource bar with colours per threshold and a glow effect
+- A character sheet showing item level, upgrade track, enchants and gems on
+  every slot
 
-**Qualité de vie**
-- Ventes des objets gris et réparations automatiques chez chaque marchand
-- Quêtes acceptées et rendues automatiquement, avec une touche pour mettre en
-  pause
-- Niveau d'objet affiché sur chaque case de sac et de banque
-- Fenêtres de Blizzard déplaçables et redimensionnables
-- Historique du chat gardé d'une session à l'autre, fenêtre de copie, chat
-  redimensionnable
-- Un seul menu pour toutes vos pierres de foyer et vos portails de donjon
-- Cinématiques passées, têtes parlantes masquées, réponse automatique aux !keys
-- Pêche : une seule touche pour lancer et ferrer, avec un son quand ça mord
+**Quality of life**
+- Auto-sell grey items and auto-repair at every merchant
+- Quests accepted and turned in automatically, with a key to pause it
+- Item level on every bag and bank slot
+- Blizzard windows you can move and resize
+- Chat history kept between sessions, a copy window, resizable chat
+- One menu for all your hearthstones and dungeon portals
+- Skip cinematics, hide talking heads, auto-answer !keys
+- Fishing: one key to cast and hook, with a sound when something bites
 
-**Mythique+ et raid**
-- Paliers +2 et +3 affichés sur le chrono du jeu, temps par boss, nombre de morts
-- Charges de résurrection de combat et recharge de la Furie sanguinaire en un
-  coup d'œil
-- Marqueurs au sol et compte à rebours de pull
-- Journal de combat qui démarre en entrant dans l'instance et s'arrête en
-  sortant
+**Mythic+ and raid**
+- +2 and +3 thresholds on the game's own timer, boss times, death count
+- Battle res charges and Bloodlust cooldown at a glance
+- World markers and a pull timer
+- Combat logging that starts when you enter the instance and stops when you
+  leave
 
-**Profils**
-- Exportez vos réglages en un texte, puis importez-les sur un autre personnage
-  ou partagez-les
+**Profiles**
+- Export your settings as text, then import them on another character or share
+  them
 
-…et bien plus encore, chaque module à un clic dans la fenêtre d'options.
+...and much more, every module one click away in the options window.
 
-## En jeu
+## In game
 
-- `/oui` ou `/oneui` : ouvre la fenêtre d'options
-- `/oui version` : affiche la version chargée
-- L'icône du compartiment d'addons, près de la minicarte, ouvre la même fenêtre
+- `/oui` or `/oneui`: open the options window
+- `/oui version`: show the loaded version
+- The OneUI icon in the addon compartment, next to the minimap, opens the same
+  window
 
-Retail 12.0.7 et plus, et WoW Forever. En anglais et en français.
+Retail 12.0.7 and above, and WoW Forever. Available in English and French.
 
-## Signaler un bug
+## Report a bug
 
-Ouvrir une [issue](https://github.com/anthonycosson/OneUI/issues) en indiquant
-la version (`/oui version`), ce qui était en cours, et le message d'erreur
-complet s'il y en a un (BugSack le copie en un clic).
+Open an [issue](https://github.com/anthonycosson/OneUI/issues) with your version
+(`/oui version`), what you were doing, and the full error message if there is
+one (BugSack copies it in one click).
 
-## Licence
+## License
 
-Tous droits réservés — voir [license.txt](license.txt).
+All rights reserved, see [license.txt](license.txt).
 
-OneUI est un addon non officiel. Il n'est ni créé, ni affilié, ni soutenu
-par Blizzard Entertainment, Inc.
+OneUI is an unofficial add-on. It is not created by, affiliated with, or
+endorsed by Blizzard Entertainment, Inc.

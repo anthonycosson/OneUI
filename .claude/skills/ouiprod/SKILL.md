@@ -52,7 +52,7 @@ Exigences :
 
 ### 3. Choisir le numéro de version
 
-Lire ce qui figure sous `## Non publié` dans `CHANGELOG.md`, et proposer un
+Lire ce qui figure sous `## Unreleased` dans `CHANGELOG.md`, et proposer un
 numéro d'après le contenu réel :
 
 | Contenu | Incrément |

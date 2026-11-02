@@ -1,6 +1,6 @@
 # Page CurseForge
 
-Texte à coller dans le projet CurseForge, repris en français dans le
+Texte à coller dans le projet CurseForge, repris en anglais dans le
 `README.md`. À relire à chaque version qui ajoute ou retire un module : une
 page qui décrit des fonctionnalités absentes se paie en commentaires.
 
@@ -27,64 +27,68 @@ Le tout-en-un pour l'interface de Blizzard, sur Retail et Forever : cadres d'uni
 
 ## Description
 
-Coller les deux sections l'une après l'autre, l'anglais d'abord.
+Coller les deux sections l'une après l'autre, l'anglais d'abord. Le README
+reprend la version anglaise.
 
 ```
 # OneUI
 
-**The Blizzard UI you already know. Finally finished.**
+**The UI you know, only better, with all the QoL you need in one place.**
 
 ✅ Works on **Retail** and **WoW Forever**.
 
-You don't need a whole new interface. You need the one you have to stop
-getting in your way. OneUI keeps the game looking like the game, then fixes
-everything around it: sleek dark mode, unit frames that show what matters,
-Blizzard windows you can drag anywhere, junk sold and quests handled before
-you even think about it.
+OneUI keeps the interface you know and makes it nicer to use every day: dark
+mode, clearer unit frames, windows you can place anywhere, nameplates the way
+you like them, auto-sell and auto-repair, quests accepted and turned in for
+you. Turn on only what you like.
 
-One addon. Zero dependencies. Nothing changes until you flip the switch.
+One addon. No dependencies. Nothing changes until you choose.
 
 ## What's inside
 
 **Interface**
-- Dark mode for action bars, unit frames, auras, cast bar and tooltip
-- Class colours, specialization icons, larger party and arena frames
-- Nameplates you can resize, recolour by NPC type or threat, with their own aura rows
-- A class resource bar with colour thresholds and a proc glow
-- A character sheet showing item level, upgrade track, enchant rank and gems on every slot
+- Dark mode for action bars, unit frames, auras, cast bar and tooltips
+- Unit frames in class colours, with specialization icons, and bigger party and
+  arena frames
+- Nameplates your way: size, colour by NPC type or threat, aura rows
+- A class resource bar with colours per threshold and a glow effect
+- A character sheet showing item level, upgrade track, enchants and gems on
+  every slot
 
 **Quality of life**
-- Auto-accept and auto-turn-in quests, with a modifier key to pause it
-- Sell junk and repair at every merchant
+- Auto-sell grey items and auto-repair at every merchant
+- Quests accepted and turned in automatically, with a key to pause it
 - Item level on every bag and bank slot
-- Chat history kept across sessions, a copy window, drag-to-resize
-- One teleport menu for your hearthstones and every dungeon portal you own
-- Skip cinematics, hide talking heads, answer !keys automatically
-- Move and rescale the game's own windows
-- Fishing: one key to cast and hook, with a splash you can hear
+- Blizzard windows you can move and resize
+- Chat history kept between sessions, a copy window, resizable chat
+- One menu for all your hearthstones and dungeon portals
+- Skip cinematics, hide talking heads, auto-answer !keys
+- Fishing: one key to cast and hook, with a sound when something bites
 
 **Mythic+ and raid**
-- +2 and +3 thresholds drawn on the game's own timer, boss splits, deaths
-- Battle resurrection charges and Bloodlust cooldown in two small trackers
+- +2 and +3 thresholds on the game's own timer, boss times, death count
+- Battle res charges and Bloodlust cooldown at a glance
 - World markers and a pull timer
-- Combat logging that starts at the instance door and stops when you leave
+- Combat logging that starts when you enter the instance and stops when you
+  leave
 
 **Profiles**
-- Export your setup as a string, import it on another character or share it
+- Export your settings as text, then import them on another character or share
+  them
 
-...and much more, with every module one click away in the options window.
+...and much more, every module one click away in the options window.
 
 ## Getting started
 
-Type **/oui** in game, or click the icon in the addon compartment next to the
-minimap. Retail 12.0.7 and above, and WoW Forever.
-English and French.
+Type **/oui** in game, or click the OneUI icon in the addon compartment next to
+the minimap. Retail 12.0.7 and above, and WoW Forever. Available in English and
+French.
 
 ## Found a bug?
 
 Open an issue on GitHub: https://github.com/anthonycosson/OneUI/issues
-Include your version (/oui version), what you were doing, and the full Lua
-error if there is one (BugSack copies it in one click).
+Include your version (/oui version), what you were doing, and the full error
+message if there is one (BugSack copies it in one click).
 
 ---
 
@@ -193,7 +197,7 @@ réel et non à une intention :
 ## À faire à chaque publication
 
 - [ ] Recopier la description si un module a été ajouté ou retiré, ici et dans
-      la version française du `README.md`.
+      le `README.md`.
 - [ ] Vérifier que la première capture de la galerie est celle qui vend le
       mieux — c'est la vignette, et c'est elle qui décide du clic. La fiche de
       personnage enrichie et le menu de téléportation sont les deux qui se

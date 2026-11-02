@@ -1,6 +1,6 @@
-# Journal des modifications
+# Changelog
 
-## Non publié
+## Unreleased
 
 ## 3.0.0 — 2026-11-02
 

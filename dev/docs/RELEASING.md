@@ -47,7 +47,7 @@ protégés de l'ancien GitLab.
 
 ## À chaque version
 
-Écrire ce qui a changé sous `## Non publié` dans `CHANGELOG.md` au fil des
+Écrire ce qui a changé, en anglais, sous `## Unreleased` dans `CHANGELOG.md` au fil des
 commits, puis :
 
 ```bash

@@ -161,10 +161,16 @@ SavedVariables : `OneUIDB` (compte) et `OneUICharDB` (personnage).
 - La version ne se modifie pas à la main : `## Version: @project-version@` est
   remplacé par le tag git au packaging. Une release = un tag `vX.Y.Z`.
 - `CHANGELOG.md` se met à jour dans le même commit que la fonctionnalité, pas au
-  moment du tag : une ligne sous `## Non publié`, dans `### Ajouté`,
-  `### Modifié` ou `### Corrigé` si le joueur le voit, `### Interne` sinon
-  (refactor, outillage, CI). Une modification purement locale (doc de dev,
-  script) peut s'en passer.
+  moment du tag : une ligne **en anglais** sous `## Unreleased`, dans
+  `### Added`, `### Changed`, `### Fixed` ou `### Removed` si le joueur le voit,
+  `### Internal` sinon (refactor, outillage, CI). Une modification purement
+  locale (doc de dev, script) peut s'en passer. Les sections publiées avant la
+  3.0.0 restent en français.
+- **Tout ce que voit le public est en anglais** : `README.md`, notes de
+  version, description du dépôt GitHub, page CurseForge (avec sa version
+  française en second, voir `dev/docs/CURSEFORGE.md`). Les textes du jeu
+  passent par `Locales/`. La doc de dev, `CLAUDE.md` et les messages de commit
+  restent en français.
 
 ### Enregistrer le travail (« commit et pousse »)
 
