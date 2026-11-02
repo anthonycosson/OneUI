@@ -29,9 +29,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Nombre de marqueurs au sol. Huit depuis toujours, comme les icônes de
 --- ciblage dont ils empruntent les vignettes.

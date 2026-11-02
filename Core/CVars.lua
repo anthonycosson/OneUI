@@ -39,11 +39,11 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local U   = BUI.Util
+local OUI = ns.OUI
+local U   = OUI.Util
 
 local CVars = {}
-BUI.CVars = CVars
+OUI.CVars = CVars
 
 --- Espace du registre dans les données au compte. Ce n'est pas un module : le
 --- nom ne peut entrer en collision avec aucun, il commence par un souligné.
@@ -57,7 +57,7 @@ local EPSILON = 0.001
 --- last = dernier emprunteur, hold = { [emprunteur] = true } }
 ---@return table
 local function store()
-    return BUI.DB:AccountData(STORE)
+    return OUI.DB:AccountData(STORE)
 end
 
 ---@param a any
@@ -170,7 +170,7 @@ local function reapply()
     if InCombatLockdown() then
         if not waitingCombat then
             waitingCombat = true
-            BUI:RegisterEventOnce("PLAYER_REGEN_ENABLED", function()
+            OUI:RegisterEventOnce("PLAYER_REGEN_ENABLED", function()
                 waitingCombat = false
                 reapply()
             end)
@@ -217,11 +217,11 @@ end
 -- Les modules s'allument à `PLAYER_LOGIN` (voir `Core/Module.lua`) ; le
 -- rattrapage passe juste après, quand chacun a repris ce qu'il voulait garder.
 
-BUI:RegisterEventOnce("PLAYER_LOGIN", function()
+OUI:RegisterEventOnce("PLAYER_LOGIN", function()
     -- Un préréglage graphique écrit ses CVars en rafale : on relit une fois la
     -- rafale retombée, pas à chaque écriture. Branché ici et non au chargement
     -- du fichier : le thème, qui porte ce délai, charge après `Core/`.
-    BUI:RegisterEvent("CVAR_UPDATE", U.Debounce(BUI.Theme.TIMING.CVAR_SETTLE, audit))
+    OUI:RegisterEvent("CVAR_UPDATE", U.Debounce(OUI.Theme.TIMING.CVAR_SETTLE, audit))
 
     C_Timer.After(0, function()
         local owners = {}
@@ -232,7 +232,7 @@ BUI:RegisterEventOnce("PLAYER_LOGIN", function()
         end
 
         for owner in pairs(owners) do
-            local mod = BUI.Modules:Get(owner)
+            local mod = OUI.Modules:Get(owner)
             if not (mod and mod._active) then CVars:ReturnAll(owner) end
         end
     end)

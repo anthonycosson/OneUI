@@ -24,10 +24,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Teleports"
@@ -86,7 +86,7 @@ local TRAVEL_SPELLS = {
 --- camp d'une extension à l'autre : on le redemande au client plutôt que de
 --- l'écrire dans les listes.
 ---@param id number
----@return BUI.MenuEntry|nil
+---@return OUI.MenuEntry|nil
 local function resolveItem(id)
     if PlayerHasToy and PlayerHasToy(id) and C_ToyBox and C_ToyBox.GetToyInfo then
         local _, name, icon = C_ToyBox.GetToyInfo(id)
@@ -136,7 +136,7 @@ local function spellLook(id)
 end
 
 ---@param id number
----@return BUI.MenuEntry|nil
+---@return OUI.MenuEntry|nil
 local function resolveSpell(id)
     if not knowsSpell(id) then return nil end
 
@@ -499,7 +499,7 @@ end
 --- Une table neuve par tiroir : ils sont tous affichés en même temps, il n'y a
 --- donc rien à réutiliser.
 ---@param flyoutID number
----@return BUI.MenuEntry[], integer seasonMatches, integer newestSpell
+---@return OUI.MenuEntry[], integer seasonMatches, integer newestSpell
 local function flyoutDungeons(flyoutID)
     local out = {}
     local slots, known = flyoutShape(flyoutID)
@@ -543,7 +543,7 @@ end
 local expansions = {}
 local loose      = {}
 
----@return table[] packs, BUI.MenuEntry[] loose
+---@return table[] packs, OUI.MenuEntry[] loose
 local function expansionMenus()
     wipe(expansions)
     wipe(loose)
@@ -655,7 +655,7 @@ end
 local entries = {}
 
 ---@param mod table
----@return BUI.MenuEntry[]
+---@return OUI.MenuEntry[]
 local function buildEntries(mod)
     wipe(entries)
 
@@ -893,7 +893,7 @@ local APPLIERS = {
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Teleports"],
     category = "QoL",
     order    = 80,
@@ -944,7 +944,7 @@ BUI:RegisterModule(MODULE, {
             label   = L["Create"],
             tooltip = L["Teleport macro tip"],
             onClick = function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 if mod then createMacro(mod) end
             end,
         },

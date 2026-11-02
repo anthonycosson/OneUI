@@ -293,7 +293,7 @@ lève »).
 
 **Ce qu'on fait** — l'isolation, à trois niveaux, et il faut les trois :
 
-- `applyDarkMode` traite chaque élément dans son propre `BUI.safecall` ;
+- `applyDarkMode` traite chaque élément dans son propre `OUI.safecall` ;
 - `paint` traite chaque texture dans son propre `pcall` — sans quoi une région
   sur vingt laisse un cadre d'unité entier en clair ;
 - `UI/Shade.lua` ne demande **rien** à un cadre autrement que par `ask` /
@@ -2293,8 +2293,8 @@ fonction refusée, ni le cadre en cause. `Logs/taint.log` reste vide même aprè
 **événement** : `ADDON_ACTION_BLOCKED` et `ADDON_ACTION_FORBIDDEN` sont émis avec
 `(addon, fonction)`.
 
-**Ce qu'on fait** — `/bui blocked` arme une veille qui écrit ces deux événements
-dans le chat (`BUI:ToggleActionWatch`, dans `Core/Init.lua`). Éteinte par défaut,
+**Ce qu'on fait** — `/oui blocked` arme une veille qui écrit ces deux événements
+dans le chat (`OUI:ToggleActionWatch`, dans `Core/Init.lua`). Éteinte par défaut,
 et pour une raison de fond : la contamination est régulièrement imputée à l'addon
 qui a **lu** une valeur salie, pas à celui qui l'a salie. Laissée allumée, elle
 accuserait donc régulièrement le mauvais coupable devant un joueur qui n'a rien
@@ -2304,7 +2304,7 @@ demandé.
 
 ## La veille des actions bloquées est muette si les erreurs sont masquées
 
-**Symptôme** — `/bui blocked` répond « veille activée », la fenêtre « action
+**Symptôme** — `/oui blocked` répond « veille activée », la fenêtre « action
 réservée à l'IU de Blizzard » continue de s'afficher, et **rien** n'arrive dans
 le chat. On en conclut que le blocage a disparu, ou que la veille ne marche pas.
 
@@ -2359,7 +2359,7 @@ d'une extension à l'autre, et certains n'existent que sur certains clients.
 `OnEnable` s'exécute sous `safecall`, donc l'erreur est bien remontée — mais le
 reste de la fonction est perdu.
 
-**Ce qu'on fait** — `BUI:RegisterEvent` tente l'inscription sous `pcall`,
+**Ce qu'on fait** — `OUI:RegisterEvent` tente l'inscription sous `pcall`,
 signale le nom fautif, et rend la main. Le module continue de se brancher. C'est
 la même logique que les tests de capacité de la règle 1 : ce que le client
 n'expose pas ne doit pas emporter ce qu'il expose.
@@ -3203,7 +3203,7 @@ erreur. Le mode aperçu et le mode réel ne diffèrent que par la source des
 données, ce qui désigne la lecture — mais `C_UnitAuras.GetUnitAuras` répond, et
 elle rend bien l'aura attendue.
 
-**Relevé en jeu** (`/bui auras`, un affaiblissement du joueur sur la cible) :
+**Relevé en jeu** (`/oui auras`, un affaiblissement du joueur sur la cible) :
 
 ```
 player HELPFUL: 6 (témoin)
@@ -3529,7 +3529,7 @@ puisque c'est l'addon qui a lancé l'appel. C'est le même constat que pour
 `UpdateNamePlateOptions` (voir « Appeler le pilote de barres d'infos teinte tout
 ce qu'il touche ») : **on n'entre pas dans le code du client**, et il n'existe
 pas de version prudente de cet appel — ni `pcall`, ni garde, ni moment opportun.
-Ici `BUI.safecall` attrapait bien l'erreur, ce qui l'empêchait de casser le
+Ici `OUI.safecall` attrapait bien l'erreur, ce qui l'empêchait de casser le
 passage mais pas de remplir BugSack.
 
 La seconde faute est un compteur. La restitution passait sur les cinq cadres à
@@ -3623,7 +3623,7 @@ ne s'affiche **que pour dire quelque chose** ; le jeu la montre teintée de vert
 bordure est laissée intacte. Ailleurs — infobulle, cadre d'unité — une bordure
 est bien de l'habillage, d'où la liste par élément plutôt qu'une règle générale.
 
-**Le corollaire, plus large** — le relevé qui a tranché (`/bui glow`, ajouté pour
+**Le corollaire, plus large** — le relevé qui a tranché (`/oui glow`, ajouté pour
 l'occasion) a montré que *tout* ce qu'un bouton d'action porte en cadres enfants
 était assombri : animations d'incantation, réticule de cible, éclat de fin de
 temps de recharge, halo d'attaque automatique. Aucun n'est de l'habillage, tous
@@ -3637,7 +3637,7 @@ la liste de ce qu'elle contient**, parce que la seconde se reperd à chaque
 extension.
 
 **Comment on l'a su** — pas en lisant le code du client ni en devinant : en
-demandant à l'addon ce qu'il avait touché. C'est ce que fait `/bui glow`, et
+demandant à l'addon ce qu'il avait touché. C'est ce que fait `/oui glow`, et
 c'est pourquoi il reste livré. Une texture de signal assombrie ne ressemble pas à
 une texture assombrie : elle ressemble à une lueur qui manque, et le symptôme
 désigne toujours le déclencheur plutôt que le voile.
@@ -3982,7 +3982,7 @@ plaque sur treize : un aperçu qui n'apparaît que sur une, une animation qui se
 fige, un réglage qui ne repeint rien, un crâne d'exemple qu'on ne parvient plus
 à retirer.
 
-**Ce qu'on trouve** — `/bui noms`, treize plaques à l'écran :
+**Ce qu'on trouve** — `/oui noms`, treize plaques à l'écran :
 
 ```
 GetNamePlates: 13 | plates: 1 | namePlateUnitToken: nil
@@ -4059,7 +4059,7 @@ reste blanc, exactement comme si la case n'était pas cochée.
 2. l'écriture refusée (`SetTextColor` sur des nombres secrets) ;
 3. le cadre déclaré interdit (`IsForbidden`), qu'on écarte à l'entrée.
 
-**Ce qu'on trouve** — `/bui noms`, dans un donjon, l'écran couvert de noms
+**Ce qu'on trouve** — `/oui noms`, dans un donjon, l'écran couvert de noms
 alliés :
 
 ```
@@ -4084,7 +4084,7 @@ apparaît dans BugSack — et c'est ce qui le rend attirant comme explication. U
 liste vide ne dit rien du tout, et c'est justement pour cela qu'on la lit en
 dernier.
 
-**Ce que le diagnostic a coûté** — `/bui noms` finissait par son recensement, et
+**Ce que le diagnostic a coûté** — `/oui noms` finissait par son recensement, et
 les deux sorties anticipées l'emportaient avec elles. « La cible n'a pas de
 plaque » sans les deux nombres qui l'expliquent : trois allers-retours en jeu
 pour une ligne qui était déjà écrite, mais placée après la porte de sortie. **Un
@@ -4216,7 +4216,7 @@ Deux leçons, et la seconde vaut au-delà des emotes :
 
 - **une formule est un relevé, jamais une déduction.** « Embrasser » est la
   traduction de *to kiss* et n'est pas ce que le client écrit. Le seul moyen de
-  savoir est de lire ce qu'il produit — d'où `/bui emote`, qui écrit le texte
+  savoir est de lire ce qu'il produit — d'où `/oui emote`, qui écrit le texte
   brut de chaque emote reçu ;
 - **on se cale sur le complément, pas sur le verbe.** Le câlin est reconnu à
   « dans ses bras ». Le verbe est la partie qui bouge — accord, tournure réécrite
@@ -4280,7 +4280,7 @@ L'habillage est celui du gestionnaire de temps de recharge (mêmes atlas
 - tout passage reste sous `pcall`, et un refus rend un texte vide — une barre
   muette est une réponse honnête, une erreur Lua n'en est pas une.
 
-**La méthode qui a tout trouvé** — une sonde temporaire `/bui perso` qui écrit
+**La méthode qui a tout trouvé** — une sonde temporaire `/oui perso` qui écrit
 son relevé dans `OneUIDB`, relu hors du jeu après `/reload` dans
 `WTF/.../SavedVariables/OneUI.lua`. Quand le nom d'un cadre est inconnu,
 `EnumerateFrames()` + filtre « StatusBar visible dans telle zone de l'écran »
@@ -4671,7 +4671,7 @@ l'échelle de son parent. Faux par défaut : les barres d'infos gardent le
 comportement pour lequel il a été écrit. Le module PvP le passe vrai, et les
 trois cadres — panneau, rangée, lueur — vivent enfin dans le même espace.
 
-**Le garde-fou** — `/bui pvp` écrit désormais la largeur, l'échelle effective et
+**Le garde-fou** — `/oui pvp` écrit désormais la largeur, l'échelle effective et
 la taille réelle des trois cadres. Trois largeurs identiques à des échelles
 différentes ne font pas trois cadres de même taille, et c'est invisible autrement
 qu'en les écrivant côte à côte.
@@ -4681,7 +4681,7 @@ qu'en les écrivant côte à côte.
 ## `IsInGroup()` répond « non » dans un groupe formé par une file
 
 **Symptôme** — l'alerte de soigneur sous contrôle ne se déclenche jamais en
-arène. Les réglages sont bons, le lieu est reconnu (`inArena`), et `/bui pvp`
+arène. Les réglages sont bons, le lieu est reconnu (`inArena`), et `/oui pvp`
 écrit pourtant :
 
     où l'on est : inArena — le module regarde : désactivée
@@ -4718,7 +4718,7 @@ discussion ; la leçon n'avait simplement pas quitté ce fichier.
 ## En arène, lire une aura est refusé — quel que soit le soin qu'on y mette
 
 **Symptôme** — l'alerte de soigneur sous contrôle ne montre rien en arène.
-`/bui pvp` donne la raison mot pour mot :
+`/oui pvp` donne la raison mot pour mot :
 
     C_UnitAuras.GetUnitAuras: activée
     party2 rôle HEALER — entraves trouvées :
@@ -4767,7 +4767,7 @@ aucun code repris, seuls les noms d'API et le principe).
 **Symptôme** — les barres de vie de la cible et du focus perdent leur couleur de
 classe en arène, et seulement là.
 
-**Ce que la sonde a répondu** (`/bui cadres`, sur un adversaire ciblé) :
+**Ce que la sonde a répondu** (`/oui cadres`, sur un adversaire ciblé) :
 
     target UnitIsPlayer: true — UnitClass: secret
 
@@ -4878,7 +4878,7 @@ frame, tout ce qu'on écrit pendant la distribution de l'événement est en plac
 quand elle le lit. Un `module:MarkDirty()` de notre part n'avance donc rien et
 ajoute une pile salie par clé — et par boss.
 
-**Pour l'attraper en jeu** — `/bui blocked` avant d'entrer, puis la clé : la
+**Pour l'attraper en jeu** — `/oui blocked` avant d'entrer, puis la clé : la
 veille nomme la fonction refusée au moment où le suivi s'éteint. Voir plus haut
 « Le client ne dit pas quelle action il a bloquée », et son avertissement sur la
 CVar `scriptErrors`. Le témoin se lit aussi directement, pendant le gel :
@@ -4990,7 +4990,7 @@ sort 1228297) et le serveur l'annonce par une bannière plein écran. À chaque
 boss, sans réglage client pour la taire — le mot « Waystone » n'apparaît même
 pas dans le code de l'interface.
 
-**Comment on l'a identifiée** — sonde SavedVariables (`/bui waystone`,
+**Comment on l'a identifiée** — sonde SavedVariables (`/oui waystone`,
 retirée) sur `DISPLAY_EVENT_TOASTS`, un boss tué en donjon, relevé lu dans WTF :
 
     toast | eventToastID=288 | eventType=18 (SpellScript) | displayType=6 (Scenario)
@@ -5027,7 +5027,7 @@ chaque toast congédié à la souris, donc sûr. Voir `Modules/Annoyances.lua`.
 ## Les plaques 12.1 disent la cible par deux textures, et leurs noms ne préviennent pas
 
 **Symptôme** — mode sombre des plaques allumé, « la barre de vie de l'add est
-toute noire ». La couleur, elle, était juste : la sonde (`/bui barre`, retirée)
+toute noire ». La couleur, elle, était juste : la sonde (`/oui barre`, retirée)
 a relevé le violet miniboss sur la barre **et** sur son remplissage — et, sur
 le conteneur, deux textures teintes à `0.05, 0.05, 0.05`, le facteur des
 plaques :
@@ -5048,7 +5048,7 @@ Le tri du Shade protège les états par clé publiée et par nom (`STATE_KEYS`) 
 « Highlight », « Glow »… Aucun des deux noms ne contient un de ces mots : ils
 tombaient dans l'habillage, et un voile clair multiplié par le facteur des
 plaques devient un couvercle noir. Le symptôme désigne la barre, jamais le
-voile posé dessus — même leçon que la lueur assombrie de `/bui glow`.
+voile posé dessus — même leçon que la lueur assombrie de `/oui glow`.
 
 **Ce qu'on fait** — les deux clés, telles quelles, dans `STATE_KEYS`
 (`UI/Shade.lua`) : elles protègent par clé publiée et par nom d'un coup.
@@ -5074,7 +5074,7 @@ fichier 137014) ont rejoint `STATE_KEYS`.
 protection par **nom** ont un train de retard : le patch qui ajoute une texture
 d'état sous un nom nouveau la livre au tri comme habillage. Quand un élément
 sombre « ne devrait pas l'être », relever les textures et leurs teintes (sonde
-ou `/bui glow`) avant de soupçonner les couleurs — une teinte `0.05` uniforme
+ou `/oui glow`) avant de soupçonner les couleurs — une teinte `0.05` uniforme
 signe notre facteur, pas une couleur choisie. Et quand un symptôme ne touche
 que **certains** porteurs d'un même cadre, chercher ce que ces porteurs
 affichent **en plus**, pas ce que tous partagent.
@@ -5219,7 +5219,7 @@ instant-là. La carte du joueur reste en repli.
 
 **La leçon dépasse le vol** : une fonction qui rend une liste vide au lieu de
 `nil` ne se distingue pas d'un cas légitime, et une chaîne de lectures dont
-chaque maillon peut se taire n'a **aucun symptôme propre**. D'où `/bui vol`,
+chaque maillon peut se taire n'a **aucun symptôme propre**. D'où `/oui vol`,
 qui relit l'embarquement étape par étape — le crochet, la carte, le nombre de
 nœuds, le trajet, la perte de contrôle — et dit lequel des maillons a manqué.
 
@@ -5228,7 +5228,7 @@ nœuds, le trajet, la perte de contrôle — et dit lequel des maillons a manqu�
 ## `UnitOnTaxi` vaut encore `false` quand le vol commence (Forever)
 
 **Symptôme** — la carte de vol corrigée (entrée précédente), le trajet est bien
-lu — `/bui vol` affiche `TakeTaxiNode: 2`, `GetTaxiMapID: 1464`,
+lu — `/oui vol` affiche `TakeTaxiNode: 2`, `GetTaxiMapID: 1464`,
 `GetAllTaxiNodes: 22`, `trajet : 25 → 23` — et le cadre ne paraît toujours pas.
 La même ligne donne la réponse : `PLAYER_CONTROL_LOST: true — UnitOnTaxi:
 false`.

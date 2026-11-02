@@ -20,10 +20,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
 --- Repères posés sur une barre, masqués au départ.
 ---
@@ -44,7 +44,7 @@ function W.BarMarkers(bar)
     -- barre du client que le moteur assombrit, et sans elle le parcours
     -- teintait nos traits comme de l'habillage — un blanc du thème ressortait
     -- gris (voir `collectFrom` dans `UI/Shade.lua`).
-    overlay.buiOwn = true
+    overlay.ouiOwn = true
 
     -- Au-dessus de l'habillage que le client pose sur ses propres enfants de
     -- barre — au niveau de la barre, le trait passerait dessous — et sous nos

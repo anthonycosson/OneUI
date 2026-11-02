@@ -20,10 +20,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
 --- Une case : son liseré sombre et son remplissage.
 ---
@@ -61,13 +61,13 @@ local function newCell(panel)
     return { edge = edge, fill = fill }
 end
 
----@class BUI.ResourceBarOpts
+---@class OUI.ResourceBarOpts
 ---@field getPos? fun(): number, number
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean
 
 --- Rangée de ressource, masquée au départ.
----@param opts BUI.ResourceBarOpts
+---@param opts OUI.ResourceBarOpts
 ---@return table
 function W.ResourceBar(opts)
     -- Aucun habillage : le jeu ne met pas de cadre autour de sa propre rangée de

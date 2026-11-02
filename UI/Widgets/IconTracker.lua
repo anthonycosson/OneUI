@@ -30,19 +30,19 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
----@class BUI.TrackerInfo
+---@class OUI.TrackerInfo
 ---@field charges? number        compteur du coin ; absent, le coin reste vide
 ---@field maxCharges? number
 ---@field remaining? number      secondes restantes, affichées au centre
 ---@field duration? number       durée pleine
 
 --- Suivi posé sur une icône de sort, masqué au départ.
----@param opts table  { getPos, setPos, isLocked, source: fun(): BUI.TrackerInfo|nil }
+---@param opts table  { getPos, setPos, isLocked, source: fun(): OUI.TrackerInfo|nil }
 ---@return table
 function W.IconTracker(opts)
     -- Le panneau **est** l'icône : mêmes bords, aucune marge. Il ne sert plus

@@ -8,14 +8,14 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 
 local L = setmetatable({}, {
     __index = function(_, key) return key end,
 })
 
 ns.L  = L
-BUI.L = L
+OUI.L = L
 
 local CLIENT_LOCALE = GetLocale()
 
@@ -24,7 +24,7 @@ local CLIENT_LOCALE = GetLocale()
 --- appliquées que si elles correspondent au client, et écrasent la base.
 ---@param locale string  code de locale, ex. "frFR"
 ---@param entries table<string, string>
-function BUI:RegisterLocale(locale, entries)
+function OUI:RegisterLocale(locale, entries)
     if locale ~= "enUS" and locale ~= CLIENT_LOCALE then return end
     for key, value in pairs(entries) do
         if value ~= true then -- `true` = « identique à enUS », rien à faire
@@ -33,9 +33,9 @@ function BUI:RegisterLocale(locale, entries)
     end
 end
 
---- Formatage localisé : `BUI:Lf("%d quêtes", n)`.
+--- Formatage localisé : `OUI:Lf("%d quêtes", n)`.
 ---@param key string
 ---@return string
-function BUI:Lf(key, ...)
+function OUI:Lf(key, ...)
     return string.format(L[key], ...)
 end

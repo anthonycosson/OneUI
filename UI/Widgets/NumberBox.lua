@@ -13,9 +13,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
 
 --- Case de saisie d'une borne.
@@ -68,7 +68,7 @@ function W.BoundBox(parent, hint, getValue, setValue)
     return box
 end
 
----@class BUI.RangeRowDesc
+---@class OUI.RangeRowDesc
 ---@field text string
 ---@field tooltip? string
 ---@field indent? boolean
@@ -79,7 +79,7 @@ end
 
 --- Ligne « libellé + deux bornes » : au moins tant, au plus tant.
 ---@param parent table
----@param desc BUI.RangeRowDesc
+---@param desc OUI.RangeRowDesc
 ---@return table row
 function W.RangeRow(parent, desc)
     local row = W.Row(parent, desc.text, desc.indent)

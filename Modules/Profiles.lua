@@ -31,8 +31,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Profiles"
@@ -51,9 +51,9 @@ local otherProfile
 ---@return boolean
 local function otherReady()
     if type(otherProfile) ~= "string" then return false end
-    if otherProfile == BUI.DB:GetProfileName() then return false end
+    if otherProfile == OUI.DB:GetProfileName() then return false end
 
-    local names = BUI.DB:ListProfiles()
+    local names = OUI.DB:ListProfiles()
     for i = 1, #names do
         if names[i] == otherProfile then return true end
     end
@@ -64,9 +64,9 @@ end
 --  Les listes des menus
 -- =========================================================================
 
----@return BUI.DropdownEntry[]
+---@return OUI.DropdownEntry[]
 local function profileValues()
-    local names  = BUI.DB:ListProfiles()
+    local names  = OUI.DB:ListProfiles()
     local values = {}
     for i = 1, #names do
         values[#values + 1] = { value = names[i], label = names[i] }
@@ -76,10 +76,10 @@ end
 
 --- Tous les profils **sauf l'actif** : se copier sur soi-même n'est pas un
 --- geste, la liste ne le propose pas.
----@return BUI.DropdownEntry[]
+---@return OUI.DropdownEntry[]
 local function otherProfileValues()
-    local active = BUI.DB:GetProfileName()
-    local names  = BUI.DB:ListProfiles()
+    local active = OUI.DB:GetProfileName()
+    local names  = OUI.DB:ListProfiles()
     local values = {}
     for i = 1, #names do
         if names[i] ~= active then
@@ -91,7 +91,7 @@ end
 
 ---@return boolean
 local function aloneInList()
-    return #BUI.DB:ListProfiles() < 2
+    return #OUI.DB:ListProfiles() < 2
 end
 
 -- =========================================================================
@@ -103,7 +103,7 @@ end
 ---@param name string
 ---@return boolean
 local function nameTaken(name)
-    local names = BUI.DB:ListProfiles()
+    local names = OUI.DB:ListProfiles()
     for i = 1, #names do
         if names[i] == name then return true end
     end
@@ -113,20 +113,20 @@ end
 local function createProfile()
     W.Prompt(L["New profile name"], L["Create"], function(name)
         if nameTaken(name) then
-            BUI:Print(L["Profile exists"])
+            OUI:Print(L["Profile exists"])
             return
         end
-        BUI.DB:SetProfile(name)
-        BUI:Print(BUI:Lf("Profile created", name))
+        OUI.DB:SetProfile(name)
+        OUI:Print(OUI:Lf("Profile created", name))
     end)
 end
 
 local function duplicateProfile()
     W.Prompt(L["New profile name"], L["Duplicate"], function(name)
-        if BUI.DB:CopyProfileTo(name) then
-            BUI:Print(BUI:Lf("Profile duplicated", name))
+        if OUI.DB:CopyProfileTo(name) then
+            OUI:Print(OUI:Lf("Profile duplicated", name))
         else
-            BUI:Print(L["Profile exists"])
+            OUI:Print(L["Profile exists"])
         end
     end)
 end
@@ -135,10 +135,10 @@ local function copyFromSource()
     if not otherReady() then return end
 
     local source = otherProfile
-    W.Confirm(BUI:Lf("Copy profile confirm", BUI.DB:GetProfileName(), source),
+    W.Confirm(OUI:Lf("Copy profile confirm", OUI.DB:GetProfileName(), source),
         function()
-            if BUI.DB:CopyProfileFrom(source) then
-                BUI:Print(BUI:Lf("Profile copied", source))
+            if OUI.DB:CopyProfileFrom(source) then
+                OUI:Print(OUI:Lf("Profile copied", source))
             end
         end)
 end
@@ -147,10 +147,10 @@ end
 --- le profil par défaut et l'annonce comme un changement de profil — la page
 --- se rafraîchit donc sans qu'on l'appelle.
 local function deleteActive()
-    local doomed = BUI.DB:GetProfileName()
-    W.Confirm(BUI:Lf("Delete profile confirm", doomed), function()
-        if BUI.DB:DeleteProfile(doomed) then
-            BUI:Print(BUI:Lf("Profile deleted", doomed))
+    local doomed = OUI.DB:GetProfileName()
+    W.Confirm(OUI:Lf("Delete profile confirm", doomed), function()
+        if OUI.DB:DeleteProfile(doomed) then
+            OUI:Print(OUI:Lf("Profile deleted", doomed))
         end
     end)
 end
@@ -167,9 +167,9 @@ local exportWindow
 local importWindow
 
 local function openExport()
-    local text = BUI.DB:ExportString()
+    local text = OUI.DB:ExportString()
     if not text then
-        BUI:Print(L["Export failed"])
+        OUI:Print(L["Export failed"])
         return
     end
 
@@ -185,27 +185,27 @@ end
 ---@param data table
 local function importIntoNew(data)
     W.Prompt(L["New profile name"], L["Create"], function(name)
-        local ok, reason = BUI.DB:ImportProfile(data, name)
+        local ok, reason = OUI.DB:ImportProfile(data, name)
         if ok then
-            BUI:Print(BUI:Lf("Import applied to new", name))
+            OUI:Print(OUI:Lf("Import applied to new", name))
         elseif reason == "exists" then
-            BUI:Print(L["Profile exists"])
+            OUI:Print(L["Profile exists"])
         else
-            BUI:Print(L["Import invalid"])
+            OUI:Print(L["Import invalid"])
         end
     end)
 end
 
 ---@param text string
 local function submitImport(text)
-    local data = BUI.DB:ParseImport(text)
+    local data = OUI.DB:ParseImport(text)
 
     -- La validation passe **avant** les questions : demander « quel profil ? »
     -- pour répondre ensuite « le code était invalide » ferait porter la
     -- question sur rien.
-    local ok, reason = BUI.DB:ValidateImport(data)
+    local ok, reason = OUI.DB:ValidateImport(data)
     if not ok then
-        BUI:Print(reason == "newer" and L["Import newer"] or L["Import invalid"])
+        OUI:Print(reason == "newer" and L["Import newer"] or L["Import invalid"])
         return
     end
 
@@ -214,10 +214,10 @@ local function submitImport(text)
     -- deux boutons est y répondre en connaissance de cause.
     W.Choose(L["Import destination"],
         L["Current profile"], function()
-            if BUI.DB:ImportProfile(data) then
-                BUI:Print(L["Import applied"])
+            if OUI.DB:ImportProfile(data) then
+                OUI:Print(L["Import applied"])
             else
-                BUI:Print(L["Import invalid"])
+                OUI:Print(L["Import invalid"])
             end
         end,
         L["New profile"], function()
@@ -238,7 +238,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Profiles"],
     category = "Sharing",
     order    = 1,
@@ -255,10 +255,10 @@ BUI:RegisterModule(MODULE, {
             text    = L["Active profile"],
             tooltip = L["Active profile tip"],
             values  = profileValues,
-            get     = function() return BUI.DB:GetProfileName() end,
+            get     = function() return OUI.DB:GetProfileName() end,
             set     = function(value)
-                if type(value) == "string" and value ~= BUI.DB:GetProfileName() then
-                    BUI.DB:SetProfile(value)
+                if type(value) == "string" and value ~= OUI.DB:GetProfileName() then
+                    OUI.DB:SetProfile(value)
                 end
             end,
         },
@@ -295,7 +295,7 @@ BUI:RegisterModule(MODULE, {
                 otherProfile = value
                 -- Un choix hors base n'émet pas de message : la page se
                 -- rafraîchit ici pour que les boutons suivent le menu.
-                BUI.PageBuilder:RefreshPage(MODULE)
+                OUI.PageBuilder:RefreshPage(MODULE)
             end,
             disabled = aloneInList,
             disabledReason = L["No other profile"],

@@ -16,7 +16,7 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 local L    = ns.L
 
 local MODULE = "AuctionHouse"
@@ -79,7 +79,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Auction house"],
     category = "QoL",
     order    = 50,

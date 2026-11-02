@@ -30,10 +30,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Character"
@@ -602,11 +602,11 @@ local function watchButton(button)
     if type(button.SetItemButtonTexture) ~= "function" then return end
 
     U.GuardedHook(button, "SetItemButtonTexture", function(self)
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         if not (mod and mod:Get("showBagItemLevel")) then return end
-        BUI.safecall(tagButton, self)
+        OUI.safecall(tagButton, self)
     end, function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return mod and mod:IsEnabled()
     end)
 end
@@ -621,7 +621,7 @@ local function walkContainer(frame, depth)
         -- Un cadre qui s'est révélé être un bouton de conteneur est mis sous
         -- surveillance : le parcours ne repassera pas forcément par lui, mais
         -- lui saura se signaler.
-        local ok, handled = BUI.safecall(tagButton, child)
+        local ok, handled = OUI.safecall(tagButton, child)
         if ok and handled then watchButton(child) end
 
         walkContainer(child, depth - 1)
@@ -909,7 +909,7 @@ end
 --- affiche lui-même, ou le grimoire éteint quand la pièce n'est pas enchantée.
 ---@param unit string
 ---@param slotID integer
----@return BUI.SlotIcon
+---@return OUI.SlotIcon
 local function enchantIcon(unit, slotID)
     local enchanted, atlas, label = enchantInfo(unit, slotID)
 
@@ -1038,10 +1038,10 @@ local function updateAll(mod, sheet)
     end
 
     for i = 1, #sheet.slots do
-        BUI.safecall(updateSlot, mod, sheet.slots[i], unit)
+        OUI.safecall(updateSlot, mod, sheet.slots[i], unit)
     end
 
-    BUI.safecall(paintHeadline, mod, sheet, unit)
+    OUI.safecall(paintHeadline, mod, sheet, unit)
 end
 
 --- Repeint les fiches ouvertes, et elles seules.
@@ -1050,7 +1050,7 @@ end
 --- change surtout quand la fiche est fermée, et rien de ce qu'on affiche n'a de
 --- valeur tant qu'on ne la regarde pas.
 local function repaint()
-    local mod = BUI.Modules:Get(MODULE)
+    local mod = OUI.Modules:Get(MODULE)
     if not (mod and mod:IsEnabled()) then return end
 
     for i = 1, #SHEETS do
@@ -1081,7 +1081,7 @@ local refreshLater = U.Debounce(T.TIMING.SLOT_INFO_SETTLE, repaint)
 --- Elle n'est **pas** conditionnée à la fiche de personnage, contrairement aux
 --- deux précédentes : les sacs s'ouvrent seuls, c'est même leur usage courant.
 local refreshBags = U.Debounce(T.TIMING.BAG_TAG, function()
-    local mod = BUI.Modules:Get(MODULE)
+    local mod = OUI.Modules:Get(MODULE)
     if not (mod and mod:IsEnabled()) then return end
 
     updateContainers(mod)
@@ -1131,7 +1131,7 @@ local function startBankWatch()
     if bankTicker then return end
 
     bankTicker = C_Timer.NewTicker(T.TIMING.BANK_WATCH, function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         local wanted = mod and mod:IsEnabled() and mod:Get("showBagItemLevel")
 
         -- La veille se coupe seule dès qu'elle n'a plus lieu d'être : banque
@@ -1186,7 +1186,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Character sheet"],
     category = "Interface",
     order    = 30,
@@ -1223,7 +1223,7 @@ BUI:RegisterModule(MODULE, {
             max      = MAX_LEVEL_DECIMALS,
             step     = 1,
             disabled = function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 return not (mod and mod:Get("showAverageLevel"))
             end,
         },
@@ -1263,7 +1263,7 @@ BUI:RegisterModule(MODULE, {
         },
     },
 
-    --- `/bui fiche` : pourquoi l'icône d'enchantement porte l'image qu'elle porte.
+    --- `/oui fiche` : pourquoi l'icône d'enchantement porte l'image qu'elle porte.
     ---
     --- L'étoile de rang n'est pas une icône qu'on choisit : on la **récupère**
     --- dans la ligne d'infobulle du client, sous la forme `|A:nom:h:l|a`, et la

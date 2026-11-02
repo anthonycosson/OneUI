@@ -19,17 +19,17 @@ mais aucun module n'appelle `UI`.
 
 ```
 chargement des fichiers
-    Core/Init.lua        crée BUI, la frame d'événements, le bus de messages
+    Core/Init.lua        crée OUI, la frame d'événements, le bus de messages
     Core/DB.lua          s'abonne à PLAYER_LOGOUT
     Core/Module.lua      s'abonne à ADDON_LOADED et PLAYER_LOGIN
-    Modules/*.lua        appellent BUI:RegisterModule (les défauts sont
+    Modules/*.lua        appellent OUI:RegisterModule (les défauts sont
                          enregistrés, rien n'est encore actif)
 ADDON_LOADED (OneUI)
     DB:Initialize()      SavedVariables prêts, migrations, fusion des défauts
 PLAYER_LOGIN
-    pour chaque module enregistré et activé -> BUI:EnableModule
+    pour chaque module enregistré et activé -> OUI:EnableModule
     enregistrement de la catégorie dans les options du client
-premier /bui
+premier /oui
     construction paresseuse de la fenêtre d'options
 PLAYER_LOGOUT
     DB retire les valeurs égales aux défauts avant l'écriture du fichier
@@ -45,7 +45,7 @@ options ne crée aucune frame d'interface.
         -> widget.set()
         -> mod:Set(key, value)
         -> DB:Set  écrit dans OneUIDB.profiles[actif].modules[mod][key]
-        -> SendMessage("BUI_SETTING_CHANGED", mod, key, value)
+        -> SendMessage("OUI_SETTING_CHANGED", mod, key, value)
               |
               +-> Core/Module.lua   key == "enabled" ? bascule le module
               |                     sinon -> mod:OnSettingChanged(key, value)
@@ -82,7 +82,7 @@ l'ajout d'une option ou le changement d'un défaut.
 
 ## Registre de modules
 
-Un module est une table déclarative passée à `BUI:RegisterModule(name, def)`.
+Un module est une table déclarative passée à `OUI:RegisterModule(name, def)`.
 Le core y injecte des méthodes (`Get`, `Set`, `IsEnabled`, `RegisterEvent`,
 `RegisterMessage`, `Print`) et une clé `enabled` avec le défaut `true`.
 
@@ -97,7 +97,7 @@ est en combat (`PLAYER_REGEN_ENABLED`).
 
 Un module marqué `preview = true` occupe sa place dans la navigation et montre
 les réglages qu'il proposera, mais **n'a aucun code derrière lui**. Le core
-force son défaut `enabled` à `false` et `BUI:EnableModule` refuse de l'allumer ;
+force son défaut `enabled` à `false` et `OUI:EnableModule` refuse de l'allumer ;
 le moteur de pages grise la page entière, interrupteur du module compris, et
 ajoute en tête un encart « bientôt disponible ». Il n'existe donc aucun chemin
 — clic, base d'un joueur, changement de profil — par lequel il puisse

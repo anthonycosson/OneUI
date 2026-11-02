@@ -29,7 +29,7 @@
 --  Repeindre est idempotent : on rend d'abord, on recollecte, on reteinte.
 --
 --  Ce qu'on ne touche jamais :
---    · les cadres de l'addon lui-même (marque `buiOwn`, posée par le widget à
+--    · les cadres de l'addon lui-même (marque `ouiOwn`, posée par le widget à
 --      sa création) : leurs couleurs sont celles du thème, déjà voulues ;
 --    · la texture de remplissage d'une barre de statut — c'est la donnée (vie,
 --      ressource, temps restant), pas l'habillage ;
@@ -46,12 +46,12 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
 
 local S = {}
-BUI.Shade = S
+OUI.Shade = S
 
 --- Voir `U.IsSecret`, où le prédicat vit depuis qu'un deuxième fichier s'en
 --- sert. Il n'écarte qu'une **valeur** dont on s'apprête à faire un calcul,
@@ -609,7 +609,7 @@ local READOUT_NAMES = {
     "TotemFrame",
 
     -- La seconde famille de barres de ressource du client, relevée en jeu par
-    -- `/bui glow` sous le cadre du joueur — même lecture, autre habillage. Sur
+    -- `/oui glow` sous le cadre du joueur — même lecture, autre habillage. Sur
     -- un paladin, c'est celle-là qui sortait encore en plaque noire.
     "ClassNameplateBarPaladinFrame", "ClassNameplateBarDracthyrFrame",
     "ClassNameplateBarRogueFrame", "ClassNameplateBarFeralDruidFrame",
@@ -817,7 +817,7 @@ local function collectFrom(frame, out, seen, rules)
     -- ses textes — et le parcours les croisait comme n'importe quel enfant :
     -- un trait que le thème dit blanc ressortait gris. Leurs couleurs sont
     -- celles du thème, il n'y a rien à corriger dessus.
-    if frame.buiOwn then return end
+    if frame.ouiOwn then return end
 
     -- Une lecture de combat ne se visite pas : ni elle, ni ce qu'elle porte
     -- (voir `READOUT_NAMES`).
@@ -1161,7 +1161,7 @@ end
 local function drawBorder(icon, factor)
     local border = borders[icon]
     if border == nil then
-        border = BUI.Widgets.ShadeBorder(icon) or false
+        border = OUI.Widgets.ShadeBorder(icon) or false
         borders[icon] = border
     end
     if not border then return end
@@ -1346,7 +1346,7 @@ end
 -- =========================================================================
 --  Diagnostic
 -- =========================================================================
--- `/bui glow` : ce que le mode sombre a fait au bouton sous le curseur.
+-- `/oui glow` : ce que le mode sombre a fait au bouton sous le curseur.
 --
 -- Il existe pour une raison précise. Une texture de **signal** assombrie ne
 -- ressemble pas à une texture assombrie : elle ressemble à une lueur qui
@@ -1399,7 +1399,7 @@ local function reportRegion(region, mine)
         tint = string.format("%.2f %.2f %.2f", r, g, b)
     end
 
-    BUI:Print("  " .. reportName(region) .. shown .. ours
+    OUI:Print("  " .. reportName(region) .. shown .. ours
         .. " | " .. image .. desat .. " | " .. tint)
 end
 
@@ -1409,19 +1409,19 @@ end
 --- lueur, et l'arbre complet d'un bouton d'action tient sur trente lignes qu'on
 --- ne relit pas. Ce qu'on cherche est un nom, pas un inventaire.
 function S:Diagnose()
-    BUI:Print(ns.L["Glow diagnostic"])
+    OUI:Print(ns.L["Glow diagnostic"])
 
     local function report(label)
         local focus = GetMouseFoci and GetMouseFoci()[1]
         if not focus and GetMouseFocus then focus = GetMouseFocus() end
 
         if type(focus) ~= "table" or type(focus.GetRegions) ~= "function" then
-            BUI:Print(ns.L["Glow diagnostic nothing"])
+            OUI:Print(ns.L["Glow diagnostic nothing"])
             return
         end
 
         local mine = ns.L["Glow diagnostic darkened"]
-        BUI:Print(reportName(focus) .. (label or ""))
+        OUI:Print(reportName(focus) .. (label or ""))
 
         for _, region in ipairs(askAll(focus, "GetRegions")) do
             if ask(region, "GetObjectType") == "Texture" then
@@ -1430,7 +1430,7 @@ function S:Diagnose()
         end
 
         for _, child in ipairs(askAll(focus, "GetChildren")) do
-            BUI:Print("  [" .. reportName(child) .. "]")
+            OUI:Print("  [" .. reportName(child) .. "]")
             for _, region in ipairs(askAll(child, "GetRegions")) do
                 if ask(region, "GetObjectType") == "Texture" then
                     reportRegion(region, mine)

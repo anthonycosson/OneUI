@@ -19,19 +19,19 @@
 --  filet sous le titre de page : deux panneaux encadrés côte à côte se
 --  disputeraient le regard.
 --
---  Construction paresseuse : la fenêtre n'existe qu'au premier `/bui`. Se
+--  Construction paresseuse : la fenêtre n'existe qu'au premier `/oui`. Se
 --  connecter sans ouvrir les options ne coûte donc aucune frame.
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
-local PB   = BUI.PageBuilder
+local PB   = OUI.PageBuilder
 
 local Config = {}
-BUI.Config = Config
+OUI.Config = Config
 
 local frame            --- fenêtre principale
 local body             --- tout ce qui vit sous la barre de titre
@@ -74,7 +74,7 @@ local SCALE_MODULE, SCALE_KEY = "General", "configScale"
 
 ---@return number  pourcentage
 local function currentScale()
-    local value = BUI.DB:Get(SCALE_MODULE, SCALE_KEY)
+    local value = OUI.DB:Get(SCALE_MODULE, SCALE_KEY)
     if type(value) ~= "number" then return T.SIZE.CONFIG_SCALE_MAX end
     return value
 end
@@ -109,7 +109,7 @@ local playerWidth
 ---@return number|nil
 local function measure(value)
     if type(value) ~= "number" then return nil end
-    if BUI.Util.IsSecret(value) then return nil end
+    if OUI.Util.IsSecret(value) then return nil end
     if value ~= value then return nil end                 -- NaN
     return value
 end
@@ -219,7 +219,7 @@ end
 
 ---@param percent number
 local function setScale(percent)
-    BUI.DB:Set(SCALE_MODULE, SCALE_KEY, percent)
+    OUI.DB:Set(SCALE_MODULE, SCALE_KEY, percent)
     applyScale()
 end
 
@@ -292,7 +292,7 @@ local function buildFrame()
     -- n'a pas recliqué, fenêtre fermée comprise, et un bouton qui laisse
     -- quelque chose derrière lui doit se voir.
     editButton = W.DangerButton(body, L["Edit mode"], function()
-        BUI:ToggleEditMode()
+        OUI:ToggleEditMode()
         Config:RefreshEditButton()
     end)
     editButton:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", 0, -S.PANEL_PAD)
@@ -345,7 +345,7 @@ local function buildFrame()
     -- ----- pied de fenêtre : version -----
     local version = frame:CreateFontString(nil, "OVERLAY", T.FONT.HINT)
     version:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -S.CHROME_SIDE - 18, S.CHROME_BOTTOM - 6)
-    version:SetText(BUI.VERSION)
+    version:SetText(OUI.VERSION)
 
     --- `byPlayer` : le coin a été tiré à la main. La fenêtre qu'on avait mise de
     --- côté n'a plus lieu d'être rendue — le joueur vient d'en choisir une autre,
@@ -370,7 +370,7 @@ local function buildFrame()
         if currentModule then PB:RefreshPage(currentModule) end
     end
 
-    BUI.Sidebar:Build(sidebarContent, function(moduleName)
+    OUI.Sidebar:Build(sidebarContent, function(moduleName)
         Config:SelectModule(moduleName)
     end)
 
@@ -391,7 +391,7 @@ end
 --- Affiche la page d'un module.
 ---@param moduleName string
 function Config:SelectModule(moduleName)
-    local mod = BUI.Modules:Get(moduleName)
+    local mod = OUI.Modules:Get(moduleName)
     if not mod then return end
 
     currentModule = moduleName
@@ -405,7 +405,7 @@ function Config:SelectModule(moduleName)
     -- la page est la fonction. Ce qui suit ne doit jamais pouvoir empêcher ce
     -- qui précède — une page à la mauvaise largeur reste une page qu'on lit.
     pageTitle:SetTitle(mod.title)
-    BUI.Sidebar:SetSelected(moduleName)
+    OUI.Sidebar:SetSelected(moduleName)
     page:Show()
 
     -- La fenêtre ensuite, la page se disposant d'après la largeur de la zone de
@@ -437,13 +437,13 @@ end
 function Config:OnSearchChanged(text)
     local query = strtrim(text or "")
 
-    if #query < BUI.Search.MIN_CHARS then
-        BUI.Sidebar:ClearResults()
+    if #query < OUI.Search.MIN_CHARS then
+        OUI.Sidebar:ClearResults()
         return
     end
 
-    local groups, truncated = BUI.Search:Find(query)
-    BUI.Sidebar:ShowResults(groups, truncated, function(moduleName, descriptor)
+    local groups, truncated = OUI.Search:Find(query)
+    OUI.Sidebar:ShowResults(groups, truncated, function(moduleName, descriptor)
         -- Le clic referme la recherche : la colonne montre alors la liste, avec
         -- la page atteinte sélectionnée — l'état exact qu'aurait laissé une
         -- navigation à la main.
@@ -463,7 +463,7 @@ end
 function Config:SelectOption(moduleName, descriptor)
     self:SelectModule(moduleName)
 
-    local row = BUI.PageBuilder:RowFor(moduleName, descriptor)
+    local row = OUI.PageBuilder:RowFor(moduleName, descriptor)
     if not row then return end
 
     C_Timer.After(0, function()
@@ -503,7 +503,7 @@ end
 --- ferait ressortir du mode à qui croirait y entrer.
 function Config:RefreshEditButton()
     if not editButton then return end
-    editButton:SetText(BUI:IsEditMode() and L["Leave edit mode"] or L["Edit mode"])
+    editButton:SetText(OUI:IsEditMode() and L["Leave edit mode"] or L["Edit mode"])
 end
 
 function Config:Show()
@@ -513,13 +513,13 @@ function Config:Show()
     -- quelque chemin que ce soit — la commande, le bouton de minicarte, le
     -- compartiment d'addons, les options du jeu. C'est ce qui vaut à cette
     -- marque d'être posée ici et non dans chacun d'eux.
-    BUI.DB:MarkSeen(BUI.DB.HINT_LOGIN)
+    OUI.DB:MarkSeen(OUI.DB.HINT_LOGIN)
 
     frame:Show()
     self:RefreshEditButton()
-    BUI.Sidebar:RefreshStates()
+    OUI.Sidebar:RefreshStates()
 
-    local target = currentModule or BUI.Sidebar:FirstModuleName()
+    local target = currentModule or OUI.Sidebar:FirstModuleName()
     if target then
         self:SelectModule(target)
     else
@@ -548,18 +548,18 @@ end
 --  Réaction aux changements d'état
 -- =========================================================================
 
-BUI:RegisterMessage(BUI.MESSAGES.SETTING_CHANGED, function(_, moduleName)
+OUI:RegisterMessage(OUI.MESSAGES.SETTING_CHANGED, function(_, moduleName)
     if not Config:IsShown() then return end
     if moduleName == currentModule then PB:RefreshPage(moduleName) end
 end)
 
-BUI:RegisterMessage(BUI.MESSAGES.MODULE_STATE, function(_, moduleName, enabled)
-    BUI.Sidebar:SetModuleEnabled(moduleName, enabled)
+OUI:RegisterMessage(OUI.MESSAGES.MODULE_STATE, function(_, moduleName, enabled)
+    OUI.Sidebar:SetModuleEnabled(moduleName, enabled)
 end)
 
-BUI:RegisterMessage(BUI.MESSAGES.PROFILE_CHANGED, function()
+OUI:RegisterMessage(OUI.MESSAGES.PROFILE_CHANGED, function()
     if not Config:IsShown() then return end
-    BUI.Sidebar:RefreshStates()
+    OUI.Sidebar:RefreshStates()
     if currentModule then PB:RefreshPage(currentModule) end
 end)
 
@@ -571,7 +571,7 @@ end)
 -- demande de fermer celui-ci **puis** d'ouvrir la nôtre à la frame suivante ;
 -- l'enchaîner dans le même appel propage le taint du panneau à notre code.
 
-BUI:RegisterEventOnce("PLAYER_LOGIN", function()
+OUI:RegisterEventOnce("PLAYER_LOGIN", function()
     if not (Settings and Settings.RegisterCanvasLayoutCategory) then return end
 
     local panel = W.Container()

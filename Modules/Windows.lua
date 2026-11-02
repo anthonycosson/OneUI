@@ -15,8 +15,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Windows"
@@ -26,7 +26,7 @@ local MODULE = "Windows"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -63,7 +63,7 @@ end
 
 --- Construit l'hôte que le moteur interroge.
 ---@param mod table
----@return BUI.MoveHost
+---@return OUI.MoveHost
 local function makeHost(mod)
     return {
         CanMove  = function() return mod:Get("movable") == true end,
@@ -115,7 +115,7 @@ end
 ---@param mod table
 local function resetLayout(mod)
     W.Confirm(L["Reset windows confirm"], function()
-        BUI.Move:ResetAll()
+        OUI.Move:ResetAll()
 
         -- `ResetAll` a vidé les entrées une à une, par l'hôte. Les tables
         -- elles-mêmes sont vidées ici : une fenêtre retirée du registre entre
@@ -136,7 +136,7 @@ end
 -- renommer casserait les réglages de tout le monde (règle 4). Seul l'intitulé
 -- change, et il dit désormais de quelles fenêtres il s'agit — celles du client,
 -- par opposition à la fenêtre d'options de l'addon.
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Game windows"],
     category = "QoL",
     order    = 10,
@@ -227,35 +227,35 @@ BUI:RegisterModule(MODULE, {
             text    = L["Reset window layout"],
             label   = L["Reset"],
             tooltip = function()
-                return string.format(L["Reset window layout tip"], BUI.Move:CountPinned())
+                return string.format(L["Reset window layout tip"], OUI.Move:CountPinned())
             end,
             onClick = function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 if mod then resetLayout(mod) end
             end,
         },
     },
 
     OnEnable = function(self)
-        BUI.Move:SetHost(makeHost(self))
-        BUI.Move:Start()
+        OUI.Move:SetHost(makeHost(self))
+        OUI.Move:Start()
 
         -- La moitié des fenêtres du client vit dans un addon chargé à la
         -- demande : elles n'existent pas encore ici.
         self:RegisterEvent("ADDON_LOADED", function(_, addonName)
-            BUI.Move:OnAddonLoaded(addonName)
+            OUI.Move:OnAddonLoaded(addonName)
         end)
 
         -- Le capteur de molette ne s'arme que pendant que le modificateur est
         -- tenu. Hors de ces instants-là, il n'existe pas.
         self:RegisterEvent("MODIFIER_STATE_CHANGED", function()
-            BUI.Move:OnModifierChanged()
+            OUI.Move:OnModifierChanged()
         end)
 
         -- Un cadre protégé ne se repositionne pas en combat : ce qui a été
         -- refusé pendant le combat est rattrapé ici.
         self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-            BUI.Move:Refresh()
+            OUI.Move:Refresh()
         end)
     end,
 
@@ -263,7 +263,7 @@ BUI:RegisterModule(MODULE, {
         -- Rend chaque fenêtre à l'ancrage et à l'échelle où on l'a trouvée, puis
         -- débranche le moteur. Les positions restent en base : rallumer le
         -- module doit retrouver la disposition, pas la redemander.
-        BUI.Move:Stop()
+        OUI.Move:Stop()
     end,
 
     OnSettingChanged = function(self, key)
@@ -272,21 +272,21 @@ BUI:RegisterModule(MODULE, {
             -- d'abord les fenêtres à leur état d'origine, sans quoi celles que
             -- l'ancien profil déplaçait et que le nouveau ignore resteraient là
             -- où le profil précédent les avait mises.
-            BUI.Move:Stop()
-            BUI.Move:SetHost(makeHost(self))
-            BUI.Move:Start()
+            OUI.Move:Stop()
+            OUI.Move:SetHost(makeHost(self))
+            OUI.Move:Start()
             return
         end
 
         if key == "scalable" then
             -- Décocher pendant que le modificateur est tenu doit rendre la
             -- molette au jeu tout de suite, pas au relâchement.
-            BUI.Move:OnModifierChanged()
+            OUI.Move:OnModifierChanged()
             return
         end
 
         if key == "lootMove" or key == "lootPreview" or key == "lootLocked" then
-            BUI.Move:RefreshLoot()
+            OUI.Move:RefreshLoot()
         end
     end,
 })

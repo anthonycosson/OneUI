@@ -37,10 +37,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
 -- =========================================================================
 --  La rangée d'auras de l'addon
@@ -163,7 +163,7 @@ local function setEdge(icon, kind, shaded, side)
         -- `UI/Widgets/ShadeBorder.lua`). Celui du contour est celui de l'image,
         -- donc la vignette moins son retrait des deux côtés.
         local face   = side - 2 * T.SIZE.PLATE_AURA_EDGE
-        local factor = BUI.Shade and BUI.Shade:FactorFor("auras") or 1
+        local factor = OUI.Shade and OUI.Shade:FactorFor("auras") or 1
         icon.border:Draw(factor, edgeColor(kind), face)
         return
     end

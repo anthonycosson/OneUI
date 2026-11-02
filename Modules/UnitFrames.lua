@@ -23,10 +23,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "UnitFrames"
@@ -36,7 +36,7 @@ local MODULE = "UnitFrames"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -163,7 +163,7 @@ end
 --- La classe d'un adversaire d'arène, par le seul chemin qui reste quand
 --- `UnitClass` se tait.
 ---
---- **En arène, le client cache la classe** — relevé par `/bui cadres` : une
+--- **En arène, le client cache la classe** — relevé par `/oui cadres` : une
 --- cible dont `UnitIsPlayer` répond franchement `true` rend une classe secrète.
 --- Il publie en revanche la **spécialisation** de chaque adversaire, et c'est
 --- par là que ses propres cadres d'arène se colorent :
@@ -1103,9 +1103,9 @@ local function restoreFrameScale(frame)
     if not scale then return end
     frameScales[frame] = nil
 
-    BUI.safecall(frame.SetScale, frame, scale)
+    OUI.safecall(frame.SetScale, frame, scale)
     if type(frame.UpdateSystemSettingFrameSize) == "function" then
-        BUI.safecall(frame.UpdateSystemSettingFrameSize, frame)
+        OUI.safecall(frame.UpdateSystemSettingFrameSize, frame)
     end
 end
 
@@ -1191,7 +1191,7 @@ local function applySystemScale(mod, system)
             if frameScales[frame] == nil then
                 frameScales[frame] = frame:GetScale() or 1
             end
-            BUI.safecall(frame.SetScale, frame, scale)
+            OUI.safecall(frame.SetScale, frame, scale)
         end
     end
 end
@@ -1210,7 +1210,7 @@ end
 ---@return fun(): boolean
 local function scaleGuard(toggle)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return (mod and mod:IsEnabled() and mod:Get(toggle) == true) or false
     end
 end
@@ -1274,7 +1274,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Unit frames"],
     category = "Interface",
     order    = 10,
@@ -1475,7 +1475,7 @@ BUI:RegisterModule(MODULE, {
         self:RegisterEvent("ARENA_OPPONENT_UPDATE", rescaleArena)
     end,
 
-    --- `/bui cadres` : pourquoi la barre de la cible n'a pas la couleur de sa
+    --- `/oui cadres` : pourquoi la barre de la cible n'a pas la couleur de sa
     --- classe.
     ---
     --- Trois réponses possibles, et elles se ressemblent toutes de l'écran — la
@@ -1487,7 +1487,7 @@ BUI:RegisterModule(MODULE, {
     ---   · il laisse dire que c'en est un mais **cache la classe**.
     ---
     --- Seul le troisième cas est sans issue. Le deuxième ne l'est peut-être pas,
-    --- et c'est cette ligne-là qui le dira. Même motif que `/bui noms` : la prose
+    --- et c'est cette ligne-là qui le dira. Même motif que `/oui noms` : la prose
     --- est traduite, les noms d'API sont bruts.
     DiagnoseFrames = function(self)
         self:Print(L["Frame diagnostic"])

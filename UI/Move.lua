@@ -36,14 +36,14 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local M = {}
-BUI.Move = M
+OUI.Move = M
 
 -- =========================================================================
 --  Bornes de l'échelle
@@ -204,7 +204,7 @@ end
 --  Hôte
 -- =========================================================================
 
----@class BUI.MoveHost
+---@class OUI.MoveHost
 ---@field CanMove fun(): boolean
 ---@field CanScale fun(): boolean
 ---@field Modifier fun(): string            "NONE" | "SHIFT" | "CTRL" | "ALT"
@@ -216,12 +216,12 @@ end
 ---@field LootLocked fun(): boolean         l'aperçu refuse-t-il le glisser ?
 ---@field LootPreview fun(): boolean        l'aperçu est-il demandé ?
 
----@type BUI.MoveHost|nil
+---@type OUI.MoveHost|nil
 local host
 
 --- Branche le moteur sur le module qui détient les réglages. `nil` l'éteint :
 --- tous les hooks posés deviennent inertes à la ligne suivante.
----@param newHost BUI.MoveHost|nil
+---@param newHost OUI.MoveHost|nil
 function M:SetHost(newHost)
     host = newHost
 end
@@ -1071,7 +1071,7 @@ end
 local function restoreBags()
     for frame, origin in pairs(bagOrigin) do
         if usable(frame) and frame:IsShown() then
-            BUI.safecall(place, frame, origin.x, origin.y)
+            OUI.safecall(place, frame, origin.x, origin.y)
         end
     end
     wipe(bagOrigin)
@@ -1197,7 +1197,7 @@ local function applyLootSoon()
     lootScheduled = true
     C_Timer.After(0, function()
         lootScheduled = false
-        if host then BUI.safecall(applyLoot) end
+        if host then OUI.safecall(applyLoot) end
     end)
 end
 
@@ -1227,7 +1227,7 @@ local function restoreLoot()
     if not frame then return end
 
     frame.ignoreFramePositionManager = nil
-    BUI.safecall(restoreOrigin, frame, lootEntry)
+    OUI.safecall(restoreOrigin, frame, lootEntry)
 end
 
 --- L'aperçu. Il ne connaît pas la base : il rend et reçoit un décalage de centre
@@ -1256,7 +1256,7 @@ local function lootPreview()
         setPos = function(x, y)
             if not host then return end
             host.SetPosition(LOOT_NAME, x, y)
-            BUI.safecall(applyLoot)
+            OUI.safecall(applyLoot)
         end,
 
         -- **La poignée d'échelle retaille la vraie fenêtre, pas l'aperçu.**
@@ -1277,7 +1277,7 @@ local function lootPreview()
         setScale = function(scale)
             if not host then return end
             host.SetScale(LOOT_NAME, scale)
-            BUI.safecall(applyLoot)
+            OUI.safecall(applyLoot)
         end,
     })
 
@@ -1311,12 +1311,12 @@ function M:RefreshLoot()
 
     local pos, scale = lootWanted()
     if pos or scale then
-        BUI.safecall(applyLoot)
+        OUI.safecall(applyLoot)
     else
-        BUI.safecall(restoreLoot)
+        OUI.safecall(restoreLoot)
     end
 
-    BUI.safecall(applyLootPreview)
+    OUI.safecall(applyLootPreview)
 end
 
 --- Branche les fenêtres qu'un addon de Blizzard vient d'apporter.
@@ -1362,13 +1362,13 @@ function M:Refresh()
         local frame = hooked[i]
         local entry = state[frame]
         if entry and usable(frame) and frame:IsVisible() then
-            BUI.safecall(applyStored, frame, entry)
+            OUI.safecall(applyStored, frame, entry)
         end
     end
 
     -- La pile de sacs n'est pas dans `hooked` : elle ne se repose pas cadre par
     -- cadre, mais d'un seul geste (voir la section « sacs »).
-    BUI.safecall(applyBags)
+    OUI.safecall(applyBags)
 
     -- La fenêtre de jet non plus : elle s'ancre par le bas et porte son aperçu.
     self:RefreshLoot()
@@ -1393,7 +1393,7 @@ function M:Stop()
         local frame = hooked[i]
         local entry = state[frame]
         if entry and usable(frame) then
-            BUI.safecall(restoreOrigin, frame, entry)
+            OUI.safecall(restoreOrigin, frame, entry)
         end
     end
 
@@ -1408,7 +1408,7 @@ function M:Stop()
     -- client pendant que le hook sur `SetPoint` est encore vivant reviendrait à
     -- la lui reprendre dans la foulée.
     if lootPanel then lootPanel:Hide() end
-    BUI.safecall(restoreLoot)
+    OUI.safecall(restoreLoot)
 end
 
 --- Rend toutes les fenêtres **et** efface ce que la base sait d'elles.
@@ -1436,7 +1436,7 @@ function M:ResetAll()
         local frame = hooked[i]
         local entry = state[frame]
         if entry and usable(frame) then
-            BUI.safecall(restoreOrigin, frame, entry)
+            OUI.safecall(restoreOrigin, frame, entry)
         end
     end
 
@@ -1446,8 +1446,8 @@ function M:ResetAll()
 
     -- Celle de la fenêtre de jet aussi. L'aperçu, lui, reste affiché si le
     -- joueur l'avait demandé : il revient au centre, prêt à être reposé.
-    BUI.safecall(restoreLoot)
-    BUI.safecall(applyLootPreview)
+    OUI.safecall(restoreLoot)
+    OUI.safecall(applyLootPreview)
 end
 
 --- Nombre de fenêtres actuellement épinglées, pour l'affichage des options.

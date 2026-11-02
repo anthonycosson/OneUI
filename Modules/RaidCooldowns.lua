@@ -22,10 +22,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "RaidCooldowns"
@@ -35,7 +35,7 @@ local MODULE = "RaidCooldowns"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -117,7 +117,7 @@ end
 local RES_PREVIEW = { charges = 1, maxCharges = 1, remaining = 90, duration = 600 }
 
 ---@param mod table
----@return BUI.TrackerInfo|nil
+---@return OUI.TrackerInfo|nil
 local function battleResSource(mod)
     if not inGroupContent() then
         if mod:Get("battleResPreview") then return RES_PREVIEW end
@@ -223,7 +223,7 @@ end
 local LUST_PREVIEW = { remaining = 420, duration = 600 }
 
 ---@param mod table
----@return BUI.TrackerInfo|nil
+---@return OUI.TrackerInfo|nil
 local function lustSource(mod)
     local remaining, duration = readSated()
 
@@ -453,7 +453,7 @@ end
 ---@param mod table
 local function hookAuraUpdates(mod)
     local guard = function() return mod:IsEnabled() end
-    local body  = function() BUI.safecall(applyHideDebuff, mod) end
+    local body  = function() OUI.safecall(applyHideDebuff, mod) end
 
     -- Trois noms de méthode, parce que le client en a changé : celle qui existe
     -- est branchée, les autres sont sautées.
@@ -577,7 +577,7 @@ local APPLIERS = {
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Bloodlust and battle res"],
     category = "MythicRaid",
     order    = 20,
@@ -708,7 +708,7 @@ BUI:RegisterModule(MODULE, {
         -- par un chemin qu'on n'a pas su nommer.
         self:RegisterEvent("UNIT_AURA", function(_, unit)
             if unit ~= "player" then return end
-            BUI.safecall(applyHideDebuff, self)
+            OUI.safecall(applyHideDebuff, self)
         end)
 
         -- Ce qui décide de l'affichage du suivi des résurrections change au

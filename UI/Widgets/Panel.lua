@@ -22,12 +22,12 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
----@class BUI.PanelOpts
+---@class OUI.PanelOpts
 ---@field width number
 ---@field height number
 ---@field title? string
@@ -43,7 +43,7 @@ local W    = BUI.Widgets
 ---@field canScale? fun(): boolean        refuse la poignée quand elle rendrait faux
 
 --- Panneau autonome, masqué au départ.
----@param opts BUI.PanelOpts
+---@param opts OUI.PanelOpts
 ---@return table
 function W.Panel(opts)
     local panel = CreateFrame("Frame", nil, UIParent)

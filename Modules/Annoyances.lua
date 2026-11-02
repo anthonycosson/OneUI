@@ -15,8 +15,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local U    = BUI.Util
+local OUI = ns.OUI
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "Annoyances"
@@ -268,7 +268,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Annoyances"],
     category = "QoL",
     order    = 90,

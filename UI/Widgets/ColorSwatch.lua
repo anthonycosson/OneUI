@@ -15,11 +15,11 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
----@class BUI.ColorOpts
+---@class OUI.ColorOpts
 ---@field text string
 ---@field tooltip? string
 ---@field indent? boolean  sous-option : en retrait, d'un corps plus petit
@@ -89,7 +89,7 @@ end
 ---     })
 ---
 ---@param parent table
----@param opts BUI.ColorOpts
+---@param opts OUI.ColorOpts
 ---@return table row
 function W.ColorSwatch(parent, opts)
     local row = W.Row(parent, opts.text, opts.indent)

@@ -12,7 +12,7 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 
 --- Objet couleur du client, renvoyé par `CreateColor` et par les globales
 --- `*_FONT_COLOR`. Déclaré ici parce que l'analyse statique locale ne dispose
@@ -23,7 +23,7 @@ local BUI = ns.BUI
 ---@field WrapTextInColorCode fun(self: ColorMixin, text: string): string
 
 local T = {}
-BUI.Theme = T
+OUI.Theme = T
 
 -- =========================================================================
 --  Géométrie
@@ -2480,6 +2480,6 @@ function T.Template(kind)
     for i = 1, #candidates do
         if T.HasTemplate(candidates[i]) then return candidates[i] end
     end
-    BUI:Warn("aucun template disponible pour « " .. kind .. " »")
+    OUI:Warn("aucun template disponible pour « " .. kind .. " »")
     return nil
 end

@@ -26,8 +26,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local U    = BUI.Util
+local OUI = ns.OUI
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "Graphics"
@@ -114,7 +114,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Graphics"],
     category = "QoL",
     -- Juste avant « Nuisances », et pour la même raison qu'elle ferme la

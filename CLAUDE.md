@@ -110,7 +110,7 @@ SavedVariables : `OneUIDB` (compte) et `OneUICharDB` (personnage).
 - Les défauts ne sont jamais écrits sur le disque (`Core/DB.lua` les retire à la
   déconnexion). Changer un défaut change donc le comportement de tous les
   joueurs qui n'ont pas touché à l'option — c'est voulu.
-- Le nom d'un module (`BUI:RegisterModule("Quest", ...)`) est une clé de base de
+- Le nom d'un module (`OUI:RegisterModule("Quest", ...)`) est une clé de base de
   données. Le renommer casse les réglages de tout le monde : ne pas le faire.
 
 ## 5. Textes
@@ -126,7 +126,7 @@ SavedVariables : `OneUIDB` (compte) et `OneUICharDB` (personnage).
   `nil` : **désactiver un module doit le rendre indétectable**. Toute frame
   cachée, texture remplacée ou point d'ancrage déplacé doit être restauré.
 - Les abonnements pris via `self:RegisterEvent` / `self:RegisterMessage` sont
-  révoqués automatiquement. Ne pas utiliser `BUI:RegisterEvent` depuis un module.
+  révoqués automatiquement. Ne pas utiliser `OUI:RegisterEvent` depuis un module.
 - `hooksecurefunc` est irréversible. Le seul motif autorisé est
   `U.GuardedHook`, qui pose le hook une fois et le rend inerte quand le module
   est éteint.
@@ -179,7 +179,7 @@ SavedVariables : `OneUIDB` (compte) et `OneUICharDB` (personnage).
 4. Si le changement touche l'affichage ou le comportement en jeu, rappeler de
    tester avec `/reload` : la CI ne lance jamais le jeu.
 
-**Aucun tag hors du skill `/buiprod`** : un tag `v*` poussé publie
+**Aucun tag hors du skill `/ouiprod`** : un tag `v*` poussé publie
 immédiatement une version publique sur CurseForge.
 
 ## 10. Vérification avant de dire « c'est fait »
@@ -203,10 +203,10 @@ immédiatement une version publique sur CurseForge.
 |---|---|
 | Ajouter un module | copier `Modules/Quest.lua`, ajouter la ligne dans `OneUI.toc` |
 | Ajouter un type de contrôle | `UI/Widgets/`, puis le brancher dans `PageBuilder.lua` |
-| Ajouter une catégorie de menu | `BUI.CATEGORIES` dans `Core/Module.lua` |
-| Ajouter un événement global | `BUI:RegisterEvent` dans `Core/Init.lua` |
+| Ajouter une catégorie de menu | `OUI.CATEGORIES` dans `Core/Module.lua` |
+| Ajouter un événement global | `OUI:RegisterEvent` dans `Core/Init.lua` |
 | Migrer un format de réglage | `DB:RunMigrations` dans `Core/DB.lua` |
-| Emprunter une CVar du client (partagée, ou à rendre après un `/reload`) | `BUI.CVars:Lend` / `:Return` dans `Core/CVars.lua` |
+| Emprunter une CVar du client (partagée, ou à rendre après un `/reload`) | `OUI.CVars:Lend` / `:Return` dans `Core/CVars.lua` |
 | Piège d'API rencontré | le noter dans `dev/docs/API_NOTES.md` |
 | Un module qui ne tient plus dans un fichier | le couper entre ce qui **décrit** et ce qui **agit**, la page d'abord dans le `.toc` — voir `Modules/NameplatesPage.lua` |
 

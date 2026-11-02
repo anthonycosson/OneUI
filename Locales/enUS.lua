@@ -4,9 +4,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 
-BUI:RegisterLocale("enUS", {
+OUI:RegisterLocale("enUS", {
     -- Fenêtre d'options
     ["OneUI"]              = "OneUI",
     ["Interface"]               = "Interface",
@@ -38,7 +38,7 @@ BUI:RegisterLocale("enUS", {
     -- Écrit une fois à la connexion. La commande y est en clair : c'est la seule
     -- chose que le joueur ait besoin de retenir, et l'addon ne se manifeste
     -- nulle part ailleurs tant qu'il n'a rien coché.
-    ["Login hint"]              = "Type /bui to open the options.",
+    ["Login hint"]              = "Type /oui to open the options.",
     ["Module disabled tooltip"] = "This module is disabled.",
     ["Version"]                 = "Version",
     ["Blocked action watch"]    = "Blocked action watch:",
@@ -1091,7 +1091,7 @@ BUI:RegisterLocale("enUS", {
     ["Aura scale"]                     = "Aura size",
     ["Aura scale tip"]                 = "Size of the aura icons, as a percentage of the game's own.",
 
-    -- Diagnostic `/bui auras` : les libellés de prose seulement — les noms de
+    -- Diagnostic `/oui auras` : les libellés de prose seulement — les noms de
     -- filtres et de champs sont ceux de l'API, ils ne se traduisent pas.
     ["Aura diagnostic"]                = "Nameplate diagnostic — target's plate",
     ["Aura diagnostic needs target"]   = "Target something first: the diagnostic reads the target's nameplate.",
@@ -1106,7 +1106,7 @@ BUI:RegisterLocale("enUS", {
     ["Tokens"]                         = "tokens",
     ["Aura diagnostic unavailable"]    = "The Nameplates module is not running.",
 
-    -- Diagnostic `/bui glow` : la prose seulement — les noms de textures sont
+    -- Diagnostic `/oui glow` : la prose seulement — les noms de textures sont
     -- ceux du client, ils ne se traduisent pas.
     ["Glow diagnostic"] =
         "Dark mode diagnostic: hover the button now. Its textures are listed in three "

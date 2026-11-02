@@ -39,11 +39,11 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local U   = BUI.Util
+local OUI = ns.OUI
+local U   = OUI.Util
 
 local DB = {}
-BUI.DB = DB
+OUI.DB = DB
 
 local SCHEMA_VERSION   = 19
 local DEFAULT_PROFILE  = "Default"
@@ -745,7 +745,7 @@ local function onLogout()
     end
 end
 
-BUI:RegisterEvent("PLAYER_LOGOUT", onLogout)
+OUI:RegisterEvent("PLAYER_LOGOUT", onLogout)
 
 -- =========================================================================
 --  Mémoire de compte
@@ -825,7 +825,7 @@ function DB:Set(moduleName, key, value)
     local settings = moduleTable(moduleName)
     if settings[key] == value then return end
     settings[key] = value
-    BUI:SendMessage(BUI.MESSAGES.SETTING_CHANGED, moduleName, key, value)
+    OUI:SendMessage(OUI.MESSAGES.SETTING_CHANGED, moduleName, key, value)
 end
 
 --- Remet un module à ses défauts.
@@ -835,7 +835,7 @@ function DB:ResetModule(moduleName)
     wipe(settings)
     local defaults = defaultsRegistry[moduleName]
     if defaults then U.MergeDefaults(settings, defaults) end
-    BUI:SendMessage(BUI.MESSAGES.SETTING_CHANGED, moduleName, nil, nil)
+    OUI:SendMessage(OUI.MESSAGES.SETTING_CHANGED, moduleName, nil, nil)
 end
 
 -- =========================================================================
@@ -922,7 +922,7 @@ function DB:SetProfile(name)
     end
     setProfileName(name)
     applyAllDefaults()
-    BUI:SendMessage(BUI.MESSAGES.PROFILE_CHANGED, name)
+    OUI:SendMessage(OUI.MESSAGES.PROFILE_CHANGED, name)
 end
 
 --- Duplique le profil actif sous un nouveau nom, sans y basculer.
@@ -947,7 +947,7 @@ function DB:DeleteProfile(name)
     if name == profileName() then
         setProfileName(DEFAULT_PROFILE)
         applyAllDefaults()
-        BUI:SendMessage(BUI.MESSAGES.PROFILE_CHANGED, profileName())
+        OUI:SendMessage(OUI.MESSAGES.PROFILE_CHANGED, profileName())
     end
     return true
 end
@@ -1080,7 +1080,7 @@ function DB:ImportProfile(data, targetName)
 
     -- Le même message qu'un changement de profil : c'est exactement ce qui
     -- vient d'arriver aux modules, et le core sait déjà rejouer leur état.
-    BUI:SendMessage(BUI.MESSAGES.PROFILE_CHANGED, profileName())
+    OUI:SendMessage(OUI.MESSAGES.PROFILE_CHANGED, profileName())
     return true
 end
 
@@ -1099,6 +1099,6 @@ function DB:CopyProfileFrom(name)
 
     profileTable().modules = U.DeepCopy(source.modules or {})
     applyAllDefaults()
-    BUI:SendMessage(BUI.MESSAGES.PROFILE_CHANGED, profileName())
+    OUI:SendMessage(OUI.MESSAGES.PROFILE_CHANGED, profileName())
     return true
 end

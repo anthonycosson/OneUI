@@ -3,13 +3,13 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
----@class BUI.SliderOpts
+---@class OUI.SliderOpts
 ---@field text string
 ---@field tooltip? string
 ---@field indent? boolean  sous-option : en retrait, d'un corps plus petit
@@ -31,7 +31,7 @@ local L    = ns.L
 --- endroit où l'on peut dire que le nombre se saisit. Une infobulle ne se lit
 --- que sur ce qu'on soupçonne déjà d'être cliquable.
 ---@param parent table
----@param opts BUI.SliderOpts
+---@param opts OUI.SliderOpts
 ---@return table row
 function W.Slider(parent, opts)
     local S   = T.SIZE

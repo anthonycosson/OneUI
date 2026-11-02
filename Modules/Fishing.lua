@@ -41,10 +41,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Fishing"
@@ -88,7 +88,7 @@ local linger
 
 ---@return table|nil
 local function module()
-    return BUI.Modules:Get(MODULE)
+    return OUI.Modules:Get(MODULE)
 end
 
 -- =========================================================================
@@ -203,14 +203,14 @@ end
 local function lend(mod)
     if mod:Get("sound") then
         for i = 1, #SOUND_CVARS do
-            BUI.CVars:Lend(MODULE, SOUND_CVARS[i][1], SOUND_CVARS[i][2])
+            OUI.CVars:Lend(MODULE, SOUND_CVARS[i][1], SOUND_CVARS[i][2])
         end
     end
 
     local key = mod:Get("castKey")
     if type(key) == "string" and key ~= "" then
         for i = 1, #TARGET_CVARS do
-            BUI.CVars:Lend(MODULE, TARGET_CVARS[i][1], TARGET_CVARS[i][2])
+            OUI.CVars:Lend(MODULE, TARGET_CVARS[i][1], TARGET_CVARS[i][2])
         end
     end
 end
@@ -220,7 +220,7 @@ local function giveBack()
         linger:Cancel()
         linger = nil
     end
-    BUI.CVars:ReturnAll(MODULE)
+    OUI.CVars:ReturnAll(MODULE)
 end
 
 ---@param mod table
@@ -242,7 +242,7 @@ local function onChannelStop(mod)
     if linger then linger:Cancel() end
     linger = C_Timer.NewTimer(T.TIMING.FISH_LINGER, function()
         linger = nil
-        if not channeling then BUI.CVars:ReturnAll(MODULE) end
+        if not channeling then OUI.CVars:ReturnAll(MODULE) end
     end)
 end
 
@@ -250,7 +250,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Fishing"],
     category = "QoL",
     order    = 47,
@@ -348,7 +348,7 @@ BUI:RegisterModule(MODULE, {
         -- Une option retirée en pleine prise rend ce qu'elle tenait ; celles
         -- qui restent reprennent aussitôt.
         if channeling then
-            BUI.CVars:ReturnAll(MODULE)
+            OUI.CVars:ReturnAll(MODULE)
             lend(self)
         end
         bind(self)

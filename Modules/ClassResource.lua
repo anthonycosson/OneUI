@@ -24,10 +24,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "ClassResource"
@@ -37,7 +37,7 @@ local MODULE = "ClassResource"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -49,7 +49,7 @@ end
 ---@return fun(): boolean
 local function needsStep(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         if not (mod and mod:Get("show")) then return true end
         return (mod:Get(key) or 0) <= 0
     end
@@ -386,7 +386,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Class resource"],
     category = "Interface",
     order    = 15,
@@ -535,7 +535,7 @@ BUI:RegisterModule(MODULE, {
             tooltip  = L["Resource fill colour tip"],
             indent   = true,
             disabled = function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 if not (mod and mod:Get("show")) then return true end
                 return mod:Get("colorMode") ~= "custom"
             end,
@@ -624,7 +624,7 @@ BUI:RegisterModule(MODULE, {
             max      = T.SIZE.RESOURCE_MAX_CELLS,
             step     = 1,
             disabled = function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 if not (mod and mod:Get("show")) then return true end
                 return not mod:Get("thresholdGlow")
             end,

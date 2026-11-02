@@ -8,13 +8,13 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
 
 local Sidebar = {}
-BUI.Sidebar = Sidebar
+OUI.Sidebar = Sidebar
 
 local items = {}      --- moduleName -> bouton
 local built = false
@@ -77,8 +77,8 @@ function Sidebar:Build(parent, onSelect)
 
     local y = -T.SIZE.PADDING * 0.5
 
-    for _, category in ipairs(BUI.CATEGORIES) do
-        local modules = BUI.Modules:GetByCategory(category.key)
+    for _, category in ipairs(OUI.CATEGORIES) do
+        local modules = OUI.Modules:GetByCategory(category.key)
 
         if #modules > 0 then
             local header = W.SidebarItem(list, categoryLabel(category, modules), false)
@@ -269,8 +269,8 @@ end
 --- l'ouverture.
 ---@return string|nil
 function Sidebar:FirstModuleName()
-    for _, category in ipairs(BUI.CATEGORIES) do
-        local modules = BUI.Modules:GetByCategory(category.key)
+    for _, category in ipairs(OUI.CATEGORIES) do
+        local modules = OUI.Modules:GetByCategory(category.key)
         if #modules > 0 then return modules[1].name end
     end
     return nil
@@ -301,14 +301,14 @@ function Sidebar:SetModuleEnabled(moduleName, enabled)
     local item = items[moduleName]
     if not item then return end
 
-    local mod = BUI.Modules:Get(moduleName)
+    local mod = OUI.Modules:Get(moduleName)
     item:SetAlpha(mod and itemAlpha(mod) or (enabled and 1 or T.ALPHA.ITEM_OFF))
 end
 
 --- Réapplique l'opacité de toutes les entrées d'après la base.
 function Sidebar:RefreshStates()
     for name, item in pairs(items) do
-        local mod = BUI.Modules:Get(name)
+        local mod = OUI.Modules:Get(name)
         if mod then
             item:SetAlpha(itemAlpha(mod))
         end

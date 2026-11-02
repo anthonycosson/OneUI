@@ -27,11 +27,11 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
----@class BUI.GroupFilterRowDesc
+---@class OUI.GroupFilterRowDesc
 ---@field type string            "header" | "toggle" | "range" | "list"
 ---@field text? string
 ---@field tooltip? string
@@ -43,13 +43,13 @@ local W    = BUI.Widgets
 ---@field getMax? fun(): number|nil
 ---@field setMax? fun(value: number|nil)
 
----@class BUI.GroupFilterFooterToggle
+---@class OUI.GroupFilterFooterToggle
 ---@field text string
 ---@field tooltip? string
 ---@field get fun(): boolean
 ---@field set fun(value: boolean)
 
----@class BUI.GroupFilterPanelOpts
+---@class OUI.GroupFilterPanelOpts
 ---@field parent table        la frame du client dont on suit la visibilité
 ---@field anchor table        celle contre laquelle on se pose (son bord droit)
 ---@field getOffset? fun(): number, number   écart mémorisé au point d'ancrage par défaut
@@ -61,13 +61,13 @@ local W    = BUI.Widgets
 ---@field searchLabel string
 ---@field searchTooltip? string
 ---@field onSearch fun()      relance la recherche du client
----@field footerToggle BUI.GroupFilterFooterToggle  la ligne commune à tous les contextes, posée au pied
+---@field footerToggle OUI.GroupFilterFooterToggle  la ligne commune à tous les contextes, posée au pied
 
 --- Les bornes d'une ligne vivent dans `W.BoundBox` / `W.RangeRow` depuis que la
 --- recherche de la liste BIS a voulu les mêmes cases : la pièce est partie dans
 --- la fabrique, le panneau ne fait plus que s'en servir.
 
----@class BUI.ListRowBinding
+---@class OUI.ListRowBinding
 ---@field get? fun(): boolean
 ---@field set? fun(value: boolean)
 
@@ -77,7 +77,7 @@ local W    = BUI.Widgets
 ---@param parent table
 ---@return table row
 local function listRow(parent)
-    ---@type BUI.ListRowBinding
+    ---@type OUI.ListRowBinding
     local binding = {}
 
     -- Sans retrait : ces lignes ne sont pas des sous-options de l'en-tête,
@@ -105,7 +105,7 @@ local function listRow(parent)
 end
 
 --- Panneau de filtres, ancré au bord droit d'une fenêtre du client.
----@param opts BUI.GroupFilterPanelOpts
+---@param opts OUI.GroupFilterPanelOpts
 ---@return table panel
 function W.GroupFilterPanel(opts)
     local S = T.SIZE
@@ -251,7 +251,7 @@ function W.GroupFilterPanel(opts)
 
     --- Construit une page d'après ses descripteurs. Voir le contrat en tête de
     --- fichier : une liste au plus, dans sa colonne de droite.
-    ---@param descriptors BUI.GroupFilterRowDesc[]
+    ---@param descriptors OUI.GroupFilterRowDesc[]
     ---@return table page
     local function buildPage(descriptors)
         local page = W.Container(panel)
@@ -327,7 +327,7 @@ function W.GroupFilterPanel(opts)
 
     --- Montre la page `key`, en la bâtissant au premier passage.
     ---@param key string
-    ---@param descriptors fun(): BUI.GroupFilterRowDesc[]
+    ---@param descriptors fun(): OUI.GroupFilterRowDesc[]
     function panel:ShowPage(key, descriptors)
         if not pages[key] then
             pages[key] = buildPage(descriptors())
@@ -395,7 +395,7 @@ end
 --- La flèche dit le geste : vers la fenêtre pour ranger, vers l'extérieur pour
 --- ressortir. `Refresh` est à rappeler quand l'état change sans passer par le
 --- bouton.
----@class BUI.GroupFilterStowOpts
+---@class OUI.GroupFilterStowOpts
 ---@field parent table      la frame du client qui porte le bouton
 ---@field anchor? table     le voisin contre le bord gauche duquel se poser ;
 ---                         à défaut, le coin haut-droit du parent
@@ -405,7 +405,7 @@ end
 ---@field showTitle string
 ---@field tooltip? string
 
----@param opts BUI.GroupFilterStowOpts
+---@param opts OUI.GroupFilterStowOpts
 ---@return table button
 function W.GroupFilterStowButton(opts)
     local S = T.SIZE

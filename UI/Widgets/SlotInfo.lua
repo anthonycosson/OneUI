@@ -31,9 +31,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Empile les pastilles, une par ligne, alignées sur le bord qui touche la case.
 ---
@@ -273,7 +273,7 @@ function W.SlotInfo(button)
         self._icons = 0
     end
 
-    ---@class BUI.SlotIcon
+    ---@class OUI.SlotIcon
     ---@field atlas? string
     ---@field texture? string|number
     ---@field desaturated? boolean
@@ -282,7 +282,7 @@ function W.SlotInfo(button)
     ---@field hint? string
 
     --- Ajoute une icône à la rangée en cours.
-    ---@param spec BUI.SlotIcon
+    ---@param spec OUI.SlotIcon
     function info:AddIcon(spec)
         if not (spec and (spec.atlas or spec.texture)) then return end
 

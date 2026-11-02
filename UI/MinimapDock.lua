@@ -22,13 +22,13 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
 
 local Dock = {}
-BUI.MinimapDock = Dock
+OUI.MinimapDock = Dock
 
 -- =========================================================================
 --  Boutons d'addons : qui a le droit d'être rangé
@@ -312,7 +312,7 @@ local function applyButton()
                     tray:Toggle()
                     return
                 end
-                if BUI.Config and BUI.Config.Toggle then BUI.Config:Toggle() end
+                if OUI.Config and OUI.Config.Toggle then OUI.Config:Toggle() end
             end,
 
             getAngle = function() return getAngle and getAngle() end,

@@ -37,7 +37,7 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 local L    = ns.L
 
 local MODULE = "Sparkles"
@@ -71,9 +71,9 @@ local NEAREST_CVARS = {
 local function sync(list, wanted, hold)
     for i = 1, #list do
         if wanted then
-            BUI.CVars:Lend(MODULE, list[i][1], list[i][2], hold)
+            OUI.CVars:Lend(MODULE, list[i][1], list[i][2], hold)
         else
-            BUI.CVars:Return(MODULE, list[i][1])
+            OUI.CVars:Return(MODULE, list[i][1])
         end
     end
 end
@@ -84,7 +84,7 @@ local function apply(mod)
     sync(NEAREST_CVARS, mod:Get("nearest") and true or false)
 end
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Sparkles"],
     category = "QoL",
     order    = 48,
@@ -115,7 +115,7 @@ BUI:RegisterModule(MODULE, {
     end,
 
     OnDisable = function()
-        BUI.CVars:ReturnAll(MODULE)
+        OUI.CVars:ReturnAll(MODULE)
     end,
 
     OnSettingChanged = function(self)

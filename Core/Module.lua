@@ -6,7 +6,7 @@
 --  le SavedVariables et ne connaît aucun autre module. Il déclare ce qu'il
 --  règle, et ce qu'il fait quand on l'active.
 --
---      BUI:RegisterModule("Quest", {
+--      OUI:RegisterModule("Quest", {
 --          title    = L["Quest"],
 --          category = "QoL",
 --          defaults = { autoAccept = false },
@@ -23,11 +23,11 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 local L   = ns.L
 
 local Modules = {}
-BUI.Modules = Modules
+OUI.Modules = Modules
 
 --- Catégories de la barre latérale, dans l'ordre d'affichage.
 --- Ajouter une catégorie ici et nulle part ailleurs.
@@ -36,7 +36,7 @@ BUI.Modules = Modules
 --- juste sous lui-même donne une navigation qui a l'air cassée.
 --- La catégorie « Jeu » a disparu : chacun de ses modules a rejoint la page où on
 --- le cherche, et une catégorie ne se garde pas pour son nom.
-BUI.CATEGORIES = {
+OUI.CATEGORIES = {
     { key = "Interface",  label = "Interface" },
     { key = "QoL",        label = "Quality of life" },
     -- La clé reste `MythicRaid` : elle ne sert qu'à regrouper, et la renommer
@@ -78,14 +78,14 @@ function ModuleMixin:Get(key)
     if self._withdrawn and self._withdrawn[key] then
         return self.defaults[key]
     end
-    return BUI.DB:Get(self.name, key)
+    return OUI.DB:Get(self.name, key)
 end
 
 ---@param key string
 ---@param value any
 function ModuleMixin:Set(key, value)
     if self._withdrawn and self._withdrawn[key] then return end
-    BUI.DB:Set(self.name, key, value)
+    OUI.DB:Set(self.name, key, value)
 end
 
 ---@return boolean
@@ -98,7 +98,7 @@ end
 --- `DB:CharData`, qui explique pourquoi ce chemin est séparé de `Get`/`Set`).
 ---@return table
 function ModuleMixin:CharData()
-    return BUI.DB:CharData(self.name)
+    return OUI.DB:CharData(self.name)
 end
 
 --- Le même espace, **au compte** : pour la donnée que tous les personnages
@@ -106,7 +106,7 @@ end
 --- des profils).
 ---@return table
 function ModuleMixin:AccountData()
-    return BUI.DB:AccountData(self.name)
+    return OUI.DB:AccountData(self.name)
 end
 
 --- Abonnement à un événement du client, révoqué automatiquement à la
@@ -116,7 +116,7 @@ end
 function ModuleMixin:RegisterEvent(event, fn)
     self._events = self._events or {}
     self._events[#self._events + 1] = { event = event, fn = fn }
-    BUI:RegisterEvent(event, fn)
+    OUI:RegisterEvent(event, fn)
 end
 
 --- Abonnement à un message interne, révoqué automatiquement lui aussi.
@@ -125,25 +125,25 @@ end
 function ModuleMixin:RegisterMessage(message, fn)
     self._messages = self._messages or {}
     self._messages[#self._messages + 1] = { message = message, fn = fn }
-    BUI:RegisterMessage(message, fn)
+    OUI:RegisterMessage(message, fn)
 end
 
 function ModuleMixin:Print(...)
-    BUI:Print("[" .. self.name .. "]", ...)
+    OUI:Print("[" .. self.name .. "]", ...)
 end
 
 local function releaseSubscriptions(mod)
     if mod._events then
         for i = 1, #mod._events do
             local sub = mod._events[i]
-            BUI:UnregisterEvent(sub.event, sub.fn)
+            OUI:UnregisterEvent(sub.event, sub.fn)
         end
         mod._events = nil
     end
     if mod._messages then
         for i = 1, #mod._messages do
             local sub = mod._messages[i]
-            BUI:UnregisterMessage(sub.message, sub.fn)
+            OUI:UnregisterMessage(sub.message, sub.fn)
         end
         mod._messages = nil
     end
@@ -155,13 +155,13 @@ end
 
 ---@param name string        identifiant stable, sert de clé en base — ne jamais le renommer
 ---@param definition table
-function BUI:RegisterModule(name, definition)
+function OUI:RegisterModule(name, definition)
     if type(name) ~= "string" or type(definition) ~= "table" then
-        BUI:Warn("RegisterModule: arguments invalides")
+        OUI:Warn("RegisterModule: arguments invalides")
         return
     end
     if registry[name] then
-        BUI:Warn("RegisterModule: " .. name .. " est déjà enregistré")
+        OUI:Warn("RegisterModule: " .. name .. " est déjà enregistré")
         return
     end
 
@@ -173,7 +173,7 @@ function BUI:RegisterModule(name, definition)
     -- s'afficher quelque part, et un nom écrit ici en dur deviendrait faux le jour
     -- où cette catégorie-là disparaîtrait — c'est précisément ce qui est arrivé à
     -- « Jeu ».
-    mod.category  = mod.category or BUI.CATEGORIES[1].key
+    mod.category  = mod.category or OUI.CATEGORIES[1].key
     mod.title     = mod.title or name
     mod.order     = mod.order or 100
     mod._index    = registrationIndex
@@ -232,11 +232,11 @@ function BUI:RegisterModule(name, definition)
     end
 
     registry[name] = mod
-    BUI.DB:RegisterDefaults(name, mod.defaults)
+    OUI.DB:RegisterDefaults(name, mod.defaults)
 
     -- Enregistrement tardif (après PLAYER_LOGIN) : on démarre tout de suite.
     if started and mod:Get("enabled") then
-        BUI:EnableModule(name)
+        OUI:EnableModule(name)
     end
 end
 
@@ -312,7 +312,7 @@ local function eachEditOption(mod, fn)
 end
 
 ---@return boolean
-function BUI:IsEditMode()
+function OUI:IsEditMode()
     return editMode
 end
 
@@ -322,7 +322,7 @@ end
 --- module reçoit son `OnSettingChanged`, la page ouverte se rafraîchit, et il
 --- n'y a rien de particulier à prévoir nulle part.
 ---@param on boolean
-function BUI:SetEditMode(on)
+function OUI:SetEditMode(on)
     on = on and true or false
     if editMode == on then return end
     editMode = on
@@ -352,7 +352,7 @@ function BUI:SetEditMode(on)
 end
 
 --- Bascule, pour le bouton qui n'a qu'un état à inverser.
-function BUI:ToggleEditMode()
+function OUI:ToggleEditMode()
     self:SetEditMode(not editMode)
 end
 
@@ -361,7 +361,7 @@ end
 -- =========================================================================
 
 ---@param name string
-function BUI:EnableModule(name)
+function OUI:EnableModule(name)
     local mod = registry[name]
     if not mod or mod._active then return end
     if mod.preview then return end
@@ -373,12 +373,12 @@ function BUI:EnableModule(name)
     pendingCombat[name] = nil
 
     mod._active = true
-    if mod.OnEnable then BUI.safecall(mod.OnEnable, mod) end
-    BUI:SendMessage(BUI.MESSAGES.MODULE_STATE, name, true)
+    if mod.OnEnable then OUI.safecall(mod.OnEnable, mod) end
+    OUI:SendMessage(OUI.MESSAGES.MODULE_STATE, name, true)
 end
 
 ---@param name string
-function BUI:DisableModule(name)
+function OUI:DisableModule(name)
     local mod = registry[name]
     if not mod or not mod._active then return end
 
@@ -389,33 +389,33 @@ function BUI:DisableModule(name)
     pendingCombat[name] = nil
 
     mod._active = false
-    if mod.OnDisable then BUI.safecall(mod.OnDisable, mod) end
+    if mod.OnDisable then OUI.safecall(mod.OnDisable, mod) end
     releaseSubscriptions(mod)
-    BUI:SendMessage(BUI.MESSAGES.MODULE_STATE, name, false)
+    OUI:SendMessage(OUI.MESSAGES.MODULE_STATE, name, false)
 end
 
 -- =========================================================================
 --  Démarrage
 -- =========================================================================
 
-BUI:RegisterEvent("ADDON_LOADED", function(_, addonName)
-    if addonName ~= BUI.ADDON then return end
-    BUI.DB:Initialize()
+OUI:RegisterEvent("ADDON_LOADED", function(_, addonName)
+    if addonName ~= OUI.ADDON then return end
+    OUI.DB:Initialize()
 end)
 
-BUI:RegisterEventOnce("PLAYER_LOGIN", function()
+OUI:RegisterEventOnce("PLAYER_LOGIN", function()
     -- Filet de sécurité : si ADDON_LOADED a été manqué (rechargement à chaud
     -- d'un profil de dev), la base est quand même prête.
-    BUI.DB:Initialize()
+    OUI.DB:Initialize()
 
     -- **Avant d'allumer quoi que ce soit.** Le nom du personnage n'existe pas à
     -- `ADDON_LOADED` : c'est ici que la base apprend quel profil ce personnage
     -- utilise, et un module allumé avant lirait les réglages du mauvais.
-    BUI.DB:BindCharacter()
+    OUI.DB:BindCharacter()
 
     started = true
     for name, mod in pairs(registry) do
-        if mod:Get("enabled") then BUI:EnableModule(name) end
+        if mod:Get("enabled") then OUI:EnableModule(name) end
     end
 
     -- **Une ligne, et la seule que l'addon écrive de lui-même.** Un addon dont
@@ -431,17 +431,17 @@ BUI:RegisterEventOnce("PLAYER_LOGIN", function()
     --
     -- Après le démarrage des modules, pour qu'elle arrive après ce qu'ils
     -- auraient à dire eux-mêmes, et non au milieu.
-    if not BUI.DB:Seen(BUI.DB.HINT_LOGIN) then
-        BUI:Print(L["Login hint"])
+    if not OUI.DB:Seen(OUI.DB.HINT_LOGIN) then
+        OUI:Print(L["Login hint"])
     end
 end)
 
-BUI:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+OUI:RegisterEvent("PLAYER_REGEN_ENABLED", function()
     if not next(pendingCombat) then return end
     for name in pairs(pendingCombat) do
         local mod = registry[name]
         if mod then
-            if mod:Get("enabled") then BUI:EnableModule(name) else BUI:DisableModule(name) end
+            if mod:Get("enabled") then OUI:EnableModule(name) else OUI:DisableModule(name) end
         end
     end
     wipe(pendingCombat)
@@ -449,30 +449,30 @@ end)
 
 -- Un changement de `enabled` bascule le module ; tout autre changement est
 -- transmis au module concerné.
-BUI:RegisterMessage(BUI.MESSAGES.SETTING_CHANGED, function(_, moduleName, key, value)
+OUI:RegisterMessage(OUI.MESSAGES.SETTING_CHANGED, function(_, moduleName, key, value)
     local mod = registry[moduleName]
     if not mod then return end
 
     if key == "enabled" then
-        if value then BUI:EnableModule(moduleName) else BUI:DisableModule(moduleName) end
+        if value then OUI:EnableModule(moduleName) else OUI:DisableModule(moduleName) end
         return
     end
 
     if mod._active and mod.OnSettingChanged then
-        BUI.safecall(mod.OnSettingChanged, mod, key, value)
+        OUI.safecall(mod.OnSettingChanged, mod, key, value)
     end
 end)
 
 -- Un changement de profil rejoue l'état voulu de chaque module.
-BUI:RegisterMessage(BUI.MESSAGES.PROFILE_CHANGED, function()
+OUI:RegisterMessage(OUI.MESSAGES.PROFILE_CHANGED, function()
     for name, mod in pairs(registry) do
         local shouldRun = mod:Get("enabled") and true or false
         if shouldRun and not mod._active then
-            BUI:EnableModule(name)
+            OUI:EnableModule(name)
         elseif not shouldRun and mod._active then
-            BUI:DisableModule(name)
+            OUI:DisableModule(name)
         elseif shouldRun and mod._active and mod.OnSettingChanged then
-            BUI.safecall(mod.OnSettingChanged, mod, nil, nil)
+            OUI.safecall(mod.OnSettingChanged, mod, nil, nil)
         end
     end
 end)
@@ -481,44 +481,44 @@ end)
 --  Ligne de commande
 -- =========================================================================
 
-SLASH_ONEUI1 = "/bui"
+SLASH_ONEUI1 = "/oui"
 SLASH_ONEUI2 = "/oneui"
 
 SlashCmdList["ONEUI"] = function(msg)
     local arg = strlower(strtrim(msg or ""))
 
     if arg == "version" then
-        BUI:Print(L["Version"], BUI.VERSION)
+        OUI:Print(L["Version"], OUI.VERSION)
         return
     end
 
-    -- `/bui auras` : le diagnostic des barres d'infos, écrit dans le chat par
+    -- `/oui auras` : le diagnostic des barres d'infos, écrit dans le chat par
     -- le module lui-même. Le core cite le module par son nom, ce qui est permis :
     -- ce nom est une clé de base de données, donc stable par la règle 4.
     if arg == "auras" then
         local mod = registry["Nameplates"]
         if mod and mod._active and mod.DiagnoseAuras then
-            BUI.safecall(mod.DiagnoseAuras, mod)
+            OUI.safecall(mod.DiagnoseAuras, mod)
         else
-            BUI:Print(L["Aura diagnostic unavailable"])
+            OUI:Print(L["Aura diagnostic unavailable"])
         end
         return
     end
 
-    -- `/bui noms` : pourquoi le nom du joueur ciblé porte la couleur qu'il
+    -- `/oui noms` : pourquoi le nom du joueur ciblé porte la couleur qu'il
     -- porte. Même porte d'entrée que ci-dessus, et même motif : ce qui décide
     -- est invisible depuis le jeu.
     if arg == "noms" or arg == "names" then
         local mod = registry["Nameplates"]
         if mod and mod._active and mod.DiagnoseNames then
-            BUI.safecall(mod.DiagnoseNames, mod)
+            OUI.safecall(mod.DiagnoseNames, mod)
         else
-            BUI:Print(L["Aura diagnostic unavailable"])
+            OUI:Print(L["Aura diagnostic unavailable"])
         end
         return
     end
 
-    -- `/bui emote` : écrit le texte brut de chaque emote reçu. Ce que le module
+    -- `/oui emote` : écrit le texte brut de chaque emote reçu. Ce que le module
     -- des emotes reconnaît est une **phrase**, tirée des fichiers de locale
     -- faute d'API qui la publie — et une phrase mal orthographiée ne lève pas,
     -- elle rend le module muet. C'est le seul moyen de lire ce que le client
@@ -526,86 +526,86 @@ SlashCmdList["ONEUI"] = function(msg)
     if arg == "emote" or arg == "emotes" then
         local mod = registry["Emotes"]
         if mod and mod._active and mod.ToggleWatch then
-            BUI:Print(L["Emote watch"], mod:ToggleWatch() and L["On"] or L["Off"])
+            OUI:Print(L["Emote watch"], mod:ToggleWatch() and L["On"] or L["Off"])
         else
-            BUI:Print(L["Emote module unavailable"])
+            OUI:Print(L["Emote module unavailable"])
         end
         return
     end
 
-    -- `/bui fiche` : pourquoi l'icône d'enchantement d'un emplacement porte
+    -- `/oui fiche` : pourquoi l'icône d'enchantement d'un emplacement porte
     -- l'image qu'elle porte. L'étoile de rang n'est pas choisie, elle est
     -- récupérée dans une chaîne d'infobulle — et quatre choses peuvent manquer
     -- en chemin sans que rien ne lève.
     if arg == "fiche" or arg == "sheet" then
         local mod = registry["Character"]
         if mod and mod._active and mod.DiagnoseSheet then
-            BUI.safecall(mod.DiagnoseSheet, mod)
+            OUI.safecall(mod.DiagnoseSheet, mod)
         else
-            BUI:Print(L["Sheet diagnostic unavailable"])
+            OUI:Print(L["Sheet diagnostic unavailable"])
         end
         return
     end
 
-    -- `/bui cadres` : pourquoi la barre de la cible ou du focus n'a pas la
+    -- `/oui cadres` : pourquoi la barre de la cible ou du focus n'a pas la
     -- couleur de sa classe. Trois causes qui donnent la même barre verte.
     if arg == "cadres" or arg == "frames" then
         local mod = registry["UnitFrames"]
         if mod and mod._active and mod.DiagnoseFrames then
-            BUI.safecall(mod.DiagnoseFrames, mod)
+            OUI.safecall(mod.DiagnoseFrames, mod)
         else
-            BUI:Print(L["Frame diagnostic unavailable"])
+            OUI:Print(L["Frame diagnostic unavailable"])
         end
         return
     end
 
-    -- `/bui vol` : pourquoi le temps de vol restant ne s'est pas affiché.
+    -- `/oui vol` : pourquoi le temps de vol restant ne s'est pas affiché.
     -- Quatre lectures peuvent se taire sans qu'aucune ne lève, et le symptôme
     -- est le même pour les quatre — un cadre qui ne vient pas.
     if arg == "vol" or arg == "flight" then
         local mod = registry["Timers"]
         if mod and mod._active and mod.DiagnoseFlight then
-            BUI.safecall(mod.DiagnoseFlight, mod)
+            OUI.safecall(mod.DiagnoseFlight, mod)
         else
-            BUI:Print(L["Flight diagnostic unavailable"])
+            OUI:Print(L["Flight diagnostic unavailable"])
         end
         return
     end
 
-    -- `/bui glow` : ce que le mode sombre a fait au cadre sous le curseur. Le
+    -- `/oui glow` : ce que le mode sombre a fait au cadre sous le curseur. Le
     -- moteur est hors des modules, comme celui de la minicarte : on l'appelle
     -- donc directement, sans passer par le registre.
     if arg == "glow" then
-        if BUI.Shade and BUI.Shade.Diagnose then
-            BUI.safecall(BUI.Shade.Diagnose, BUI.Shade)
+        if OUI.Shade and OUI.Shade.Diagnose then
+            OUI.safecall(OUI.Shade.Diagnose, OUI.Shade)
         end
         return
     end
 
-    -- `/bui blocked` : écrit dans le chat le nom de chaque action refusée par le
+    -- `/oui blocked` : écrit dans le chat le nom de chaque action refusée par le
     -- client. La fenêtre « action réservée à l'IU de Blizzard » ne le dit pas, et
-    -- sans lui il n'y a rien à chercher (voir `BUI:ToggleActionWatch`).
+    -- sans lui il n'y a rien à chercher (voir `OUI:ToggleActionWatch`).
     if arg == "blocked" then
-        local watching = BUI:ToggleActionWatch()
-        BUI:Print(L["Blocked action watch"], watching and L["On"] or L["Off"])
+        local watching = OUI:ToggleActionWatch()
+        OUI:Print(L["Blocked action watch"], watching and L["On"] or L["Off"])
 
         -- La veille allume l'affichage des erreurs, sans quoi le client
         -- n'émettrait rien à écouter. On le dit : le joueur voit un réglage
         -- changer, il doit savoir par qui et jusqu'à quand.
-        if watching then BUI:Print(L["Blocked action needs errors"]) end
+        if watching then OUI:Print(L["Blocked action needs errors"]) end
         return
     end
 
 
-    if BUI.Config and BUI.Config.Toggle then
-        BUI.Config:Toggle()
+    if OUI.Config and OUI.Config.Toggle then
+        OUI.Config:Toggle()
     else
-        BUI:Warn("interface d'options indisponible")
+        OUI:Warn("interface d'options indisponible")
     end
 end
 
 --- Icône du compartiment d'addons (menu de la minicarte).
 --- Deuxième et dernier global autorisé, imposé par `## AddonCompartmentFunc`.
 function OneUI_OnAddonCompartmentClick()
-    if BUI.Config and BUI.Config.Toggle then BUI.Config:Toggle() end
+    if OUI.Config and OUI.Config.Toggle then OUI.Config:Toggle() end
 end

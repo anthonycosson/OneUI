@@ -8,7 +8,7 @@
 --
 --  La liste vient de `Data.lua`, engendré depuis le dépôt : rien n'est deviné,
 --  rien n'est oublié. Le résultat est écrit dans `OneUIProbeDB`, donc
---  lisible dans WTF après un `/reload`, et résumé en jeu par `/buiprobe`.
+--  lisible dans WTF après un `/reload`, et résumé en jeu par `/ouiprobe`.
 --
 --  Le verdict utile est par fichier : « Modules/Quest.lua — 100 % » veut dire
 --  que ce module est portable tel quel sur ce client-là.
@@ -266,7 +266,7 @@ local function report(arg)
         reportGroup("UI/Theme.lua")
     end
 
-    say("tout : |cffffffff/buiprobe tout|r · un fichier : |cffffffff/buiprobe quest|r"
+    say("tout : |cffffffff/ouiprobe tout|r · un fichier : |cffffffff/ouiprobe quest|r"
         .. " · relevé complet dans WTF après |cffffffff/reload|r.")
 end
 
@@ -279,14 +279,14 @@ end
 -- La passe se fait toute seule, sans rien dire : le relevé part dans WTF au
 -- `/reload` que quelque chose ait été imprimé ou non, et une sonde qui parle à
 -- chaque connexion se fait ignorer avant de se faire lire. Le rapport se
--- demande : `/buiprobe`.
+-- demande : `/ouiprobe`.
 probeFrame:RegisterEvent("PLAYER_LOGIN")
 probeFrame:SetScript("OnEvent", function(self)
     self:UnregisterEvent("PLAYER_LOGIN")
     run()
 end)
 
-_G.SLASH_ONEUIPROBE1 = "/buiprobe"
+_G.SLASH_ONEUIPROBE1 = "/ouiprobe"
 SlashCmdList["ONEUIPROBE"] = function(msg)
     if not OneUIProbeDB then run() end
     report(string.lower((string.gsub(msg or "", "^%s*(.-)%s*$", "%1"))))

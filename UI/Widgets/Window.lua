@@ -5,9 +5,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Récupère le FontString du titre, dont l'emplacement a changé selon les
 --- versions du template (`frame.TitleText` puis `frame.TitleContainer.TitleText`).

@@ -38,9 +38,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Queue"
@@ -162,7 +162,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Queues"],
     category = "QoL",
     -- Juste après la recherche de groupe sur retail, où les deux pages parlent

@@ -1,8 +1,8 @@
 # Page CurseForge
 
 Texte à coller dans le projet CurseForge, repris en français dans le
-`README.md`. À relire à chaque version qui ajoute ou retire un module — une page qui décrit des fonctionnalités absentes se paie
-en commentaires.
+`README.md`. À relire à chaque version qui ajoute ou retire un module : une
+page qui décrit des fonctionnalités absentes se paie en commentaires.
 
 **L'anglais passe en premier dans la description**, et ce n'est pas une
 préférence : c'est la langue de la modération et de la très grande majorité des
@@ -14,7 +14,7 @@ première ligne. Le français suit, entier, pour ceux qui le cherchent.
 ## Summary (champ court, obligatoire)
 
 ```
-Fixes the small things that annoy you about Blizzard's UI — and touches nothing until you tick a box.
+Blizzard's UI, minus everything that annoys you: dark mode, M+ timers, smarter nameplates and dozens of fixes, all off until you say so.
 ```
 
 ---
@@ -24,123 +24,131 @@ Fixes the small things that annoy you about Blizzard's UI — and touches nothin
 Coller les deux sections l'une après l'autre, l'anglais d'abord.
 
 ```
-OneUI doesn't replace your interface — it fixes, one setting at a time, the
-small things that annoy you about Blizzard's, and touches nothing until you tick
-a box.
+# OneUI
 
-## Why you might keep it
+**Blizzard's interface, minus everything that annoys you.**
 
-- **Nothing is on by default.** Installing it changes exactly nothing. Every
-  setting ships switched off, and the build fails if a single one doesn't — it
-  is checked, not promised.
-- **Turning a module off makes it undetectable.** Every frame it hid comes back,
-  every texture it replaced is restored, every console variable it wrote is put
-  back the way it was.
-- **One folder, no libraries, no dependencies.** Nothing to install alongside,
-  nothing that breaks when another addon updates.
-- **It looks like the game.** Colours, fonts and borders are the client's own —
-  the options window is meant to pass for one of Blizzard's.
+OneUI is one addon that polishes the default UI instead of replacing it. Dark
+mode, a character sheet that finally tells you everything, Mythic+ timers,
+smarter nameplates, quests and junk on autopilot: switch on only what you want,
+and the game still looks like the game.
+
+## Why players keep it
+
+- **Nothing changes until you say so.** Every setting ships switched off, and
+  the build fails if a single one doesn't. Install it, then pick your upgrades.
+- **Off means gone.** Turn a module off and every hidden frame comes back, every
+  texture and console variable is restored. No leftovers, no `/reload` roulette.
+- **One folder, zero dependencies.** No libraries to install alongside, nothing
+  that breaks when another addon updates.
+- **Feels like Blizzard made it.** The game's own colours, fonts and borders:
+  the options window is meant to pass for one of theirs.
 
 ## What's inside
 
 **Interface**
-Dark mode for action bars, unit frames, auras, cast bar and tooltip · class
-colours, specialization icons, and larger party or arena frames · nameplates you
-can resize, recolour by NPC type or by threat, and give their own aura rows · a
-class resource bar with colour thresholds and a proc glow · a character sheet
-that finally shows item level, upgrade track, enchant rank and gems on every
-slot.
+- Dark mode for action bars, unit frames, auras, cast bar and tooltip
+- Class colours, specialization icons, larger party and arena frames
+- Nameplates you can resize, recolour by NPC type or threat, with their own aura rows
+- A class resource bar with colour thresholds and a proc glow
+- A character sheet showing item level, upgrade track, enchant rank and gems on every slot
 
 **Quality of life**
-Auto-accept and auto-turn-in quests, with a modifier key to suspend it · sell
-junk and repair at every merchant · item level on every bag and bank slot · chat
-history kept across sessions, a copy window, drag-to-resize · a teleport menu
-gathering your hearthstones and every dungeon portal you own · skip cinematics,
-hide talking heads · answer !keys in guild and group chat · move and rescale the
-game's own windows.
+- Auto-accept and auto-turn-in quests, with a modifier key to pause it
+- Sell junk and repair at every merchant
+- Item level on every bag and bank slot
+- Chat history kept across sessions, a copy window, drag-to-resize
+- One teleport menu for your hearthstones and every dungeon portal you own
+- Skip cinematics, hide talking heads, answer !keys automatically
+- Move and rescale the game's own windows
+- Fishing: one key to cast and hook, with a splash you can hear
 
 **Mythic+ and raid**
-The +2 and +3 thresholds drawn on the game's own timer, boss split times, deaths
-· battle resurrection charges and bloodlust cooldown as two small trackers ·
-world markers and a pull timer · combat logging that starts at the instance door
-and stops when you leave.
+- +2 and +3 thresholds drawn on the game's own timer, boss splits, deaths
+- Battle resurrection charges and Bloodlust cooldown in two small trackers
+- World markers and a pull timer
+- Combat logging that starts at the instance door and stops when you leave
 
-## Requirements
+**Profiles**
+- Export your setup as a string, import it on another character or share it
 
-Retail only, 12.0.7 and above. English and French.
+## Getting started
 
-## Reporting a bug
+Type **/oui** in game, or click the icon in the addon compartment next to the
+minimap. Retail 12.0.7 and above, English and French.
 
-Three things make a report usable, and without them it takes three exchanges to
-get anywhere:
+## Found a bug?
 
-- your addon version — type /bui version in game;
-- what you were doing when it happened;
-- the full Lua error text, if there is one — BugSack copies it in one click.
-
-Post it in the Issues tab rather than in the comments: comments can't hold a
-screenshot, and they scroll away.
+Open an issue on GitHub: https://github.com/anthonycosson/OneUI/issues
+Include your version (/oui version), what you were doing, and the full Lua
+error if there is one (BugSack copies it in one click).
 
 ---
 
-OneUI ne remplace pas votre interface — il répare, réglage par réglage, les
-petites choses qui vous agacent dans celle de Blizzard, et ne touche à rien tant
-que vous ne l'avez pas coché.
+# OneUI
 
-## Pourquoi vous pourriez le garder
+**L'interface de Blizzard, sans tout ce qui vous agace.**
 
-- **Rien n'est allumé par défaut.** L'installer ne change strictement rien.
-  Chaque réglage est livré éteint, et la construction échoue si un seul ne l'est
-  pas — c'est vérifié, pas promis.
-- **Éteindre un module le rend indétectable.** Chaque cadre masqué revient,
-  chaque texture remplacée est rendue, chaque variable de console écrite
-  retrouve sa valeur.
-- **Un seul dossier, aucune bibliothèque, aucune dépendance.** Rien à installer
-  à côté, rien qui casse quand un autre addon se met à jour.
-- **Il ressemble au jeu.** Couleurs, polices et bordures sont celles du client —
-  la fenêtre d'options est faite pour passer pour une de Blizzard.
+OneUI est un seul addon qui peaufine l'interface d'origine au lieu de la
+remplacer. Mode sombre, une fiche de personnage qui dit enfin tout, chronos de
+Mythique+, plaques plus malignes, quêtes et camelote en pilote automatique :
+vous n'activez que ce que vous voulez, et le jeu garde son allure.
+
+## Pourquoi on le garde
+
+- **Rien ne change tant que vous ne l'avez pas décidé.** Chaque réglage est
+  livré éteint, et la construction échoue si un seul ne l'est pas. Installez,
+  puis choisissez vos améliorations.
+- **Éteint, c'est parti.** Un module désactivé rend chaque cadre masqué, chaque
+  texture et chaque variable de console. Aucune trace, pas besoin de croiser
+  les doigts au `/reload`.
+- **Un seul dossier, zéro dépendance.** Aucune bibliothèque à installer à côté,
+  rien qui casse quand un autre addon se met à jour.
+- **On dirait du Blizzard.** Les couleurs, polices et bordures du jeu : la
+  fenêtre d'options est faite pour passer pour une des leurs.
 
 ## Ce qu'il contient
 
 **Interface**
-Mode sombre pour les barres d'action, les cadres d'unité, les auras, la barre
-d'incantation et l'infobulle · couleurs de classe, icônes de spécialisation et
-agrandissement des cadres de groupe ou d'arène · plaques redimensionnables,
-colorables par type de PNJ ou par menace, avec leurs propres rangées d'auras ·
-une barre de ressource de classe à paliers de couleur et effet brillant · une
-fiche de personnage qui affiche enfin niveau d'objet, piste d'amélioration, rang
-d'enchantement et gemmes sur chaque emplacement.
+- Mode sombre pour les barres d'action, les cadres d'unité, les auras, la barre
+  d'incantation et l'infobulle
+- Couleurs de classe, icônes de spécialisation, cadres de groupe et d'arène agrandis
+- Plaques redimensionnables, colorées par type de PNJ ou par menace, avec leurs
+  propres rangées d'auras
+- Une barre de ressource de classe à paliers de couleur et effet brillant
+- Une fiche de personnage avec niveau d'objet, piste d'amélioration, rang
+  d'enchantement et gemmes sur chaque emplacement
 
 **Qualité de vie**
-Acceptation et rendu automatiques des quêtes, avec une touche pour suspendre ·
-vente de la camelote et réparation à chaque marchand · niveau d'objet sur chaque
-case de sac et de banque · historique du chat conservé, fenêtre de copie,
-redimensionnement à la souris · un menu de téléportation réunissant vos pierres
-de foyer et tous les portails de donjon que vous possédez · cinématiques
-passées, têtes parlantes masquées · réponse automatique aux !keys · les fenêtres
-du jeu déplaçables et redimensionnables.
+- Acceptation et rendu automatiques des quêtes, avec une touche pour suspendre
+- Vente de la camelote et réparation à chaque marchand
+- Niveau d'objet sur chaque case de sac et de banque
+- Historique du chat conservé, fenêtre de copie, redimensionnement à la souris
+- Un seul menu de téléportation pour vos pierres de foyer et tous vos portails de donjon
+- Cinématiques passées, têtes parlantes masquées, réponse automatique aux !keys
+- Les fenêtres du jeu déplaçables et redimensionnables
+- Pêche : une touche pour lancer et ferrer, et le plouf du bouchon à l'oreille
 
 **Mythique+ et raid**
-Les paliers +2 et +3 dessinés sur le chrono du jeu, les temps de boss, les morts
-· les charges de résurrection de combat et le temps de recharge de la Furie
-sanguinaire en deux petits suivis · marqueurs de zone et minuteur de pull ·
-journalisation qui démarre à la porte de l'instance et s'arrête en sortant.
+- Paliers +2 et +3 dessinés sur le chrono du jeu, temps de boss, morts
+- Charges de résurrection de combat et recharge de la Furie sanguinaire en deux
+  petits suivis
+- Marqueurs de zone et minuteur de pull
+- Journalisation qui démarre à la porte de l'instance et s'arrête en sortant
 
-## Prérequis
+**Profils**
+- Exportez votre configuration en texte, importez-la sur un autre personnage ou partagez-la
 
-Retail uniquement, 12.0.7 et au-delà. Anglais et français.
+## Pour commencer
 
-## Signaler un bug
+Tapez **/oui** en jeu, ou cliquez sur l'icône du compartiment d'addons près de
+la minicarte. Retail 12.0.7 et au-delà, anglais et français.
 
-Trois choses rendent un rapport exploitable, et sans elles il faut trois
-échanges pour en arriver là :
+## Un bug ?
 
-- votre version de l'addon — tapez /bui version en jeu ;
-- ce que vous étiez en train de faire ;
-- le texte complet de l'erreur Lua s'il y en a une — BugSack le copie en un clic.
-
-Passez par l'onglet Issues plutôt que par les commentaires : un commentaire ne
-peut pas porter de capture d'écran, et il descend au fil des jours.
+Ouvrez une issue sur GitHub : https://github.com/anthonycosson/OneUI/issues
+Indiquez votre version (/oui version), ce que vous faisiez, et le texte complet
+de l'erreur Lua s'il y en a une (BugSack la copie en un clic).
 
 ---
 

@@ -27,14 +27,14 @@
 --  sections livrées, les noms de CVars, la liste des familles d'unités adverses,
 --  et la fonction qui rend la page. Le moteur les relit en tête de fichier.
 --
---  Il charge **avant** lui, et il le faut : `BUI:RegisterModule` réclame la
+--  Il charge **avant** lui, et il le faut : `OUI:RegisterModule` réclame la
 --  liste des options au moment où il s'exécute.
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "Nameplates"
@@ -48,7 +48,7 @@ local MODULE = "Nameplates"
 local function requires(...)
     local keys = { ... }
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         if not mod then return true end
 
         for i = 1, #keys do
@@ -61,7 +61,7 @@ end
 
 ---@return table|nil
 local function module()
-    return BUI.Modules:Get(MODULE)
+    return OUI.Modules:Get(MODULE)
 end
 
 -- =========================================================================
@@ -1187,7 +1187,7 @@ local function pageOptions()
             indent   = true,
             disabled = function()
                 if needsAllyNames() then return true end
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 return not (mod and mod:Get("resizeAllyName"))
             end,
             disabledReason = L["Needs allied names only"],

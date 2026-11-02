@@ -49,10 +49,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Timers"
@@ -74,7 +74,7 @@ local ASSUMED_SPEED = 20
 --- **`UnitOnTaxi("player")` ne peut pas servir de garde ici.** Le client le
 --- teste lui-même sur cet événement (`EventImplementation.lua`), mais sur
 --- *Forever* il vaut encore `false` quand `PLAYER_CONTROL_LOST` arrive —
---- relevé en jeu par `/bui vol`, et c'est ce qui empêchait le cadre de
+--- relevé en jeu par `/oui vol`, et c'est ce qui empêchait le cadre de
 --- paraître une fois la carte de vol corrigée. Le drapeau se pose plus tard.
 ---
 --- Ce qui confirme le décollage est donc l'**enchaînement** : on vient de
@@ -92,7 +92,7 @@ local FLIGHT_PREVIEW = 185
 --- Cette moitié du fichier échoue **en silence** : chacune de ses lectures peut
 --- se taire, et le seul symptôme est un cadre qui ne vient pas — ce qui est
 --- arrivé deux fois en jeu, d'abord faute d'interroger la bonne carte, ensuite
---- à cause du drapeau ci-dessus. Cette trace est ce que `/bui vol` relit, et
+--- à cause du drapeau ci-dessus. Cette trace est ce que `/oui vol` relit, et
 --- elle dit laquelle des étapes a manqué.
 ---
 --- Déclarée avant tout ce qui l'écrit : une locale déclarée plus bas ne serait
@@ -451,12 +451,12 @@ local CRAFT_CALLS = { "CraftRecipe", "CraftEnchant", "CraftSalvage" }
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Remaining times"],
     category = "QoL",
     order    = 85,
@@ -618,7 +618,7 @@ BUI:RegisterModule(MODULE, {
         applyAll(self)
     end,
 
-    --- `/bui vol` : ce que le dernier embarquement a donné, étape par étape.
+    --- `/oui vol` : ce que le dernier embarquement a donné, étape par étape.
     ---
     --- Quatre choses peuvent se taire sans qu'aucune ne lève, et le symptôme
     --- est le même pour les quatre — un cadre qui ne vient pas. Les voici dans

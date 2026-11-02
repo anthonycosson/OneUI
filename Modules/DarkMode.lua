@@ -30,9 +30,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "DarkMode"
@@ -42,7 +42,7 @@ local MODULE = "DarkMode"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -96,7 +96,7 @@ local DARK_ELEMENTS = {
 
 ---@param mod table
 local function applyDarkMode(mod)
-    local shade = BUI.Shade
+    local shade = OUI.Shade
     if not shade then return end
 
     local on = mod:Get("darkMode")
@@ -109,10 +109,10 @@ local function applyDarkMode(mod)
         -- chute, et le symptôme — « seule la barre d'action réagit » — ne
         -- ressemble en rien à sa cause.
         if on and mod:Get(entry.key) then
-            BUI.safecall(shade.Apply, shade, entry.element,
+            OUI.safecall(shade.Apply, shade, entry.element,
                          entry.factor or T.SHADE_FACTOR)
         else
-            BUI.safecall(shade.Restore, shade, entry.element)
+            OUI.safecall(shade.Restore, shade, entry.element)
         end
     end
 end
@@ -126,13 +126,13 @@ end
 ---@return function
 local function refresher(element, now)
     local settle = U.Debounce(T.TIMING.SHADE_SETTLE, function()
-        if BUI.Shade then BUI.Shade:Refresh(element) end
+        if OUI.Shade then OUI.Shade:Refresh(element) end
     end)
 
     if not now then return settle end
 
     local function pass()
-        if BUI.Shade then BUI.Shade:Refresh(element) end
+        if OUI.Shade then OUI.Shade:Refresh(element) end
     end
 
     -- Trois passages, et chacun couvre ce que les autres manquent. Le premier
@@ -215,12 +215,12 @@ end
 --- posées sous le personnage, et une pull monte une plaque par mob.
 ---@param unit string
 local function plateAdded(_, unit)
-    local shade = BUI.Shade
+    local shade = OUI.Shade
     if shade and C_NamePlate and C_NamePlate.GetNamePlateForUnit then
         local plate = C_NamePlate.GetNamePlateForUnit(unit)
         local unitFrame = plate and plate.UnitFrame
         if unitFrame then
-            BUI.safecall(shade.ApplyTo, shade, "nameplates", unitFrame)
+            OUI.safecall(shade.ApplyTo, shade, "nameplates", unitFrame)
         end
     end
 
@@ -249,7 +249,7 @@ local function hookAuraUpdates(mod)
     local guard = function() return mod:IsEnabled() end
 
     local function styleAuras(frame)
-        local shade = BUI.Shade
+        local shade = OUI.Shade
         local pools = frame and frame.auraPools
         if not (shade and pools and pools.EnumerateActive) then return end
 
@@ -282,9 +282,9 @@ local function hookAuraUpdates(mod)
         local frame = playerFrames[i]
         if frame and type(frame.UpdateAuraButtons) == "function" then
             U.GuardedHook(frame, "UpdateAuraButtons", function(self)
-                local shade = BUI.Shade
+                local shade = OUI.Shade
                 if shade then
-                    BUI.safecall(shade.ApplyTo, shade, "auras", self)
+                    OUI.safecall(shade.ApplyTo, shade, "auras", self)
                 end
                 refreshAuras()
             end, guard)
@@ -334,9 +334,9 @@ local function hookCooldownViewers(mod)
             -- Le passage complet du filet remplace les listes, ce qui empêche
             -- les ajouts d'`ApplyTo` de s'accumuler (règle 7).
             U.GuardedHook(viewer, "RefreshLayout", function(self)
-                local shade = BUI.Shade
+                local shade = OUI.Shade
                 if shade then
-                    BUI.safecall(shade.ApplyTo, shade, "cooldownManager", self)
+                    OUI.safecall(shade.ApplyTo, shade, "cooldownManager", self)
                 end
                 refreshCooldowns()
             end, guard)
@@ -397,7 +397,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Dark mode"],
     -- En tête de la catégorie, sous « Général » : il décide de l'allure de tout ce
     -- qui suit dans la liste, et un réglage qui commande les autres se lit avant
@@ -564,7 +564,7 @@ BUI:RegisterModule(MODULE, {
     end,
 
     OnDisable = function()
-        if BUI.Shade then BUI.Shade:RestoreAll() end
+        if OUI.Shade then OUI.Shade:RestoreAll() end
     end,
 
     OnSettingChanged = function(self)

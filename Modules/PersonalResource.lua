@@ -38,10 +38,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "PersonalResource"
@@ -371,7 +371,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Personal resources"],
     category = "Interface",
     -- Juste au-dessus de la ressource de classe : les deux pages parlent de ce
@@ -414,7 +414,7 @@ BUI:RegisterModule(MODULE, {
         ---@return fun(): boolean
         local function silenced(noneKey)
             return function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 return not mod or mod:Get(noneKey) == true
             end
         end
@@ -440,7 +440,7 @@ BUI:RegisterModule(MODULE, {
                     { value = "RIGHT",  label = L["Anchor right"] },
                 },
                 disabled = function()
-                    local mod = BUI.Modules:Get(MODULE)
+                    local mod = OUI.Modules:Get(MODULE)
                     if not mod then return true end
                     if mod:Get(noneKey) then return true end
                     return not mod:Get(needs)
@@ -495,7 +495,7 @@ BUI:RegisterModule(MODULE, {
                 max      = T.SIZE.BAR_TEXT_SIZE_MAX,
                 step     = 1,
                 disabled = function()
-                    local mod = BUI.Modules:Get(MODULE)
+                    local mod = OUI.Modules:Get(MODULE)
                     return not (mod and (barSpeaks(mod, "health")
                                          or barSpeaks(mod, "power")))
                 end,

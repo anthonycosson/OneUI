@@ -12,8 +12,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local U    = BUI.Util
+local OUI = ns.OUI
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "Quest"
@@ -154,7 +154,7 @@ local MODIFIER_VALUES = {
     { value = "ALT",   label = L["Alt"] },
 }
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Quest"],
     category = "QoL",
     order    = 30,
@@ -189,7 +189,7 @@ BUI:RegisterModule(MODULE, {
             tooltip = L["Skip trivial quests tip"],
             -- Inutile tant qu'aucune automatisation n'est active.
             disabled = function()
-                local mod = BUI.Modules:Get(MODULE)
+                local mod = OUI.Modules:Get(MODULE)
                 return not (mod:Get("autoAccept") or mod:Get("autoTurnIn"))
             end,
         },

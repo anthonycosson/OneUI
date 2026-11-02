@@ -18,12 +18,12 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
 
----@class BUI.KeyBindOpts
+---@class OUI.KeyBindOpts
 ---@field text string
 ---@field tooltip? string
 ---@field indent? boolean
@@ -71,7 +71,7 @@ end
 
 --- Ligne « libellé + bouton de touche ».
 ---@param parent table
----@param opts BUI.KeyBindOpts
+---@param opts OUI.KeyBindOpts
 ---@return table row
 function W.KeyBind(parent, opts)
     local row = W.Row(parent, opts.text, opts.indent)

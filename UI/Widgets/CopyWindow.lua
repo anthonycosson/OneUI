@@ -20,9 +20,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Construit une fenêtre de copie. L'appelant la garde et la rouvre avec un
 --- autre contenu — une par usage, chacune sous son propre nom global : deux

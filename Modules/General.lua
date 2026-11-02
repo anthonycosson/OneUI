@@ -39,9 +39,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "General"
@@ -51,7 +51,7 @@ local MODULE = "General"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -150,7 +150,7 @@ end
 
 ---@param mod table
 local function applyMinimapButton(mod)
-    BUI.MinimapDock:SetButton(
+    OUI.MinimapDock:SetButton(
         mod:Get("button"),
         function() return mod:Get("angle") end,
         function(angle) mod:Set("angle", angle) end)
@@ -158,7 +158,7 @@ end
 
 ---@param mod table
 local function applyMinimapTray(mod)
-    BUI.MinimapDock:SetTray(mod:Get("tray"))
+    OUI.MinimapDock:SetTray(mod:Get("tray"))
 end
 
 -- =========================================================================
@@ -188,7 +188,7 @@ local APPLIERS = {
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["General"],
     category = "Interface",
     order    = 1,
@@ -204,7 +204,7 @@ BUI:RegisterModule(MODULE, {
         -- rien **au jeu**. Ce bouton ne change rien au jeu — il ne remplace, ne
         -- cache ni ne déplace quoi que ce soit. Il dit que l'addon est là, et par
         -- où l'ouvrir. Livré éteint, il ne restait aucune porte visible : le
-        -- joueur qui ne connaît pas `/bui` a un addon installé et rien à quoi le
+        -- joueur qui ne connaît pas `/oui` a un addon installé et rien à quoi le
         -- rattacher, ce qui n'est pas de la discrétion mais de la disparition.
         button = true, -- @default-on
 
@@ -306,7 +306,7 @@ BUI:RegisterModule(MODULE, {
         -- Les boutons d'addons apparaissent au chargement de leur addon, et rien
         -- ne les annonce : on repasse une fois la rafale retombée.
         local settle = U.Debounce(T.TIMING.TRAY_SETTLE, function()
-            BUI.MinimapDock:Refresh()
+            OUI.MinimapDock:Refresh()
         end)
         self:RegisterEvent("ADDON_LOADED",          settle)
         self:RegisterEvent("PLAYER_ENTERING_WORLD", settle)
@@ -315,15 +315,15 @@ BUI:RegisterModule(MODULE, {
         -- ce qui a été refusé pendant le combat est rattrapé ici.
         self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
             applyGameMenu(self)
-            BUI.MinimapDock:Refresh()
+            OUI.MinimapDock:Refresh()
         end)
     end,
 
     OnDisable = function()
         -- Le bouton se cache et le tiroir rend chaque bouton emprunté à son
         -- parent, à ses ancrages et à sa strate d'origine.
-        BUI.MinimapDock:SetTray(false)
-        BUI.MinimapDock:SetButton(false)
+        OUI.MinimapDock:SetTray(false)
+        OUI.MinimapDock:SetButton(false)
 
         overrideCVar(CVAR_ZOOM, nil)
 

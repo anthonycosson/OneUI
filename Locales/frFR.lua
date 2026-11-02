@@ -5,9 +5,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 
-BUI:RegisterLocale("frFR", {
+OUI:RegisterLocale("frFR", {
     -- Fenêtre d'options
     ["OneUI"]              = true,
     ["Interface"]               = true,
@@ -33,7 +33,7 @@ BUI:RegisterLocale("frFR", {
     ["Yes"]                     = "Oui",
     ["Cancel"]                  = "Annuler",
     ["Open OneUI"]         = "Ouvrir OneUI",
-    ["Login hint"]              = "Tapez /bui pour ouvrir les options.",
+    ["Login hint"]              = "Tapez /oui pour ouvrir les options.",
     ["Module disabled tooltip"] = "Ce module est désactivé.",
     ["Version"]                 = true,
     ["Blocked action watch"]    = "Veille des actions bloquées :",
@@ -1115,7 +1115,7 @@ BUI:RegisterLocale("frFR", {
     ["Aura scale tip"] =
         "Taille des icônes d'aura, en pourcentage de celle du jeu.",
 
-    -- Diagnostic `/bui auras` : les libellés de prose seulement — les noms de
+    -- Diagnostic `/oui auras` : les libellés de prose seulement — les noms de
     -- filtres et de champs sont ceux de l'API, ils ne se traduisent pas.
     ["Aura diagnostic"]                = "Diagnostic des barres d'infos — plaque de la cible",
     ["Aura diagnostic needs target"] =
@@ -1131,7 +1131,7 @@ BUI:RegisterLocale("frFR", {
     ["Tokens"]                         = "jetons",
     ["Aura diagnostic unavailable"]    = "Le module Barres d'infos n'est pas actif.",
 
-    -- Diagnostic `/bui glow` : la prose seulement — les noms de textures sont
+    -- Diagnostic `/oui glow` : la prose seulement — les noms de textures sont
     -- ceux du client, ils ne se traduisent pas.
     ["Glow diagnostic"] =
         "Diagnostic du mode sombre : survolez le bouton maintenant. Ses textures "

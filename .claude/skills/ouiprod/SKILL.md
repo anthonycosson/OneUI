@@ -1,6 +1,6 @@
 ﻿---
-name: buiprod
-description: Publie une nouvelle version de l'addon OneUI sur CurseForge, via un tag poussé sur GitHub. À utiliser quand l'utilisateur dit "/buiprod", "publie", "envoie sur curseforge", "mets en prod", "sors une version", "fais une release", ou nomme un numéro de version à sortir. Couvre le choix du numéro de version, les vérifications, la création du tag, la confirmation avant publication, puis le suivi de la pipeline et du job release jusqu'à l'envoi effectif. Publication publique et irréversible — exige une confirmation explicite de l'utilisateur avant de pousser le tag.
+name: ouiprod
+description: Publie une nouvelle version de l'addon OneUI sur CurseForge, via un tag poussé sur GitHub. À utiliser quand l'utilisateur dit "/ouiprod", "publie", "envoie sur curseforge", "mets en prod", "sors une version", "fais une release", ou nomme un numéro de version à sortir. Couvre le choix du numéro de version, les vérifications, la création du tag, la confirmation avant publication, puis le suivi de la pipeline et du job release jusqu'à l'envoi effectif. Publication publique et irréversible — exige une confirmation explicite de l'utilisateur avant de pousser le tag.
 ---
 
 # OneUI — publier une version sur CurseForge

@@ -7,16 +7,16 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Valeurs proposées. `opts.values` peut être une **fonction** : la liste est
 --- alors relue à chaque ouverture du menu et à chaque rafraîchissement. C'est
 --- pour les listes qui dépendent du personnage — les pierres de foyer qu'il
 --- possède, par exemple —, qui ne sont pas connues à la construction de la page.
----@param opts BUI.DropdownOpts
----@return BUI.DropdownEntry[]
+---@param opts OUI.DropdownOpts
+---@return OUI.DropdownEntry[]
 local function valuesOf(opts)
     local values = opts.values
     if type(values) == "function" then return values() or {} end
@@ -24,7 +24,7 @@ local function valuesOf(opts)
 end
 
 --- Libellé associé à une valeur.
----@param values BUI.DropdownEntry[]
+---@param values OUI.DropdownEntry[]
 ---@param value any
 ---@return string
 local function labelFor(values, value)
@@ -45,7 +45,7 @@ end
 --- Remplit le menu d'un bouton déroulant. Partagé par la ligne d'option et par
 --- le contrôle de barre de titre : c'est le même menu, seule la boîte change.
 ---@param control table
----@param opts BUI.DropdownOpts
+---@param opts OUI.DropdownOpts
 local function fillMenu(control, opts)
     control:SetupMenu(function(_, rootDescription)
         local values = valuesOf(opts)
@@ -90,15 +90,15 @@ local function cyclingButton(row, opts)
     return control
 end
 
----@class BUI.DropdownEntry
+---@class OUI.DropdownEntry
 ---@field value any
 ---@field label string
 
----@class BUI.DropdownOpts
+---@class OUI.DropdownOpts
 ---@field text string
 ---@field tooltip? string
 ---@field indent? boolean  sous-option : en retrait, d'un corps plus petit
----@field values BUI.DropdownEntry[]|fun(): BUI.DropdownEntry[]
+---@field values OUI.DropdownEntry[]|fun(): OUI.DropdownEntry[]
 ---@field get fun(): any
 ---@field set fun(value: any)
 
@@ -112,7 +112,7 @@ end
 ---
 --- L'appelant l'ancre lui-même : sa place dépend de ce que la barre porte déjà.
 ---@param parent table
----@param opts BUI.DropdownOpts
+---@param opts OUI.DropdownOpts
 ---@return table control
 function W.TitleDropdown(parent, opts)
     local S = T.SIZE
@@ -148,7 +148,7 @@ end
 
 --- Ligne « libellé + menu déroulant ».
 ---@param parent table
----@param opts BUI.DropdownOpts
+---@param opts OUI.DropdownOpts
 ---@return table row
 function W.Dropdown(parent, opts)
     local row = W.Row(parent, opts.text, opts.indent)

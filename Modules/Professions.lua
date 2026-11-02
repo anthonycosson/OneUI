@@ -47,10 +47,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Professions"
@@ -221,7 +221,7 @@ end
 --- relire la liste des suivis à chaque fois en ferait dix pour un seul état
 --- (règle 7).
 local queueRefresh = U.Debounce(T.TIMING.TRACKING_SETTLE, function()
-    local mod = BUI.Modules:Get(MODULE)
+    local mod = OUI.Modules:Get(MODULE)
     if mod and mod:IsEnabled() then apply(mod) end
 end)
 
@@ -234,12 +234,12 @@ end)
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Professions"],
     category = "QoL",
     -- Juste sous le chat, qui est à 40.

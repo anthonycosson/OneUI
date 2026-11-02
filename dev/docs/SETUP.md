@@ -38,11 +38,13 @@ git clone https://github.com/anthonycosson/OneUI.git ~/Documents/Claude/OneUI
 cd ~/Documents/Claude/OneUI
 ```
 
-Pour régler l'identité des commits de ce dépôt uniquement :
+Pour régler l'identité des commits de ce dépôt uniquement, avec l'adresse
+masquée fournie par GitHub (le dépôt est public : une adresse personnelle y
+serait lisible par tous) :
 
 ```bash
 git config user.name "Anthony Cosson"
-git config user.email "ton-adresse@exemple.com"
+git config user.email "130412015+anthonycosson@users.noreply.github.com"
 ```
 
 ## 3. Brancher le dépôt dans le jeu
@@ -86,7 +88,7 @@ dir /AL "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns"
 
 1. Lancer le jeu. À l'écran des personnages → **AddOns** : `OneUI` doit
    être listé et coché.
-2. En jeu : `/bui` ouvre la fenêtre d'options, `/bui version` affiche la
+2. En jeu : `/oui` ouvre la fenêtre d'options, `/oui version` affiche la
    version chargée. Depuis un clone, elle affiche `dev` : seul le packager
    écrit le vrai numéro, au moment d'une release.
 3. Recommandé : installer **BugSack** (qui embarque BugGrabber) depuis
@@ -174,7 +176,7 @@ Avant d'écrire la première ligne :
 | [`CONTRIBUTING.md`](../../.github/CONTRIBUTING.md) | licence des contributions, checklist de pull request |
 
 **Avec Claude Code** : ouvrir la session **depuis le dossier du dépôt**. C'est
-ce qui charge `CLAUDE.md` et le skill `/buiprod`, versionné dans
+ce qui charge `CLAUDE.md` et le skill `/ouiprod`, versionné dans
 `.claude/skills/`.
 
 ---

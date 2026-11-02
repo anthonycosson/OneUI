@@ -52,10 +52,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 -- Ce que la moitié déclarative publie (voir `Modules/NameplatesPage.lua`, qui
@@ -76,7 +76,7 @@ local enemyKey     = P.Key
 --- valent mieux qu'une entrée de plus dans le passage de main.
 ---@return table|nil
 local function module()
-    return BUI.Modules:Get(MODULE)
+    return OUI.Modules:Get(MODULE)
 end
 
 
@@ -1055,7 +1055,7 @@ local collectSeen = {}
 --- **Une valeur secrète se transmet, elle ne s'inspecte pas**, et c'est toute la
 --- règle de cette fonction. Sur une unité adverse, le client rend l'icône, le
 --- nombre de cumuls et l'identifiant de sort **secrets** — relevé en jeu par
---- `/bui auras` :
+--- `/oui auras` :
 ---
 ---     aura.icon: secret | .auraInstanceID: activée
 ---     .applications: secret | .spellId: secret
@@ -2912,10 +2912,10 @@ local function release(plate)
     if not (unitFrame and unitFrame.unit) then return end
 
     if type(CompactUnitFrame_UpdateHealthColor) == "function" then
-        BUI.safecall(CompactUnitFrame_UpdateHealthColor, unitFrame)
+        OUI.safecall(CompactUnitFrame_UpdateHealthColor, unitFrame)
     end
     if type(CompactUnitFrame_UpdateName) == "function" then
-        BUI.safecall(CompactUnitFrame_UpdateName, unitFrame)
+        OUI.safecall(CompactUnitFrame_UpdateName, unitFrame)
     end
 end
 
@@ -3188,7 +3188,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Nameplates"],
     category = "Interface",
     -- La place qu'occupait l'annonce de la « barre d'infos », juste après les
@@ -3336,7 +3336,7 @@ BUI:RegisterModule(MODULE, {
 
     options = P.Options(),
 
-    --- `/bui noms` : pourquoi le nom d'un joueur porte la couleur qu'il porte.
+    --- `/oui noms` : pourquoi le nom d'un joueur porte la couleur qu'il porte.
     ---
     --- Trois choses décident, et aucune ne se voit à l'écran : ce que le client
     --- laisse lire de l'unité, de quel côté on la range, et ce que la case des
@@ -3430,7 +3430,7 @@ BUI:RegisterModule(MODULE, {
             "| unitFrame.name:", unitFrame.name and L["On"] or L["Off"])
     end,
 
-    --- `/bui auras` : l'état de la chaîne des auras et du zoom, écrit dans le
+    --- `/oui auras` : l'état de la chaîne des auras et du zoom, écrit dans le
     --- chat. Le symptôme « les curseurs ne font rien » a trop de causes
     --- possibles — lecture refusée, conteneur introuvable, rangée jamais
     --- montée, zoom posé ailleurs que là où on le tient — pour se deviner de
@@ -3700,8 +3700,8 @@ BUI:RegisterModule(MODULE, {
         local darkChanged = function(_, name)
             if name == "DarkMode" then paintAll(self) end
         end
-        self:RegisterMessage(BUI.MESSAGES.SETTING_CHANGED, darkChanged)
-        self:RegisterMessage(BUI.MESSAGES.MODULE_STATE,    darkChanged)
+        self:RegisterMessage(OUI.MESSAGES.SETTING_CHANGED, darkChanged)
+        self:RegisterMessage(OUI.MESSAGES.MODULE_STATE,    darkChanged)
 
         local function enteredWorld()
             -- Le client refait ses plaques en chargeant une zone, sans

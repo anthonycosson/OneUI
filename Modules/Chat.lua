@@ -19,10 +19,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Chat"
@@ -163,7 +163,7 @@ local function restoreHistory(mod)
     restoring = true
     -- Appel protégé, et le drapeau retombe **après** lui : une erreur au milieu
     -- du rejeu laisserait sinon le relevé muet pour le reste de la session.
-    BUI.safecall(replayHistory, mod)
+    OUI.safecall(replayHistory, mod)
     restoring = false
 end
 
@@ -262,7 +262,7 @@ end
 --- couleur du groupe doit emmener toute la famille avec elle. Groupé, le client
 --- annonçant un type à la fois.
 local repaintColors = U.Debounce(T.TIMING.CHAT_SETTLE, function()
-    local mod = BUI.Modules:Get(MODULE)
+    local mod = OUI.Modules:Get(MODULE)
     if mod and mod:IsEnabled() then applyColors(mod) end
 end)
 
@@ -514,7 +514,7 @@ end
 --- une fenêtre ouverte, arrimée ou détachée en cours de session n'a pas encore
 --- reçu ce qu'on pose. Groupé, ces événements arrivant par paquets.
 local refreshTools = U.Debounce(T.TIMING.CHAT_SETTLE, function()
-    local mod = BUI.Modules:Get(MODULE)
+    local mod = OUI.Modules:Get(MODULE)
     if not (mod and mod:IsEnabled()) then return end
 
     hookCapture(mod)
@@ -552,7 +552,7 @@ local APPLIERS = {
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Chat"],
     category = "QoL",
     order    = 40,

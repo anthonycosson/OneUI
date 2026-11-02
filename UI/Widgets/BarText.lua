@@ -14,9 +14,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Ancrages admis. Toute autre valeur retombe sur le centre : un réglage
 --- inconnu doit dégrader vers quelque chose de visible, jamais lever.
@@ -50,7 +50,7 @@ function W.BarText(bar)
     overlay:SetFrameLevel(bar:GetFrameLevel() + T.SIZE.BAR_TEXT_LEVEL)
     -- Enfant d'une barre que le mode sombre parcourt : la marque le fait
     -- passer sans être teinté (voir `collectFrom` dans `UI/Shade.lua`).
-    overlay.buiOwn = true
+    overlay.ouiOwn = true
 
     local value   = overlay:CreateFontString(nil, "OVERLAY", T.FONT.BAR_TEXT)
     local percent = overlay:CreateFontString(nil, "OVERLAY", T.FONT.BAR_TEXT)

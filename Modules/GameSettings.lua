@@ -38,17 +38,17 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "GameSettings"
 
 ---@return table|nil
 local function module()
-    return BUI.Modules:Get(MODULE)
+    return OUI.Modules:Get(MODULE)
 end
 
 -- =========================================================================
@@ -242,7 +242,7 @@ local function takeSnapshot(mod, silent)
     if not count then
         -- Le client ne sait pas lister ses CVars : rien n'est relevé, et on
         -- le dit — un relevé vide qui s'enregistre serait un mensonge.
-        if not silent then BUI:Print(L["Snapshot refused"]) end
+        if not silent then OUI:Print(L["Snapshot refused"]) end
         return
     end
 
@@ -264,8 +264,8 @@ local function takeSnapshot(mod, silent)
     snapshots(mod)[key] = snap
 
     if not silent then
-        BUI:Print(BUI:Lf("Snapshot taken", count))
-        BUI.PageBuilder:RefreshPage(MODULE)
+        OUI:Print(OUI:Lf("Snapshot taken", count))
+        OUI.PageBuilder:RefreshPage(MODULE)
     end
 end
 
@@ -293,7 +293,7 @@ end
 
 --- Les personnages relevés, ce personnage-ci exclu — s'importer sur soi-même
 --- n'est pas un geste. La date dit si le relevé est frais.
----@return BUI.DropdownEntry[]
+---@return OUI.DropdownEntry[]
 local function sourceValues()
     local mod = module()
     if not mod then return {} end
@@ -361,7 +361,7 @@ local function confirmApply()
     local mod = module()
     if not (mod and sourceSnapshot(mod)) then return end
 
-    W.Confirm(BUI:Lf("Apply snapshot confirm", source), function()
+    W.Confirm(OUI:Lf("Apply snapshot confirm", source), function()
         local m = module()
         if m then applySnapshot(m) end
     end)
@@ -371,12 +371,12 @@ local function deleteSnapshot()
     local mod = module()
     if not (mod and sourceSnapshot(mod)) then return end
 
-    W.Confirm(BUI:Lf("Delete snapshot confirm", source), function()
+    W.Confirm(OUI:Lf("Delete snapshot confirm", source), function()
         local m = module()
         if not m then return end
         snapshots(m)[source] = nil
         source = nil
-        BUI.PageBuilder:RefreshPage(MODULE)
+        OUI.PageBuilder:RefreshPage(MODULE)
     end)
 end
 
@@ -384,7 +384,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Game settings"],
     category = "Sharing",
     order    = 10,
@@ -432,7 +432,7 @@ BUI:RegisterModule(MODULE, {
                 source = value
                 -- Un choix hors base n'émet pas de message : la page se
                 -- rafraîchit ici pour que les boutons suivent le menu.
-                BUI.PageBuilder:RefreshPage(MODULE)
+                OUI.PageBuilder:RefreshPage(MODULE)
             end,
             disabled = nothingToImport,
             disabledReason = L["No snapshot yet"],

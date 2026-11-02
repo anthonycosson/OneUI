@@ -30,8 +30,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "RaidPanel"
@@ -41,7 +41,7 @@ local MODULE = "RaidPanel"
 ---@return fun(): boolean
 local function requires(key)
     return function()
-        local mod = BUI.Modules:Get(MODULE)
+        local mod = OUI.Modules:Get(MODULE)
         return not (mod and mod:Get(key))
     end
 end
@@ -197,7 +197,7 @@ local APPLIERS = {
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Raid manager"],
     category = "MythicRaid",
     order    = 10,

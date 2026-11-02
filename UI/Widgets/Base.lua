@@ -8,13 +8,13 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T   = BUI.Theme
-local U   = BUI.Util
+local OUI = ns.OUI
+local T   = OUI.Theme
+local U   = OUI.Util
 local L   = ns.L
 
 local W = {}
-BUI.Widgets = W
+OUI.Widgets = W
 
 -- =========================================================================
 --  Infobulle
@@ -394,12 +394,12 @@ local function newGrip(frame)
     return grip
 end
 
----@class BUI.GripOpts
+---@class OUI.GripOpts
 ---@field side? string             coin ou bord tiré ; « BOTTOMRIGHT » par défaut
 ---@field allow? fun(): boolean    le geste est-il permis en ce moment ?
 ---@field onStop? fun()
 ---@param frame table
----@param opts? BUI.GripOpts
+---@param opts? OUI.GripOpts
 ---@return table
 function W.ResizeGrip(frame, opts)
     opts = opts or {}
@@ -436,14 +436,14 @@ end
 ---
 --- La largeur intrinsèque du cadre ne bouge jamais : l'échelle visée est donc le
 --- rapport entre la largeur qu'on veut voir et celle-là.
----@class BUI.ScaleGripOpts
+---@class OUI.ScaleGripOpts
 ---@field min number
 ---@field max number
 ---@field setScale fun(scale: number)
 ---@field onScale? fun()          appelé à chaque cran du geste, pas seulement à sa fin
 ---@field allow? fun(): boolean
 ---@param frame table
----@param opts BUI.ScaleGripOpts
+---@param opts OUI.ScaleGripOpts
 ---@return table
 function W.ScaleGrip(frame, opts)
     local grip = newGrip(frame)

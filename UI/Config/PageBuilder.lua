@@ -52,7 +52,7 @@
 --                                                    -- de position : le mode
 --                                                    -- édition les bascule
 --                                                    -- d'un coup (voir
---                                                    -- `BUI:SetEditMode`). Une
+--                                                    -- `OUI:SetEditMode`). Une
 --                                                    -- case qui ne pose pas un
 --                                                    -- cadre à l'écran ne la
 --                                                    -- porte pas.
@@ -62,13 +62,13 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 local L    = ns.L
 
 local PB = {}
-BUI.PageBuilder = PB
+OUI.PageBuilder = PB
 
 --- moduleName -> frame de page
 local pages = {}
@@ -176,7 +176,7 @@ local function buildWidget(page, mod, descriptor)
         return spacer
     end
 
-    BUI:Warn("descripteur d'option inconnu : " .. tostring(kind))
+    OUI:Warn("descripteur d'option inconnu : " .. tostring(kind))
     return nil
 end
 
@@ -197,7 +197,7 @@ local function labelReach(frame)
 
     label:SetWidth(0)
     local text = label:GetStringWidth()
-    if BUI.Util.IsSecret(text) or type(text) ~= "number" then return 0 end
+    if OUI.Util.IsSecret(text) or type(text) ~= "number" then return 0 end
 
     return (frame._labelX or 0) + text + T.SIZE.LABEL_INDENT
 end
@@ -336,7 +336,7 @@ local function layout(page)
             -- template du client peut en rendre une ; on l'écarte ici, une fois,
             -- plutôt que de s'en défendre à chaque endroit qui lit une hauteur.
             local height = entry.frame:GetHeight()
-            if BUI.Util.IsSecret(height) or type(height) ~= "number" then
+            if OUI.Util.IsSecret(height) or type(height) ~= "number" then
                 height = T.SIZE.ROW_H
             end
 

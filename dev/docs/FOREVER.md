@@ -133,8 +133,8 @@ bash dev/scripts/make-probe.sh --calibrer "<chemin rendu à l'étape 2>"
 powershell -File dev/scripts/install-probe.ps1 -Client "C:\Program Files (x86)\World of Warcraft\_forever_" -Interface 16001
 ```
 
-En jeu : le résumé s'affiche à la connexion, `/buiprobe` le redonne,
-`/buiprobe tout` déplie tout, `/buiprobe quest` liste ce qui manque à un
+En jeu : le résumé s'affiche à la connexion, `/ouiprobe` le redonne,
+`/ouiprobe tout` déplie tout, `/ouiprobe quest` liste ce qui manque à un
 fichier. Le fichier de WTF reste la sortie de référence.
 
 ### Pourquoi l'étalonnage n'est pas facultatif

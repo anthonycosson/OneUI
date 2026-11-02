@@ -42,8 +42,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local U    = BUI.Util
+local OUI = ns.OUI
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "Emotes"
@@ -88,7 +88,7 @@ local ANSWERS = {
 -- touche obtenait une réponse sur dix, ce qui ressemble à un réglage qui
 -- décroche. On répond à chaque fois. C'est ce que la case promet.
 
---- La veille du `/bui emote` : écrit dans le chat le texte brut de chaque emote
+--- La veille du `/oui emote` : écrit dans le chat le texte brut de chaque emote
 --- reçu. Elle existe parce que la formule reconnue est une chaîne de locale, et
 --- qu'une chaîne de locale fausse ne lève pas — le module reste simplement muet,
 --- ce qui ressemble trait pour trait à un réglage décoché.
@@ -139,9 +139,9 @@ end
 ---@param target string|nil
 local function perform(token, target)
     if type(DoEmote) == "function" then
-        BUI.safecall(DoEmote, token, target)
+        OUI.safecall(DoEmote, token, target)
     elseif C_ChatInfo and C_ChatInfo.PerformEmote then
-        BUI.safecall(C_ChatInfo.PerformEmote, token)
+        OUI.safecall(C_ChatInfo.PerformEmote, token)
     end
 end
 
@@ -210,7 +210,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Emotes"],
     category = "Fun",
     order    = 10,
@@ -236,7 +236,7 @@ BUI:RegisterModule(MODULE, {
         },
     },
 
-    --- `/bui emote` : écrit le texte brut de chaque emote reçu.
+    --- `/oui emote` : écrit le texte brut de chaque emote reçu.
     ---
     --- Ce que le module reconnaît est une phrase, et une phrase mal orthographiée
     --- dans un fichier de locale **ne lève pas** : le module se tait, ce qui

@@ -16,10 +16,10 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
+local OUI = ns.OUI
 
 local Search = {}
-BUI.Search = Search
+OUI.Search = Search
 
 --- En dessous, la saisie est un début de geste, pas une question : deux lettres
 --- allumeraient la moitié de l'index.
@@ -79,8 +79,8 @@ local index
 local function buildIndex()
     index = {}
 
-    for _, category in ipairs(BUI.CATEGORIES) do
-        local modules = BUI.Modules:GetByCategory(category.key)
+    for _, category in ipairs(OUI.CATEGORIES) do
+        local modules = OUI.Modules:GetByCategory(category.key)
 
         for m = 1, #modules do
             local mod = modules[m]

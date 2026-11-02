@@ -22,9 +22,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- Remplace une méthode d'ancrage le temps de l'emprunt. Ne rien faire est le
 --- comportement voulu : le cadre est rangé, sa position ne lui appartient plus.

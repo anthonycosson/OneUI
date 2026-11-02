@@ -27,12 +27,12 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
----@class BUI.MenuEntry
+---@class OUI.MenuEntry
 ---@field header? string    ligne de titre ; les autres champs sont alors ignorés
 ---@field submenu? table    { name, icon, entries } ; ouvre au survol
 ---@field kind? string      "item" | "toy" | "spell"
@@ -394,7 +394,7 @@ function W.SecureMenu(parent, root)
     --- Décrit une action sur une ligne recyclée. Tous les attributs de charge
     --- sont réécrits, y compris ceux qui ne servent pas à cette entrée-là.
     ---@param row table
-    ---@param entry BUI.MenuEntry
+    ---@param entry OUI.MenuEntry
     local function describe(row, entry)
         row:SetAttribute("type", entry.kind)
         for i = 1, #PAYLOADS do
@@ -411,7 +411,7 @@ function W.SecureMenu(parent, root)
     --- Remplit le menu. Rend `false` si le client est en combat : les attributs
     --- d'un bouton sécurisé ne s'y écrivent pas, et le menu reste alors tel
     --- qu'il était.
-    ---@param entries BUI.MenuEntry[]
+    ---@param entries OUI.MenuEntry[]
     ---@return boolean applied
     function menu:SetEntries(entries)
         if InCombatLockdown() then return false end

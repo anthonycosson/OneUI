@@ -2,6 +2,11 @@
 
 ## Non publié
 
+### Modifié
+- Nouvelle commande `/oui` (ou `/oneui`) pour ouvrir les options.
+- Les réglages repartent de zéro avec cette version : les reconfigurer une
+  fois, ou importer un profil exporté auparavant (page **Profils**).
+
 ## 2.0.13 — 2026-11-02
 
 ### Ajouté

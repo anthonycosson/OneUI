@@ -21,9 +21,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
 --- bouton -> étiquette. Clés faibles : un bouton oublié par le client l'est
 --- aussi par nous.

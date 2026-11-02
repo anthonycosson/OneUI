@@ -26,19 +26,19 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local W    = OUI.Widgets
 
----@class BUI.IconBadgeSlot
+---@class OUI.IconBadgeSlot
 ---@field shown fun(): boolean        y a-t-il lieu de montrer cette case ?
 ---@field icon fun(): any             son image : identifiant de fichier ou atlas
 ---@field title? string               titre de son infobulle
 ---@field tip? string                 corps de son infobulle
 ---@field onClick? fun()              ce que le clic déclenche
 
----@class BUI.IconBadgeOpts
----@field slots BUI.IconBadgeSlot[]
+---@class OUI.IconBadgeOpts
+---@field slots OUI.IconBadgeSlot[]
 ---@field getPos? fun(): number, number
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean
@@ -65,7 +65,7 @@ local function paint(texture, source)
 end
 
 --- Rangée d'icônes, masquée au départ.
----@param opts BUI.IconBadgeOpts
+---@param opts OUI.IconBadgeOpts
 ---@return table
 function W.IconBadge(opts)
     local slots = opts.slots or {}

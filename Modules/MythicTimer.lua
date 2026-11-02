@@ -26,8 +26,8 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "MythicTimer"
@@ -106,7 +106,7 @@ end
 --- mode est éteint, ou une clé tourne pour de vrai — et alors c'est le vrai chrono
 --- qu'on regarde, pas un exemple.
 ---@param mod table
----@return BUI.KeySample|nil
+---@return OUI.KeySample|nil
 local function previewSample(mod)
     if not mod:Get("previewMode") then return nil end
     if activeMapID() then return nil end
@@ -167,7 +167,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Mythic+ timer"],
     category = "Interface",
     order    = 40,

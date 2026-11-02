@@ -13,11 +13,11 @@
 
 local ADDON, ns = ...
 
----@class BUI
+---@class OUI
 ---@field Util table   rempli par `Core/Util.lua`, chargé juste après ce fichier
-local BUI = {}
+local OUI = {}
 
-BUI.ADDON   = ADDON
+OUI.ADDON   = ADDON
 --- Version affichée.
 ---
 --- Le `.toc` porte `@project-version@`, que le packager remplace par le nom du
@@ -35,13 +35,13 @@ if type(version) ~= "string" or version == "" or version:find("@", 1, true) then
     version = "dev"
 end
 
-BUI.VERSION = version
-BUI.ns      = ns
+OUI.VERSION = version
+OUI.ns      = ns
 
-ns.BUI = BUI
+ns.OUI = OUI
 
 -- Le seul global de l'addon (voir CLAUDE.md, règle 3).
-_G.OneUI = BUI
+_G.OneUI = OUI
 
 -- =========================================================================
 --  Appel protégé
@@ -63,14 +63,14 @@ local function safecall(fn, ...)
     ---@diagnostic disable-next-line: redundant-parameter
     return xpcall(fn, errorHandler, ...)
 end
-BUI.safecall = safecall
+OUI.safecall = safecall
 
 -- =========================================================================
 --  Événements du client
 -- =========================================================================
 
 local eventFrame = CreateFrame("Frame", nil, UIParent)
-BUI.eventFrame = eventFrame
+OUI.eventFrame = eventFrame
 
 --- event -> liste ordonnée de handlers
 local handlers = {}
@@ -128,7 +128,7 @@ end)
 --- Le handler reçoit (event, ...) comme un OnEvent classique.
 ---@param event string
 ---@param fn fun(event: string, ...: any)
-function BUI:RegisterEvent(event, fn)
+function OUI:RegisterEvent(event, fn)
     if type(event) ~= "string" or type(fn) ~= "function" then return end
 
     local list = handlers[event]
@@ -142,7 +142,7 @@ function BUI:RegisterEvent(event, fn)
         --
         -- On tente, on signale, et le reste du module continue de se brancher.
         if not pcall(eventFrame.RegisterEvent, eventFrame, event) then
-            BUI:Warn("événement inconnu du client : " .. event)
+            OUI:Warn("événement inconnu du client : " .. event)
             return
         end
 
@@ -158,7 +158,7 @@ end
 --- Désabonne un handler. Sans `fn`, désabonne tout l'événement.
 ---@param event string
 ---@param fn? function
-function BUI:UnregisterEvent(event, fn)
+function OUI:UnregisterEvent(event, fn)
     local list = handlers[event]
     if not list then return end
 
@@ -192,13 +192,13 @@ end
 --- Variante « une seule fois » : le handler se désabonne après le premier tir.
 ---@param event string
 ---@param fn fun(event: string, ...: any)
-function BUI:RegisterEventOnce(event, fn)
+function OUI:RegisterEventOnce(event, fn)
     local wrapper
     wrapper = function(...)
-        BUI:UnregisterEvent(event, wrapper)
+        OUI:UnregisterEvent(event, wrapper)
         fn(...)
     end
-    BUI:RegisterEvent(event, wrapper)
+    OUI:RegisterEvent(event, wrapper)
 end
 
 -- =========================================================================
@@ -211,18 +211,18 @@ end
 local callbacks = {}
 
 --- Messages émis par le core (à garder à jour) :
----   "BUI_PROFILE_CHANGED"  (profileName)
----   "BUI_SETTING_CHANGED"  (moduleName, key, value)
----   "BUI_MODULE_STATE"     (moduleName, enabled)
-BUI.MESSAGES = {
-    PROFILE_CHANGED = "BUI_PROFILE_CHANGED",
-    SETTING_CHANGED = "BUI_SETTING_CHANGED",
-    MODULE_STATE    = "BUI_MODULE_STATE",
+---   "OUI_PROFILE_CHANGED"  (profileName)
+---   "OUI_SETTING_CHANGED"  (moduleName, key, value)
+---   "OUI_MODULE_STATE"     (moduleName, enabled)
+OUI.MESSAGES = {
+    PROFILE_CHANGED = "OUI_PROFILE_CHANGED",
+    SETTING_CHANGED = "OUI_SETTING_CHANGED",
+    MODULE_STATE    = "OUI_MODULE_STATE",
 }
 
 ---@param message string
 ---@param fn fun(message: string, ...: any)
-function BUI:RegisterMessage(message, fn)
+function OUI:RegisterMessage(message, fn)
     if type(message) ~= "string" or type(fn) ~= "function" then return end
     local list = callbacks[message]
     if not list then
@@ -237,7 +237,7 @@ end
 
 ---@param message string
 ---@param fn? function
-function BUI:UnregisterMessage(message, fn)
+function OUI:UnregisterMessage(message, fn)
     local list = callbacks[message]
     if not list then return end
     if fn then
@@ -250,7 +250,7 @@ function BUI:UnregisterMessage(message, fn)
 end
 
 ---@param message string
-function BUI:SendMessage(message, ...)
+function OUI:SendMessage(message, ...)
     local list = callbacks[message]
     if not list then return end
     for i = 1, #list do
@@ -265,12 +265,12 @@ end
 
 local PREFIX = "|cff00aeefOne|rUI:|r "
 
-function BUI:Print(...)
+function OUI:Print(...)
     print(PREFIX .. strjoin(" ", tostringall(...)))
 end
 
 --- Message d'erreur destiné à l'utilisateur (pas une erreur Lua).
-function BUI:Warn(...)
+function OUI:Warn(...)
     print(PREFIX .. "|cffff6060" .. strjoin(" ", tostringall(...)) .. "|r")
 end
 
@@ -306,29 +306,29 @@ local watching = false
 local savedErrors
 
 local function onBlocked(event, addonName, functionName)
-    BUI:Warn(event, addonName or "?", functionName or "?")
+    OUI:Warn(event, addonName or "?", functionName or "?")
 end
 
 --- Arme ou désarme la veille. Renvoie son nouvel état.
 ---@return boolean watching
-function BUI:ToggleActionWatch()
+function OUI:ToggleActionWatch()
     watching = not watching
-    local U = BUI.Util
+    local U = OUI.Util
 
     if watching then
         savedErrors = U.GetCVar(ERRORS_CVAR)
         U.SetCVar(ERRORS_CVAR, "1")
 
-        BUI:RegisterEvent("ADDON_ACTION_BLOCKED",   onBlocked)
-        BUI:RegisterEvent("ADDON_ACTION_FORBIDDEN", onBlocked)
+        OUI:RegisterEvent("ADDON_ACTION_BLOCKED",   onBlocked)
+        OUI:RegisterEvent("ADDON_ACTION_FORBIDDEN", onBlocked)
     else
         if savedErrors ~= nil then
             U.SetCVar(ERRORS_CVAR, savedErrors)
             savedErrors = nil
         end
 
-        BUI:UnregisterEvent("ADDON_ACTION_BLOCKED",   onBlocked)
-        BUI:UnregisterEvent("ADDON_ACTION_FORBIDDEN", onBlocked)
+        OUI:UnregisterEvent("ADDON_ACTION_BLOCKED",   onBlocked)
+        OUI:UnregisterEvent("ADDON_ACTION_FORBIDDEN", onBlocked)
     end
 
     return watching

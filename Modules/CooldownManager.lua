@@ -15,9 +15,9 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
 local L    = ns.L
 
 local MODULE = "CooldownManager"
@@ -301,7 +301,7 @@ local function hookViewer(mod)
         local method = RELAYOUT_METHODS[i]
         if type(viewer[method]) == "function" then
             U.GuardedHook(viewer, method, function()
-                BUI.safecall(repack, mod)
+                OUI.safecall(repack, mod)
                 -- Une amélioration qui tombe s'efface en fondu : au moment où le
                 -- client l'annonce, son emplacement est encore opaque, donc
                 -- encore compté. Le second passage voit la rangée retombée.
@@ -315,7 +315,7 @@ end
 --  Déclaration du module
 -- =========================================================================
 
-BUI:RegisterModule(MODULE, {
+OUI:RegisterModule(MODULE, {
     title    = L["Cooldown manager"],
     category = "Interface",
     order    = 25,
@@ -337,11 +337,11 @@ BUI:RegisterModule(MODULE, {
 
     OnEnable = function(self)
         settle = settle or U.Debounce(T.TIMING.CDM_SETTLE, function()
-            BUI.safecall(repack, self)
+            OUI.safecall(repack, self)
         end)
 
         hookViewer(self)
-        BUI.safecall(repack, self)
+        OUI.safecall(repack, self)
 
         -- Les emplacements sortent d'un pool que le client remplit au fur et à
         -- mesure : la visionneuse peut exister sans qu'aucune amélioration n'ait
@@ -349,21 +349,21 @@ BUI:RegisterModule(MODULE, {
         -- repasse donc à chaque frontière de zone, où l'interface se reconstruit.
         self:RegisterEvent("PLAYER_ENTERING_WORLD", function()
             hookViewer(self)
-            BUI.safecall(repack, self)
+            OUI.safecall(repack, self)
         end)
     end,
 
     OnDisable = function()
-        BUI.safecall(restore)
+        OUI.safecall(restore)
     end,
 
     OnSettingChanged = function(self, key)
         if key ~= nil and key ~= "centerTrackedBuffs" then return end
 
         if self:Get("centerTrackedBuffs") then
-            BUI.safecall(repack, self)
+            OUI.safecall(repack, self)
         else
-            BUI.safecall(restore)
+            OUI.safecall(restore)
         end
     end,
 })

@@ -41,24 +41,24 @@
 -- =========================================================================
 
 local _, ns = ...
-local BUI = ns.BUI
-local T    = BUI.Theme
-local U    = BUI.Util
-local W    = BUI.Widgets
+local OUI = ns.OUI
+local T    = OUI.Theme
+local U    = OUI.Util
+local W    = OUI.Widgets
 
----@class BUI.KeyBoss
+---@class OUI.KeyBoss
 ---@field name string     intitulé de la ligne
 
----@class BUI.KeySample
+---@class OUI.KeySample
 ---@field name string             nom du donjon montré par l'aperçu
 ---@field level number            niveau de la clé
 ---@field limit number            chrono du donjon, en secondes
 ---@field elapsed number          secondes écoulées au départ de l'aperçu
----@field bosses? BUI.KeyBoss[]   lignes de boss d'exemple
+---@field bosses? OUI.KeyBoss[]   lignes de boss d'exemple
 ---@field forces? table           `{ name, percent }`, le décompte de troupes d'exemple
 ---@field deaths? table           `{ count, lost }`, les morts d'exemple
 
----@class BUI.KeyThresholdOpts
+---@class OUI.KeyThresholdOpts
 ---@field deaths? fun(): number|nil   secondes perdues par les morts
 
 --- Fractions du chrono qui accordent des niveaux supplémentaires, **de la plus dure
@@ -101,7 +101,7 @@ end
 
 --- Les ajouts au chrono mythique+ du client.
 --- Rend `nil` si le client ne publie pas ce bloc.
----@param opts BUI.KeyThresholdOpts
+---@param opts OUI.KeyThresholdOpts
 ---@return table|nil
 function W.KeyThresholds(opts)
     -- Les deux sont testés, alors que `findBlock` ne rend jamais l'un sans
@@ -114,7 +114,7 @@ function W.KeyThresholds(opts)
     local countdown = {}
     local tiersOn   = false   -- repères, teinte du chrono et compte-à-rebours
     local deathsOn  = false   -- temps perdu par les morts
-    local sample    = nil     ---@type BUI.KeySample|nil
+    local sample    = nil     ---@type OUI.KeySample|nil
     local elapsed   = 0       -- avancement de l'aperçu, en secondes
     local ticker    = nil
 
@@ -574,7 +574,7 @@ function W.KeyThresholds(opts)
     end
 
     --- Allume l'aperçu sur le relevé donné, ou l'éteint avec `nil`.
-    ---@param data BUI.KeySample|nil
+    ---@param data OUI.KeySample|nil
     function marker:SetPreview(data)
         if not data then
             if not sample then return end
