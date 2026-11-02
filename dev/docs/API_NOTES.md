@@ -4526,7 +4526,7 @@ C'est le piège général de ce système : on choisit *où* l'alerte se pose, ja
 
 **Ce qu'on fait** — l'hôte n'est plus le cadre visé mais un **porteur** monté
 par-dessus lui : même boîte, vingt crans plus haut, et c'est lui qui porte
-`VisualAlertTargetMixin` (`UI/Widgets/AlertGlow.lua`). L'alerte hérite de sa
+`VisualAlertTargetMixin`. L'alerte hérite de sa
 hauteur et passe devant tout ce que le cadre visé contient. Les deux nombres —
 dix pour la rangée, vingt pour le porteur — sont liés : abaisser le second sous
 le premier éteint la lueur sans rien dire, d'où le commentaire sur la constante.
@@ -5114,7 +5114,8 @@ portent des clés **anglaises** (`SHAMAN_STRENGTH_TOOLTIP`) et des valeurs
 traduites. Le repli `DEFAULT_FORCE_TOOLTIP` manque pour la même raison, et le
 `string.format` qui suit reçoit `nil`.
 
-**Ce qu'on fait** — `Modules/Beta.lua` pose les clés traduites manquantes en
+**Ce qu'on faisait** (retiré le 29 octobre 2026 avec les autres correctifs de
+la bêta de Forever) — `Modules/Beta.lua` posait les clés traduites manquantes en
 les faisant pointer sur les chaînes anglaises, dont la valeur est déjà dans la
 langue du joueur. Écrire une globale de chaîne est accepté par le client
 (vérifié en jeu : `/dump SHAMAN_FORCE_TOOLTIP` rend le texte français). On

@@ -109,10 +109,11 @@ module éteint l'est. Les deux états n'en sont pas un seul : un module éteint 
 qui n'existe pas — et tant qu'ils sont majoritaires, cela délaverait la colonne
 entière.
 
-Ils vivent tous dans `Modules/Upcoming.lua`. Le fichier est un échafaudage :
-quand un module est écrit, il part dans son propre fichier avec son `OnEnable`
-et sa déclaration disparaît d'`Upcoming.lua`. Son **nom** ne bouge pas — c'est
-une clé de base de données, choisie une fois pour toutes dès la maquette.
+Aucun module n'est annoncé aujourd'hui : l'échafaudage `Modules/Upcoming.lua`
+a été retiré quand le dernier a été écrit. Un module annoncé se déclare avec
+`preview = true` ; une fois écrit, il reçoit son `OnEnable` et perd le drapeau.
+Son **nom** ne bouge pas — c'est une clé de base de données, choisie une fois
+pour toutes dès la maquette.
 
 ## Interface
 
