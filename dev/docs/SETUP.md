@@ -78,11 +78,12 @@ dir /AL "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns"
 
 `OneUI` doit apparaître avec la mention `<JONCTION>`.
 
-> ⚠️ **Ne jamais installer OneUI UI depuis CurseForge sur cette machine.**
+> ⚠️ **Ne jamais installer OneUI depuis CurseForge sur cette machine.**
 > L'application CurseForge remplace la jonction par un vrai dossier contenant
 > la version publiée, et tes modifications locales cessent d'être chargées sans
-> que rien ne le signale. Le README (§ 1) explique comment s'en apercevoir et
-> réparer.
+> que rien ne le signale. La commande `dir /AL` ci-dessus le révèle : si
+> `OneUI` n'y porte plus la mention `<JONCTION>`, supprimer le dossier et
+> relancer le `mklink`.
 
 ## 4. Premier lancement
 
@@ -163,7 +164,7 @@ bash dev/packager/release.sh -d -o -z -r "$PWD/dev/build" && find dev/build/OneU
 ## 7. Et maintenant
 
 La boucle de travail : éditer → `/reload` en jeu → `lint-local.sh` → commit →
-push. Le README (§ 3) la détaille, et la CI vérifie chaque push sur
+push. La section 9 de `CLAUDE.md` la détaille, et la CI vérifie chaque push sur
 <https://github.com/anthonycosson/OneUI/actions>.
 
 Avant d'écrire la première ligne :
@@ -202,7 +203,7 @@ ln -s ~/Documents/Claude/OneUI "/Applications/World of Warcraft/_retail_/Interfa
 ls -l "/Applications/World of Warcraft/_retail_/Interface/AddOns" | grep OneUI   # doit montrer la flèche ->
 ```
 
-**Fichiers de diagnostic :** les chemins `WTF\…` et `Logs\…` du README se
+**Fichiers de diagnostic :** les chemins `WTF\…` et `Logs\…` de `CLAUDE.md` se
 trouvent sous `/Applications/World of Warcraft/_retail_/`.
 
 **Scripts PowerShell :** `dev/scripts/*.ps1` (sonde, logo, textures) sont

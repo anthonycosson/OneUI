@@ -144,7 +144,7 @@ OUI:RegisterModule(MODULE, {
 
     defaults = {
         -- Éteint par défaut, comme tout le reste de l'addon : installer OneUI
-        -- UI ne doit rien changer tant qu'on n'a rien coché.
+        -- ne doit rien changer tant qu'on n'a rien coché.
         movable  = false,
         scalable = false,
 

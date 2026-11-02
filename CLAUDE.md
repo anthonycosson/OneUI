@@ -234,4 +234,24 @@ racine (`.pkgmeta`, `.github/`, `.luacheckrc`, `.luarc.json`,
 sous `dev/` oblige à l'ajouter aussi dans la liste `ignore` de `.pkgmeta`,
 sous peine de le livrer aux joueurs.
 
-Voir `README.md` pour le détail de ce qui est publié ou non.
+Ce qui part dans le zip est décidé par la liste `ignore` de `.pkgmeta`.
+
+## Documentation de développement
+
+| Besoin | Fichier |
+|---|---|
+| Installer le dépôt sur un nouvel ordinateur | `dev/docs/SETUP.md` |
+| Comprendre l'architecture du code | `dev/docs/ARCHITECTURE.md` |
+| Ajouter une option ou un widget | `dev/docs/DESIGN.md` |
+| Comprendre pourquoi un passage étrange est écrit ainsi | `dev/docs/API_NOTES.md` |
+| Publier une version | `dev/docs/RELEASING.md` et le skill `/ouiprod` |
+| Modifier la page CurseForge | `dev/docs/CURSEFORGE.md` |
+| Contribuer | `.github/CONTRIBUTING.md` |
+
+Diagnostic en jeu, sous `_retail_\` :
+
+| Quoi | Où |
+|---|---|
+| Erreurs Lua | `WTF\Account\<compte>\SavedVariables\!BugGrabber.lua` (BugSack) |
+| Réglages enregistrés | `WTF\Account\<compte>\SavedVariables\OneUI.lua` |
+| Taint | `Logs\taint.log`, après `/console taintLog 1` |

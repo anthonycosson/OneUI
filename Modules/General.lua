@@ -200,7 +200,7 @@ OUI:RegisterModule(MODULE, {
         -- `@default-on`, que `check-design.sh` réclame pour laisser passer un
         -- défaut vrai.
         --
-        -- La règle protège une promesse précise : installer OneUI UI ne change
+        -- La règle protège une promesse précise : installer OneUI ne change
         -- rien **au jeu**. Ce bouton ne change rien au jeu — il ne remplace, ne
         -- cache ni ne déplace quoi que ce soit. Il dit que l'addon est là, et par
         -- où l'ouvrir. Livré éteint, il ne restait aucune porte visible : le

@@ -955,7 +955,7 @@
 ### Modifié
 - **Le bouton de l'addon est affiché sur la minicarte dès l'installation.**
   C'est la seule case cochée d'origine de tout l'addon, et elle le restera. La
-  promesse est intacte : installer OneUI UI ne change toujours rien au jeu — ce
+  promesse est intacte : installer OneUI ne change toujours rien au jeu — ce
   bouton ne remplace, ne cache ni ne déplace quoi que ce soit. Il dit que l'addon
   est là, et par où l'ouvrir. Livré éteint, il ne restait aucune porte visible à
   qui ne connaît pas `/bui`.

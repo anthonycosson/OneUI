@@ -32,23 +32,26 @@ Coller les deux sections l'une après l'autre, l'anglais d'abord.
 ```
 # OneUI
 
-**Blizzard's interface, minus everything that annoys you.**
+**The Blizzard UI you already know. Finally finished.**
 
-OneUI is one addon that polishes the default UI instead of replacing it. Dark
-mode, a character sheet that finally tells you everything, Mythic+ timers,
-smarter nameplates, quests and junk on autopilot: switch on only what you want,
-and the game still looks like the game.
+You don't need a whole new interface. You need the one you have to stop
+getting in your way. OneUI keeps the game looking like the game, then fixes
+everything around it: sleek dark mode, unit frames that show what matters,
+Blizzard windows you can drag anywhere, junk sold and quests handled before
+you even think about it.
 
-## Why players keep it
+One addon. Zero dependencies. Nothing changes until you flip the switch.
 
-- **Nothing changes until you say so.** Every setting ships switched off, and
-  the build fails if a single one doesn't. Install it, then pick your upgrades.
-- **Off means gone.** Turn a module off and every hidden frame comes back, every
-  texture and console variable is restored. No leftovers, no `/reload` roulette.
-- **One folder, zero dependencies.** No libraries to install alongside, nothing
-  that breaks when another addon updates.
-- **Feels like Blizzard made it.** The game's own colours, fonts and borders:
-  the options window is meant to pass for one of theirs.
+## Why you'll keep it
+
+- **Install it, nothing breaks.** Every feature ships turned off. Switch on
+  what you want, ignore the rest.
+- **Turn it off, it's gone.** Disable a module and the game goes back exactly
+  as it was: every frame, texture and setting restored.
+- **One download, done.** No libraries, no dependency chains, no
+  "requires X" pop-ups.
+- **Looks like Blizzard shipped it.** Native colours, fonts and borders. Your
+  UI stays clean, just smarter.
 
 ## What's inside
 
@@ -77,6 +80,8 @@ and the game still looks like the game.
 
 **Profiles**
 - Export your setup as a string, import it on another character or share it
+
+...and much more, with every module one click away in the options window.
 
 ## Getting started
 

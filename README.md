@@ -72,22 +72,6 @@ Ouvrez une [issue](https://github.com/anthonycosson/OneUI/issues).
 Indiquez votre version (/oui version), ce que vous faisiez, et le texte complet
 de l'erreur Lua s'il y en a une (BugSack la copie en un clic).
 
-## Développement
-
-Le dépôt est le dossier d'addon lui-même : le jeu le lit directement, sans build.
-Tout ce qui ne part pas chez le joueur vit sous `dev/`.
-
-| Besoin | Fichier |
-|---|---|
-| Installer le dépôt sur un nouvel ordinateur | [dev/docs/SETUP.md](dev/docs/SETUP.md) |
-| Comprendre l'architecture du code | [dev/docs/ARCHITECTURE.md](dev/docs/ARCHITECTURE.md) |
-| Ajouter une option ou un widget | [dev/docs/DESIGN.md](dev/docs/DESIGN.md) |
-| Comprendre pourquoi un passage étrange est écrit ainsi | [dev/docs/API_NOTES.md](dev/docs/API_NOTES.md) |
-| Publier une version | [dev/docs/RELEASING.md](dev/docs/RELEASING.md) |
-| Modifier la page CurseForge | [dev/docs/CURSEFORGE.md](dev/docs/CURSEFORGE.md) |
-| Connaître les règles du dépôt | [CLAUDE.md](CLAUDE.md) |
-| Contribuer | [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md) |
-
 ## Licence
 
 Tous droits réservés — voir [license.txt](license.txt).
