@@ -174,8 +174,8 @@ Avant d'écrire la première ligne :
 | [`CONTRIBUTING.md`](../CONTRIBUTING.md) | licence des contributions, checklist de pull request |
 
 **Avec Claude Code** : ouvrir la session **depuis le dossier du dépôt**. C'est
-ce qui charge `CLAUDE.md` et les skills `/buidev` et `/buiprod`, versionnés
-dans `.claude/skills/`.
+ce qui charge `CLAUDE.md` et le skill `/buiprod`, versionné dans
+`.claude/skills/`.
 
 ---
 

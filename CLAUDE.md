@@ -161,7 +161,26 @@ SavedVariables : `OneUIDB` (compte) et `OneUICharDB` (personnage).
 - La version ne se modifie pas à la main : `## Version: @project-version@` est
   remplacé par le tag git au packaging. Une release = un tag `vX.Y.Z`.
 - `CHANGELOG.md` se met à jour dans le même commit que la fonctionnalité, pas au
-  moment du tag.
+  moment du tag : une ligne sous `## Non publié`, dans `### Ajouté`,
+  `### Modifié` ou `### Corrigé` si le joueur le voit, `### Interne` sinon
+  (refactor, outillage, CI). Une modification purement locale (doc de dev,
+  script) peut s'en passer.
+
+### Enregistrer le travail (« commit et pousse »)
+
+1. `bash dev/scripts/lint-local.sh` passe. **Jamais de commit s'il échoue** :
+   un avertissement luacheck fait aussi échouer la CI. Si un garde-fou de
+   design bloque, corriger le code plutôt que contourner la règle.
+2. Commiter avec l'entrée du CHANGELOG, puis `git push origin main` sans
+   demander confirmation : c'est réversible et rien n'est publié.
+3. Vérifier la CI (`gh run list --repo anthonycosson/OneUI --limit 3`).
+   Rouge : lire le log, corriger, recommencer. Ne pas s'arrêter sur une CI
+   rouge.
+4. Si le changement touche l'affichage ou le comportement en jeu, rappeler de
+   tester avec `/reload` : la CI ne lance jamais le jeu.
+
+**Aucun tag hors du skill `/buiprod`** : un tag `v*` poussé publie
+immédiatement une version publique sur CurseForge.
 
 ## 10. Vérification avant de dire « c'est fait »
 

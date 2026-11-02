@@ -1,7 +1,7 @@
 # Page CurseForge
 
-Texte à coller dans le projet CurseForge. À relire à chaque version qui ajoute
-ou retire un module — une page qui décrit des fonctionnalités absentes se paie
+Texte à coller dans le projet CurseForge, repris en français dans le
+`README.md`. À relire à chaque version qui ajoute ou retire un module — une page qui décrit des fonctionnalités absentes se paie
 en commentaires.
 
 **L'anglais passe en premier dans la description**, et ce n'est pas une
@@ -156,8 +156,8 @@ endorsed by Blizzard Entertainment, Inc.
 |---|---|
 | Nom | OneUI |
 | Licence | All Rights Reserved (option « Custom License », coller `license.txt`) |
-| Source | `https://github.com/anthonycosson/OneUI`, si tu le rends public |
-| Issues | `https://github.com/anthonycosson/OneUI/issues`, si le dépôt est public |
+| Source | `https://github.com/anthonycosson/OneUI` |
+| Issues | `https://github.com/anthonycosson/OneUI/issues` |
 
 ### Catégories
 
@@ -180,7 +180,8 @@ réel et non à une intention :
 
 ## À faire à chaque publication
 
-- [ ] Recopier la description si un module a été ajouté ou retiré.
+- [ ] Recopier la description si un module a été ajouté ou retiré, ici et dans
+      la version française du `README.md`.
 - [ ] Vérifier que la première capture de la galerie est celle qui vend le
       mieux — c'est la vignette, et c'est elle qui décide du clic. La fiche de
       personnage enrichie et le menu de téléportation sont les deux qui se

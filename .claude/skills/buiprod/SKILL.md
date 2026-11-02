@@ -45,7 +45,8 @@ cd ~/Documents/Claude/OneUI && git status --short && git log --oneline -3 && git
 
 Exigences :
 
-- arbre de travail propre — sinon utiliser d'abord le skill `buidev` ;
+- arbre de travail propre — sinon enregistrer d'abord le travail (section 9 de
+  `CLAUDE.md`) ;
 - `main` local et distant au même commit ;
 - la dernière pipeline sur `main` est verte.
 
