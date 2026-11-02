@@ -21,7 +21,7 @@ problème est parfaitement légitime : notez la trouvaille dans
 ## Outillage
 
 L'installation complète d'un poste de développement est décrite dans
-[docs/SETUP.md](docs/SETUP.md). Ce qui suit en reprend le point délicat.
+[dev/docs/SETUP.md](../dev/docs/SETUP.md). Ce qui suit en reprend le point délicat.
 
 `check-design.sh` compile chaque fichier avec le Lua du client — **5.1**, dont
 les plafonds par fonction sont plus bas que ceux des versions récentes. Un
@@ -43,7 +43,7 @@ verdict — sans `luac5.1`, il se rabat sur ce qu'il trouve, ou ne vérifie rien
 1. `luacheck .` passe.
 2. `bash dev/scripts/check-design.sh` passe.
 3. Testé en jeu, aucune erreur Lua.
-4. Les règles de [CLAUDE.md](CLAUDE.md) sont respectées — en particulier :
+4. Les règles de [CLAUDE.md](../CLAUDE.md) sont respectées — en particulier :
    pas de `CreateFrame` hors `UI/Widgets/`, pas de valeur d'apparence en dur,
    pas de texte non traduit, désactiver le module restaure l'état d'origine.
 5. `CHANGELOG.md` mis à jour dans le même commit.

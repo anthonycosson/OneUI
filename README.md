@@ -74,7 +74,7 @@ Tout ce qui ne part pas chez le joueur vit sous `dev/`.
 | Publier une version | [dev/docs/RELEASING.md](dev/docs/RELEASING.md) |
 | Modifier la page CurseForge | [dev/docs/CURSEFORGE.md](dev/docs/CURSEFORGE.md) |
 | Connaître les règles du dépôt | [CLAUDE.md](CLAUDE.md) |
-| Contribuer | [dev/CONTRIBUTING.md](dev/CONTRIBUTING.md) |
+| Contribuer | [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md) |
 
 ## Licence
 

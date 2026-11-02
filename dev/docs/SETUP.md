@@ -171,7 +171,7 @@ Avant d'écrire la première ligne :
 | [`CLAUDE.md`](../../CLAUDE.md) | les règles que la CI fait respecter, et leur raison |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | comment le code est découpé |
 | [`DESIGN.md`](DESIGN.md) | ajouter une option ou un widget |
-| [`CONTRIBUTING.md`](../CONTRIBUTING.md) | licence des contributions, checklist de pull request |
+| [`CONTRIBUTING.md`](../../.github/CONTRIBUTING.md) | licence des contributions, checklist de pull request |
 
 **Avec Claude Code** : ouvrir la session **depuis le dossier du dépôt**. C'est
 ce qui charge `CLAUDE.md` et le skill `/buiprod`, versionné dans
