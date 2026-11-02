@@ -14,7 +14,13 @@ première ligne. Le français suit, entier, pour ceux qui le cherchent.
 ## Summary (champ court, obligatoire)
 
 ```
-Blizzard's UI, minus everything that annoys you: dark mode, M+ timers, smarter nameplates and dozens of fixes, all off until you say so.
+All-in-one upgrade for Blizzard's UI: unit frames, movable Blizzard windows, dark mode, auto-sell junk, auto-quest, nameplates and much more.
+```
+
+En français, pour le README et les autres pages :
+
+```
+Le tout-en-un pour l'interface de Blizzard : cadres d'unité, fenêtres Blizzard déplaçables, mode sombre, vente automatique, quêtes automatiques, plaques et bien plus encore.
 ```
 
 ---

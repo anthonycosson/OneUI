@@ -2,6 +2,10 @@
 
 **L'interface de Blizzard, sans tout ce qui vous agace.**
 
+Le tout-en-un pour l'interface de Blizzard : cadres d'unité, fenêtres Blizzard
+déplaçables, mode sombre, vente automatique, quêtes automatiques, plaques et
+bien plus encore.
+
 **[Télécharger sur CurseForge](https://www.curseforge.com/projects/1631877)**
 
 OneUI est un seul addon qui peaufine l'interface d'origine au lieu de la
