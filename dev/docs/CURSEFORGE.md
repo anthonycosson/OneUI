@@ -14,13 +14,13 @@ première ligne. Le français suit, entier, pour ceux qui le cherchent.
 ## Summary (champ court, obligatoire)
 
 ```
-All-in-one upgrade for Blizzard's UI: unit frames, movable Blizzard windows, dark mode, nameplates, auto-sell and auto-repair, auto-quest and much more.
+All-in-one upgrade for Blizzard's UI on Retail and Forever: unit frames, movable Blizzard windows, dark mode, nameplates, auto-sell and auto-repair, auto-quest and much more.
 ```
 
 En français, pour les autres pages :
 
 ```
-Le tout-en-un pour l'interface de Blizzard : cadres d'unité, fenêtres Blizzard déplaçables, mode sombre, nameplates, ventes et réparations automatiques, quêtes automatiques et bien plus encore.
+Le tout-en-un pour l'interface de Blizzard, sur Retail et Forever : cadres d'unité, fenêtres Blizzard déplaçables, mode sombre, nameplates, ventes et réparations automatiques, quêtes automatiques et bien plus encore.
 ```
 
 ---
@@ -33,6 +33,8 @@ Coller les deux sections l'une après l'autre, l'anglais d'abord.
 # OneUI
 
 **The Blizzard UI you already know. Finally finished.**
+
+✅ Works on **Retail** and **WoW Forever**.
 
 You don't need a whole new interface. You need the one you have to stop
 getting in your way. OneUI keeps the game looking like the game, then fixes
@@ -75,7 +77,8 @@ One addon. Zero dependencies. Nothing changes until you flip the switch.
 ## Getting started
 
 Type **/oui** in game, or click the icon in the addon compartment next to the
-minimap. Retail 12.0.7 and above, English and French.
+minimap. Retail 12.0.7 and above, and WoW Forever.
+English and French.
 
 ## Found a bug?
 
@@ -88,6 +91,8 @@ error if there is one (BugSack copies it in one click).
 # OneUI
 
 **L'interface de base, en mieux, et toute la QOL dont vous avez besoin au même endroit.**
+
+✅ Compatible **Retail** et **WoW Forever**.
 
 OneUI garde l'interface que vous connaissez et la rend plus agréable au
 quotidien : mode sombre, cadres d'unité plus lisibles, fenêtres que vous placez
@@ -140,8 +145,8 @@ choisi.
 ## Pour commencer
 
 Tapez **/oui** en jeu, ou cliquez sur l'icône OneUI dans le compartiment
-d'addons, près de la minicarte. Retail 12.0.7 et plus, en anglais et en
-français.
+d'addons, près de la minicarte. Retail 12.0.7 et plus, et WoW Forever.
+En anglais et en français.
 
 ## Un bug ?
 

@@ -2,6 +2,8 @@
 
 **L'interface de base, en mieux, et toute la QOL dont vous avez besoin au même endroit.**
 
+✅ Compatible **Retail** et **WoW Forever**.
+
 **[Télécharger sur CurseForge](https://www.curseforge.com/projects/1631877)**
 
 OneUI garde l'interface que vous connaissez et la rend plus agréable au
@@ -58,7 +60,7 @@ choisi.
 - `/oui version` : affiche la version chargée
 - L'icône du compartiment d'addons, près de la minicarte, ouvre la même fenêtre
 
-Retail 12.0.7 et au-delà, anglais et français.
+Retail 12.0.7 et plus, et WoW Forever. En anglais et en français.
 
 ## Signaler un bug
 
