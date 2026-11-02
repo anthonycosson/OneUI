@@ -14,13 +14,13 @@ première ligne. Le français suit, entier, pour ceux qui le cherchent.
 ## Summary (champ court, obligatoire)
 
 ```
-All-in-one upgrade for Blizzard's UI: unit frames, movable Blizzard windows, dark mode, auto-sell junk, auto-quest, nameplates and much more.
+All-in-one upgrade for Blizzard's UI: unit frames, movable Blizzard windows, dark mode, nameplates, auto-sell and auto-repair, auto-quest and much more.
 ```
 
-En français, pour le README et les autres pages :
+En français, pour les autres pages :
 
 ```
-Le tout-en-un pour l'interface de Blizzard : cadres d'unité, fenêtres Blizzard déplaçables, mode sombre, vente automatique, quêtes automatiques, plaques et bien plus encore.
+Le tout-en-un pour l'interface de Blizzard : cadres d'unité, fenêtres Blizzard déplaçables, mode sombre, nameplates, ventes et réparations automatiques, quêtes automatiques et bien plus encore.
 ```
 
 ---
@@ -41,17 +41,6 @@ Blizzard windows you can drag anywhere, junk sold and quests handled before
 you even think about it.
 
 One addon. Zero dependencies. Nothing changes until you flip the switch.
-
-## Why you'll keep it
-
-- **Install it, nothing breaks.** Every feature ships turned off. Switch on
-  what you want, ignore the rest.
-- **Turn it off, it's gone.** Disable a module and the game goes back exactly
-  as it was: every frame, texture and setting restored.
-- **One download, done.** No libraries, no dependency chains, no
-  "requires X" pop-ups.
-- **Looks like Blizzard shipped it.** Native colours, fonts and borders. Your
-  UI stays clean, just smarter.
 
 ## What's inside
 
@@ -98,68 +87,67 @@ error if there is one (BugSack copies it in one click).
 
 # OneUI
 
-**L'interface de Blizzard, sans tout ce qui vous agace.**
+**L'interface de base, en mieux, et toute la QOL dont vous avez besoin au même endroit.**
 
-OneUI est un seul addon qui peaufine l'interface d'origine au lieu de la
-remplacer. Mode sombre, une fiche de personnage qui dit enfin tout, chronos de
-Mythique+, plaques plus malignes, quêtes et camelote en pilote automatique :
-vous n'activez que ce que vous voulez, et le jeu garde son allure.
+OneUI garde l'interface que vous connaissez et la rend plus agréable au
+quotidien : mode sombre, cadres d'unité plus lisibles, fenêtres que vous placez
+où vous voulez, nameplates à votre goût, ventes et réparations automatiques,
+quêtes acceptées et rendues pour vous. Vous activez seulement ce qui vous plaît.
 
-## Pourquoi on le garde
-
-- **Rien ne change tant que vous ne l'avez pas décidé.** Chaque réglage est
-  livré éteint, et la construction échoue si un seul ne l'est pas. Installez,
-  puis choisissez vos améliorations.
-- **Éteint, c'est parti.** Un module désactivé rend chaque cadre masqué, chaque
-  texture et chaque variable de console. Aucune trace, pas besoin de croiser
-  les doigts au `/reload`.
-- **Un seul dossier, zéro dépendance.** Aucune bibliothèque à installer à côté,
-  rien qui casse quand un autre addon se met à jour.
-- **On dirait du Blizzard.** Les couleurs, polices et bordures du jeu : la
-  fenêtre d'options est faite pour passer pour une des leurs.
+Un seul addon. Aucune dépendance. Rien ne change tant que vous ne l'avez pas
+choisi.
 
 ## Ce qu'il contient
 
 **Interface**
 - Mode sombre pour les barres d'action, les cadres d'unité, les auras, la barre
-  d'incantation et l'infobulle
-- Couleurs de classe, icônes de spécialisation, cadres de groupe et d'arène agrandis
-- Plaques redimensionnables, colorées par type de PNJ ou par menace, avec leurs
-  propres rangées d'auras
-- Une barre de ressource de classe à paliers de couleur et effet brillant
-- Une fiche de personnage avec niveau d'objet, piste d'amélioration, rang
-  d'enchantement et gemmes sur chaque emplacement
+  d'incantation et les infobulles
+- Cadres d'unité aux couleurs de classe, avec icônes de spécialisation, et
+  cadres de groupe et d'arène plus grands
+- Nameplates à votre goût : taille, couleur selon le type de PNJ ou la menace,
+  rangées d'auras
+- Une barre de ressource de classe avec des couleurs par palier et un effet
+  lumineux
+- Une fiche de personnage qui affiche le niveau d'objet, l'amélioration, les
+  enchantements et les gemmes de chaque pièce
 
 **Qualité de vie**
-- Acceptation et rendu automatiques des quêtes, avec une touche pour suspendre
-- Vente de la camelote et réparation à chaque marchand
-- Niveau d'objet sur chaque case de sac et de banque
-- Historique du chat conservé, fenêtre de copie, redimensionnement à la souris
-- Un seul menu de téléportation pour vos pierres de foyer et tous vos portails de donjon
+- Ventes des objets gris et réparations automatiques chez chaque marchand
+- Quêtes acceptées et rendues automatiquement, avec une touche pour mettre en
+  pause
+- Niveau d'objet affiché sur chaque case de sac et de banque
+- Fenêtres de Blizzard déplaçables et redimensionnables
+- Historique du chat gardé d'une session à l'autre, fenêtre de copie, chat
+  redimensionnable
+- Un seul menu pour toutes vos pierres de foyer et vos portails de donjon
 - Cinématiques passées, têtes parlantes masquées, réponse automatique aux !keys
-- Les fenêtres du jeu déplaçables et redimensionnables
-- Pêche : une touche pour lancer et ferrer, et le plouf du bouchon à l'oreille
+- Pêche : une seule touche pour lancer et ferrer, avec un son quand ça mord
 
 **Mythique+ et raid**
-- Paliers +2 et +3 dessinés sur le chrono du jeu, temps de boss, morts
-- Charges de résurrection de combat et recharge de la Furie sanguinaire en deux
-  petits suivis
-- Marqueurs de zone et minuteur de pull
-- Journalisation qui démarre à la porte de l'instance et s'arrête en sortant
+- Paliers +2 et +3 affichés sur le chrono du jeu, temps par boss, nombre de morts
+- Charges de résurrection de combat et recharge de la Furie sanguinaire en un
+  coup d'œil
+- Marqueurs au sol et compte à rebours de pull
+- Journal de combat qui démarre en entrant dans l'instance et s'arrête en
+  sortant
 
 **Profils**
-- Exportez votre configuration en texte, importez-la sur un autre personnage ou partagez-la
+- Exportez vos réglages en un texte, puis importez-les sur un autre personnage
+  ou partagez-les
+
+…et bien plus encore, chaque module à un clic dans la fenêtre d'options.
 
 ## Pour commencer
 
-Tapez **/oui** en jeu, ou cliquez sur l'icône du compartiment d'addons près de
-la minicarte. Retail 12.0.7 et au-delà, anglais et français.
+Tapez **/oui** en jeu, ou cliquez sur l'icône OneUI dans le compartiment
+d'addons, près de la minicarte. Retail 12.0.7 et plus, en anglais et en
+français.
 
 ## Un bug ?
 
 Ouvrez une issue sur GitHub : https://github.com/anthonycosson/OneUI/issues
-Indiquez votre version (/oui version), ce que vous faisiez, et le texte complet
-de l'erreur Lua s'il y en a une (BugSack la copie en un clic).
+Indiquez votre version (/oui version), ce que vous faisiez, et le message
+d'erreur complet s'il y en a un (BugSack le copie en un clic).
 
 ---
 
@@ -191,10 +179,10 @@ réel et non à une intention :
 |---|---|
 | *Miscellaneous* | le fourre-tout des suites de confort — le rayon où l'on cherche ce genre d'addon |
 | *Quests & Leveling* | acceptation et rendu automatiques |
-| *Bags & Inventory* | niveau d'objet sur les cases, vente de la camelote |
+| *Bags & Inventory* | niveau d'objet sur les cases, vente automatique |
 | *Map & Minimap* | bouton de minicarte, tiroir d'addons |
 | *Chat & Communication* | historique, copie, couleurs de canal |
-| *Buffs & Debuffs* | rangées d'auras des plaques, suivi de la Furie sanguinaire |
+| *Buffs & Debuffs* | rangées d'auras des nameplates, suivi de la Furie sanguinaire |
 | *Auction & Economy* | filtre d'extension à l'hôtel des ventes, réparation automatique |
 
 ## À faire à chaque publication
