@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.0.1 — 2026-11-05
+
 ### Fixed
 - Personal resources: the percentage text showed only 0% or 1%. It now shows
   the real percentage.
