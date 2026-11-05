@@ -1,6 +1,6 @@
-## 3.0.2 — 2026-11-05
+## 3.0.3 — 2026-11-05
 
 ### Fixed
-- Minimap: the addon buttons tray now also collects buttons whose name only
-  contains "LibDBIcon", such as MapUtils, and lists it under its own name.
+- Dark mode: the elite and rare dragon on nameplates kept its gold or silver
+  colour instead of turning black.
 
