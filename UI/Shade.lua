@@ -540,6 +540,13 @@ local STATE_TEXTURES = {
 --- tête, ce qui faisait accuser sa couleur. La preuve est dans le relevé de la
 --- sonde : leur frère `overAbsorbGlow` porte « Glow » dans son nom, lui seul
 --- était protégé, lui seul était resté blanc (voir `dev/docs/API_NOTES.md`).
+---
+--- `classificationIndicator` est le dragon d'une plaque : doré pour un élite,
+--- argenté pour un rare. Il **dit** ce qu'est la créature, comme le crâne plus
+--- haut, mais son nom porte « Indicator » et non « Icon » : le tri le classait
+--- dans l'habillage, et le dragon sortait noir. La clé exacte sert à la
+--- recherche par clé publiée ; le fragment sans première lettre sert à celle
+--- par nom, qui distingue la casse, et couvre une éventuelle majuscule.
 local STATE_KEYS = { "OutOfRange", "SpellHighlight", "Glow", "Alert", "Proc",
                      "Highlight",
                      "HighLevelTexture", "highLevelTexture",
@@ -547,7 +554,8 @@ local STATE_KEYS = { "OutOfRange", "SpellHighlight", "Glow", "Alert", "Proc",
                      "BorderShield",
                      "deselectedOverlay",
                      "totalAbsorb", "totalAbsorbOverlay",
-                     "myHealPrediction", "otherHealPrediction" }
+                     "myHealPrediction", "otherHealPrediction",
+                     "classificationIndicator", "lassificationIndicator" }
 
 --- Fragments de nom d'un **cadre entier** qui signale au lieu de décorer.
 ---
