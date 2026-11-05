@@ -88,6 +88,9 @@ ns.WITHDRAWN = {
         showGems         = true,
         -- Ni de pistes d'amélioration : pas de rang à afficher.
         showUpgradeLevel = true,
+        -- Retiré en attendant d'être repris : l'icône d'enchantement n'est
+        -- pas juste sur le client sorti. Retirer la ligne la rend telle quelle.
+        showEnchants     = true,
     },
     UnitFrames = {
         -- Le client pose déjà une icône sur le portrait.
