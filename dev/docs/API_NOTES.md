@@ -4276,7 +4276,12 @@ L'habillage est celui du gestionnaire de temps de recharge (mêmes atlas
   (« 385 k »), secrète elle aussi : on la passe telle quelle ;
 - le pourcentage ne se calcule pas — il se **demande** : `UnitHealthPercent` et
   `UnitPowerPercent` rendent le nombre (secret), et c'est le format qui
-  arrondit : `SetFormattedText("%.0f%%", pct)` ;
+  arrondit : `SetFormattedText("%.0f%%", pct)`. **Sans courbe, ce nombre est
+  une fraction** (0..1) : le texte n'affichait que 0 % ou 1 % (constaté à la
+  sortie de *Forever*, novembre 2026). La courbe `CurveConstants.ScaleTo100`
+  fait rendre 0..100, et elle ne se range pas au même rang dans les deux
+  fonctions : `UnitHealthPercent(unit, usePredicted, curve)`,
+  `UnitPowerPercent(unit, powerType, usePredicted, curve)` ;
 - tout passage reste sous `pcall`, et un refus rend un texte vide — une barre
   muette est une réponse honnête, une erreur Lua n'en est pas une.
 
@@ -4407,6 +4412,15 @@ elle est stockée par personnage. Un réglage « relais » (les cases de barres
 d'action, entre autres) porte une variable `PROXY_…` que `GetCVarInfo` ne
 connaît pas : il s'écarte tout seul, et les barres d'action se relèvent
 nommément par `GetActionBarToggles`/`SetActionBarToggles`.
+
+Une ligne du panneau peut porter **deux réglages** — une case et sa
+glissière, une case et son menu. `GetSetting()` n'en rend qu'un ; l'autre
+n'est que dans `initializer.data`, sous un nom propre au type de ligne
+(`cbSetting`, `sliderSetting`, `dropdownSetting`). Le relevé parcourt donc
+toutes les valeurs de `data` et garde celles qui répondent à `GetVariable`.
+
+Une catégorie à **mise en page libre** (un canevas, comme les raccourcis) n'a
+pas de lignes : rien ne s'y relève, et aucun addon ne peut faire mieux.
 
 **Le piège de la sonde** — la ligne de chat tronque à 255 caractères : un
 `/dump` trop long part amputé et lève une erreur de syntaxe qui ressemble à

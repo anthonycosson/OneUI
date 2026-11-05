@@ -118,9 +118,30 @@ local function eachCategory(fn)
     return true
 end
 
+--- Passe à `fn` la variable d'un réglage, s'il en a une lisible.
+---@param setting any
+---@param fn fun(variable: string)
+local function passVariable(setting, fn)
+    if type(setting) ~= "table" or type(setting.GetVariable) ~= "function" then
+        return
+    end
+    local okV, variable = pcall(setting.GetVariable, setting)
+    if okV and type(variable) == "string" and not U.IsSecret(variable) then
+        fn(variable)
+    end
+end
+
 --- Passe à `fn` la variable de chaque réglage d'une catégorie : sa mise en
 --- page, ses lignes, et le réglage que chaque ligne porte. Une ligne sans
 --- réglage — un en-tête, un bouton — ne rend rien et ne coûte rien.
+---
+--- Une ligne peut en porter **deux** : une case suivie d'une glissière ou d'un
+--- menu, sur une seule ligne du panneau. `GetSetting` n'en rend qu'un, l'autre
+--- n'est que dans les données de construction, sous un nom que le client
+--- choisit (`cbSetting`, `sliderSetting`, `dropdownSetting`…). On les prend
+--- donc **tous**, par ce qu'ils savent faire et non par leur nom : un réglage
+--- est une table qui répond à `GetVariable`. Les doublons s'écartent chez
+--- l'appelant (`seen`).
 ---@param category table
 ---@param fn fun(variable: string)
 local function eachVariable(category, fn)
@@ -133,24 +154,16 @@ local function eachVariable(category, fn)
 
     for i = 1, #initializers do
         local init = initializers[i]
-        local setting
 
         if type(init) == "table" then
             if type(init.GetSetting) == "function" then
                 local okS, value = pcall(init.GetSetting, init)
-                if okS then setting = value end
+                if okS then passVariable(value, fn) end
             end
-            -- Le repli : certaines lignes rangent leur réglage dans leurs
-            -- données de construction plutôt que derrière une méthode.
-            if type(setting) ~= "table" and type(init.data) == "table" then
-                setting = init.data.setting
-            end
-        end
-
-        if type(setting) == "table" and type(setting.GetVariable) == "function" then
-            local okV, variable = pcall(setting.GetVariable, setting)
-            if okV and type(variable) == "string" and not U.IsSecret(variable) then
-                fn(variable)
+            if type(init.data) == "table" then
+                for _, value in pairs(init.data) do
+                    passVariable(value, fn)
+                end
             end
         end
     end
