@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+- Minimap: the addon buttons tray now also collects buttons whose name only
+  contains "LibDBIcon", such as MapUtils.
+
 ## 3.0.1 — 2026-11-05
 
 ### Fixed

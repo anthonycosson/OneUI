@@ -58,15 +58,28 @@ local CLIENT_FRAMES = {
 
 local CLIENT_PREFIXES = { "Minimap", "MiniMap", "GameTime", "QueueStatus", "AddonCompartment" }
 
---- Bouton posé par une bibliothèque d'icônes. Il porte toujours ce préfixe, et
---- c'est le cas le plus fréquent — la moitié des addons passent par là.
-local LIB_PREFIX = "LibDBIcon10_"
+--- Bouton posé par une bibliothèque d'icônes. LibDBIcon nomme les siens
+--- « LibDBIcon10_<addon> », et c'est le cas le plus fréquent — la moitié des
+--- addons passent par là.
+---
+--- Le mot se cherche **partout** dans le nom, pas seulement en tête : d'autres
+--- bibliothèques le reprennent exprès pour être reconnues des outils de
+--- minicarte. Celle de MapUtils nomme son bouton
+--- « MinimapButton_D4Lib_LibDBIcon_MapUtils » — un préfixe « Minimap » qui le
+--- faisait passer pour une pièce du client, et le laissait hors du tiroir.
+local LIB_MARK = "LibDBIcon"
+
+---@param name string
+---@return boolean
+local function isLibraryButton(name)
+    return name:find(LIB_MARK, 1, true) ~= nil
+end
 
 ---@param name string
 ---@return boolean
 local function isClientFrame(name)
     if CLIENT_FRAMES[name] then return true end
-    if name:find(LIB_PREFIX, 1, true) == 1 then return false end
+    if isLibraryButton(name) then return false end
 
     for i = 1, #CLIENT_PREFIXES do
         if name:find(CLIENT_PREFIXES[i], 1, true) == 1 then return true end
@@ -163,9 +176,9 @@ local function isAddonButton(frame)
     local name = frame:GetName()
     if not name then return false end
 
-    -- Le préfixe d'une bibliothèque d'icônes **est** une réponse : rien d'autre
+    -- La marque d'une bibliothèque d'icônes **est** une réponse : rien d'autre
     -- ne s'appelle ainsi, et ce qui s'appelle ainsi est le bouton d'un addon.
-    local fromLibrary = name:find(LIB_PREFIX, 1, true) == 1
+    local fromLibrary = isLibraryButton(name)
 
     -- Un bouton, ou un cadre de bibliothèque qui n'en est pas tout à fait un :
     -- certaines versions posent une frame et lui greffent les clics.
