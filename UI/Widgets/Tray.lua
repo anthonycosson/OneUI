@@ -42,7 +42,11 @@ local function locked() end
 -- Le résultat n'est pas garanti joli. Il est garanti **stable et reconnaissable**,
 -- ce qui est ce qu'on demande à une liste où l'on cherche un addon des yeux.
 
-local NAME_PREFIXES = { "^LibDBIcon10_", "^Lib_GPI_Minimap_" }
+--- La marque `LibDBIcon` emporte tout ce qui la précède : LibDBIcon nomme
+--- « LibDBIcon10_<addon> », mais d'autres bibliothèques la reprennent au milieu
+--- de leur propre préfixe — MapUtils devient sinon « MinimapButton D4Lib
+--- LibDBIcon MapUtils » (même marque que le tri de `UI/MinimapDock.lua`).
+local NAME_PREFIXES = { "^.-LibDBIcon%d*_", "^Lib_GPI_Minimap_" }
 local NAME_SUFFIXES = {
     "[_%-]?[Mm]inimap[_%-]?[Bb]utton$",
     "[_%-]?[Mm]inimap[_%-]?[Ii]con$",
