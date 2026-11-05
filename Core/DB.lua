@@ -45,7 +45,7 @@ local U   = OUI.Util
 local DB = {}
 OUI.DB = DB
 
-local SCHEMA_VERSION   = 19
+local SCHEMA_VERSION   = 20
 local DEFAULT_PROFILE  = "Default"
 
 --- moduleName -> table de défauts (référence, pas une copie)
@@ -706,6 +706,39 @@ function DB:RunMigrations()
             end
         end
         from = 19
+    end
+
+    -- Palier 20 — la page « Graphismes » n'existe plus, et avec elle la case
+    -- qui coupait le brouillard. La clé disparaît (même motif que le palier 3),
+    -- et le brouillard est **rendu** : `volumeFog` vit dans `Config.wtf`, et le
+    -- module qui l'avait coupé n'est plus là pour le remettre. Le laisser à 0
+    -- serait garder pour toujours un réglage que le joueur ne peut plus
+    -- décocher (règle 6).
+    --
+    -- On ne rend que ce qu'on avait pris : une case cochée sur un module
+    -- allumé, et une CVar qui porte encore notre valeur. Un joueur qui l'a
+    -- remise à la main depuis garde la sienne.
+    if from < 20 then
+        local hadFog = false
+        for _, profile in pairs(OneUIDB.profiles) do
+            local modules  = profile.modules
+            local graphics = modules and modules.Graphics
+            if graphics then
+                if graphics.enabled ~= false and graphics.disableFog == true then
+                    hadFog = true
+                end
+                modules.Graphics = nil
+            end
+        end
+
+        if hadFog and U.GetCVar("volumeFog") == "0"
+           and C_CVar and C_CVar.GetCVarDefault then
+            local ok, default = pcall(C_CVar.GetCVarDefault, "volumeFog")
+            if ok and type(default) == "string" then
+                pcall(U.SetCVar, "volumeFog", default)
+            end
+        end
+        from = 20
     end
 
     OneUIDB.schema = math.max(from, SCHEMA_VERSION)
