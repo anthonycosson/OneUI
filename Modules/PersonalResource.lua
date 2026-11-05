@@ -178,11 +178,31 @@ end
 --- qu'il faut : `UnitHealthPercent` et `UnitPowerPercent`, qui rendent le
 --- nombre — secret — que le widget sait afficher (relevé en jeu, voir
 --- `dev/docs/API_NOTES.md`).
+---
+--- **Sans courbe, le client rend une fraction** — 0,73 pour 73 % —, que le
+--- format arrondissait à 0 ou 1. La courbe `ScaleTo100` lui fait rendre
+--- l'échelle qu'on affiche ; on ne peut pas multiplier nous-mêmes, le nombre
+--- est secret. Testée comme une capacité : un client sans courbe garde
+--- l'ancien appel.
+---
+--- Les deux fonctions ne rangent pas la courbe au même rang :
+--- `UnitHealthPercent(unit, usePredicted, curve)`,
+--- `UnitPowerPercent(unit, powerType, usePredicted, curve)` — `powerType` à
+--- `nil` vise la ressource affichée, comme `UnitPower` sans type.
 ---@param fn any  `UnitHealthPercent` ou `UnitPowerPercent`, si le client les a
+---@param power boolean  vrai pour `UnitPowerPercent`
 ---@return any  nombre 0..100, éventuellement secret, ou nil
-local function readPercent(fn)
+local function readPercent(fn, power)
     if type(fn) ~= "function" then return nil end
-    local ok, pct = pcall(fn, "player")
+    local curve = CurveConstants and CurveConstants.ScaleTo100
+    local ok, pct
+    if not curve then
+        ok, pct = pcall(fn, "player")
+    elseif power then
+        ok, pct = pcall(fn, "player", nil, true, curve)
+    else
+        ok, pct = pcall(fn, "player", true, curve)
+    end
     if ok then return pct end
     return nil
 end
@@ -209,7 +229,7 @@ local function refreshHealth(mod)
         if value == paintedHealth and max == paintedHealthMax then return end
         paintedHealth, paintedHealthMax = value, max
     end
-    write(mod, widget, BAR_KEYS.health, value, readPercent(UnitHealthPercent))
+    write(mod, widget, BAR_KEYS.health, value, readPercent(UnitHealthPercent, false))
 end
 
 --- Même chose pour la barre de ressource. `UnitPower` sans type rend la
@@ -225,7 +245,7 @@ local function refreshPower(mod)
         if value == paintedPower and max == paintedPowerMax then return end
         paintedPower, paintedPowerMax = value, max
     end
-    write(mod, widget, BAR_KEYS.power, value, readPercent(UnitPowerPercent))
+    write(mod, widget, BAR_KEYS.power, value, readPercent(UnitPowerPercent, true))
 end
 
 -- =========================================================================

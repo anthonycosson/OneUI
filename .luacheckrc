@@ -186,7 +186,7 @@ read_globals = {
     -- Les deux `*Percent` rendent le pourcentage tout fait : l'arithmétique
     -- sur un secret est refusée, on ne peut donc pas le calculer nous-mêmes.
     "UnitHealth", "UnitHealthMax", "AbbreviateNumbers",
-    "UnitHealthPercent", "UnitPowerPercent",
+    "UnitHealthPercent", "UnitPowerPercent", "CurveConstants",
     "UnitThreatSituation", "GetSpecializationRole",
 
     -- Sélecteur de couleur du client. On n'en écrit pas : il en a un, et il a

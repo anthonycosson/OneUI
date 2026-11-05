@@ -82,7 +82,7 @@
     "UnitPower", "UnitPowerMax", "PowerBarColor",
     "UnitPowerType", "UnitHasPowerType",
     "UnitHealth", "UnitHealthMax", "AbbreviateNumbers", "PersonalResourceDisplayFrame",
-    "UnitHealthPercent", "UnitPowerPercent",
+    "UnitHealthPercent", "UnitPowerPercent", "CurveConstants",
     "UnitThreatSituation", "GetSpecializationRole",
     "UnitExists", "UnitIsPlayer", "UnitIsUnit", "UnitClass", "UnitGUID",
     "RAID_CLASS_COLORS", "C_ClassColor", "C_Item", "ITEM_QUALITY_COLORS",
