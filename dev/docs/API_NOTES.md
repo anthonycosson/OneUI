@@ -5480,3 +5480,25 @@ l'étincelle avec les contours éteints si
 n'apparaissent pas dans le code Lua du client : ce sont des CVars du moteur,
 qu'on teste avant d'écrire. Revenir en arrière demande un redémarrage du jeu.
 Forever Loot Sparkles procède ainsi ; lu, pas repris.
+
+## La barre d'XP du client, et l'XP des quêtes terminées
+
+**Forever reprend la barre de retail.** `Blizzard_StatusTrackingBar` charge
+ses fichiers `[Family]` (Mainline) sur les deux clients : même
+`ExpStatusBarTemplate`, même `ExhaustionLevelFillBar` pour le repos. Chaque
+conteneur (`StatusTrackingBarManager.barContainers`, principal et secondaire)
+construit **toutes** les barres dans `InitializeBars` et n'en montre qu'une :
+la barre d'XP est `container.bars[StatusTrackingBarInfo.BarsEnum.Experience]`,
+une par conteneur.
+
+**Le repos se dessine sous la barre de statut** : une texture de la barre
+(`ARTWORK` -1), accrochée au bord gauche, dont seule la largeur change ; le
+remplissage de l'XP, porté par la barre de statut enfant, en couvre le début.
+`UI/Widgets/QuestXPFill.lua` pose son vert de la même façon, une couche
+au-dessus.
+
+**L'XP d'une quête se lit par son identifiant** : `GetQuestLogRewardXP(questID)`.
+Sans argument, la fonction lit la quête sélectionnée dans le journal
+(`Blizzard_UIPanels_Game/Mainline/QuestInfo.lua`) — la sélectionner pour la
+lire changerait ce que le joueur regarde. `C_QuestLog.ReadyForTurnIn(questID)`
+dit qu'elle est prête à rendre.

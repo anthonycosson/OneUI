@@ -78,6 +78,11 @@ OUI:RegisterLocale("enUS", {
     ["Skip trivial quests tip"] = "Leave grey (trivial) quests alone.",
     ["Bypass modifier"]         = "Hold to bypass",
     ["Bypass modifier tip"]     = "Hold this key to temporarily suspend the automation.",
+    ["Experience bar"]          = "Experience bar",
+    ["Completed quests XP"]     = "Show XP from completed quests",
+    ["Completed quests XP tip"] =
+        "On the game's experience bar, a green fill shows where your XP will be once you "
+        .. "turn in the quests you have completed.",
     ["None"]                    = "None",
     ["Shift"]                   = "Shift",
     ["Ctrl"]                    = "Ctrl",

@@ -192,6 +192,11 @@ OUI:RegisterLocale("frFR", {
     ["Skip trivial quests tip"] = "Ne touche pas aux quêtes grises (triviales).",
     ["Bypass modifier"]         = "Maintenir pour ignorer",
     ["Bypass modifier tip"]     = "Maintenez cette touche pour suspendre temporairement l'automatisation.",
+    ["Experience bar"]          = "Barre d'expérience",
+    ["Completed quests XP"]     = "Afficher l'XP des quêtes terminées",
+    ["Completed quests XP tip"] =
+        "Sur la barre d'expérience du jeu, un remplissage vert montre où sera votre XP "
+        .. "une fois rendues les quêtes que vous avez terminées.",
     ["None"]                    = "Aucune",
     ["Shift"]                   = "Maj",
     ["Ctrl"]                    = true,

@@ -907,6 +907,11 @@ T.TIMING = {
     -- (règle 7).
     TRACKING_SETTLE = 0.2,
 
+    -- `QUEST_LOG_UPDATE` tombe en rafale — un objectif rempli en annonce
+    -- plusieurs, une ouverture du journal aussi. Le total de XP des quêtes
+    -- terminées ne se refait qu'une fois la rafale passée.
+    QUEST_XP_SETTLE = 0.2,
+
     -- Cadence du chrono d'aperçu des paliers de clé. Une seconde, parce que
     -- c'est la vitesse à laquelle un chrono court : l'aperçu doit se lire comme
     -- le vrai, et le vrai n'affiche pas de dixièmes. En donjon, rien ne tourne
@@ -1180,7 +1185,6 @@ T.COLOR = {
     -- client décide pour ses libellés — ce qu'on ne voit qu'au moment où il en
     -- décide autrement.
     BAR_MARKER = CreateColor(1, 1, 1),
-
     RED      = RED_FONT_COLOR,
     GREEN    = GREEN_FONT_COLOR,
 
@@ -1353,6 +1357,11 @@ T.COLOR.PLATE = {
 -- donc elles se lisent au même endroit.
 
 T.ALPHA = {
+    -- Éclat ajouté au vert de l'XP des quêtes (`W.QuestXPFill`) : la même
+    -- texture en mode additif, à cette opacité. 0 rend le vert de la
+    -- réputation tel quel, 1 le double.
+    XP_QUEST_GLOW = 0.6,
+
     -- Opacité du fond de la fenêtre : à quel point le jeu transparaît derrière.
     -- Sa *clarté*, elle, ne se règle pas ici mais avec `T.COLOR.WINDOW`.
     --
@@ -2102,6 +2111,13 @@ end
 
 T.ATLAS = {
     ARROW_RIGHT = "NPE_ArrowRight",
+
+    -- L'XP des quêtes terminées sur la barre d'XP du client (`W.QuestXPFill`) :
+    -- le remplissage vert que le client pose sur la barre de réputation d'une
+    -- faction amicale. Le grain est celui de la barre, la couleur est la sienne.
+    -- Le violet de l'XP désaturé puis teint donnait un vert terne : une
+    -- texture grise teinte ne devient jamais plus vive que son gris.
+    XP_QUEST_FILL = "UI-HUD-ExperienceBar-Fill-Reputation-Faction-Green",
 
     -- Pastilles des lignes du suivi d'objectifs : la coche d'un objectif rempli et
     -- la puce d'un objectif en cours. Ce sont celles que le client pose lui-même sur

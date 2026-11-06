@@ -1,19 +1,20 @@
 -- =========================================================================
 --  OneUI — Modules/Quest.lua
---  Automatisation des quêtes : acceptation et rendu.
+--  Quêtes : acceptation et rendu automatiques, et l'XP des quêtes terminées
+--  montrée sur la barre d'XP du client.
 --
---  Aucune frame, aucune couleur, aucune position : ce module décrit ses
---  réglages et réagit aux événements. C'est le gabarit à copier pour tout
---  nouveau module.
+--  Le module ne dessine rien : le vert de la barre d'XP est posé par
+--  `UI/Widgets/QuestXPFill.lua`, qui reçoit le total calculé ici.
 --
---  Réversibilité : tout est branché via `self:RegisterEvent`, donc désactiver le
---  module suffit à tout rendre au client — il n'y a rien à défaire dans
---  `OnDisable`.
+--  Réversibilité : les abonnements passent par `self:RegisterEvent`, le
+--  crochet de taille par `U.GuardedScript` ; `OnDisable` cache le vert.
 -- =========================================================================
 
 local _, ns = ...
 local OUI = ns.OUI
+local T    = OUI.Theme
 local U    = OUI.Util
+local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Quest"
@@ -144,6 +145,61 @@ local function onQuestGreeting(mod)
 end
 
 -- =========================================================================
+--  L'XP des quêtes terminées, sur la barre d'XP
+-- =========================================================================
+
+--- Le total de XP que rapporteraient les quêtes du journal prêtes à rendre.
+---
+--- **Par identifiant de quête**, jamais par la quête sélectionnée :
+--- `GetQuestLogRewardXP` sans argument lit la quête ouverte dans le journal,
+--- et la sélectionner pour la lire changerait ce que le joueur regarde.
+---
+--- Une quête **prête à rendre**, pas seulement « complète » : `ReadyForTurnIn`
+--- d'abord, `IsComplete` à défaut — un client qui n'aurait que le second dit
+--- la même chose pour une quête du journal.
+---@return number
+local function completedQuestXP()
+    if not (C_QuestLog and C_QuestLog.GetNumQuestLogEntries and C_QuestLog.GetInfo) then
+        return 0
+    end
+    if type(GetQuestLogRewardXP) ~= "function" then return 0 end
+
+    local ready = C_QuestLog.ReadyForTurnIn or C_QuestLog.IsComplete
+    if type(ready) ~= "function" then return 0 end
+
+    local total = 0
+    for index = 1, C_QuestLog.GetNumQuestLogEntries() do
+        local info    = C_QuestLog.GetInfo(index)
+        local questID = info and not U.IsTrue(info.isHeader) and info.questID
+
+        if type(questID) == "number" and not U.IsSecret(questID)
+           and U.IsTrue(ready(questID)) then
+            local xp = GetQuestLogRewardXP(questID)
+            if type(xp) == "number" and not U.IsSecret(xp) and xp > 0 then
+                total = total + xp
+            end
+        end
+    end
+    return total
+end
+
+---@param mod table
+local function applyQuestXP(mod)
+    if not (mod:IsEnabled() and mod:Get("questXPBar")) then
+        W.QuestXPFill.Hide()
+        return
+    end
+    W.QuestXPFill.Show(completedQuestXP())
+end
+
+--- Le journal annonce ses changements en rafale : un seul calcul par rafale
+--- (règle 7).
+local queueQuestXP = U.Debounce(T.TIMING.QUEST_XP_SETTLE, function()
+    local mod = OUI.Modules:Get(MODULE)
+    if mod then applyQuestXP(mod) end
+end)
+
+-- =========================================================================
 --  Déclaration du module
 -- =========================================================================
 
@@ -164,6 +220,7 @@ OUI:RegisterModule(MODULE, {
         autoTurnIn     = false,
         skipTrivial    = false,
         bypassModifier = "SHIFT",
+        questXPBar     = false,
     },
 
     options = {
@@ -200,9 +257,35 @@ OUI:RegisterModule(MODULE, {
             tooltip = L["Bypass modifier tip"],
             values  = MODIFIER_VALUES,
         },
+
+        { type = "header", text = L["Experience bar"] },
+        {
+            type    = "toggle",
+            key     = "questXPBar",
+            text    = L["Completed quests XP"],
+            tooltip = L["Completed quests XP tip"],
+        },
     },
 
     OnEnable = function(self)
+        applyQuestXP(self)
+
+        -- Une quête remplie, rendue, abandonnée ; l'XP qui bouge ; un niveau
+        -- de plus, qui change le maximum de la barre.
+        self:RegisterEvent("QUEST_LOG_UPDATE",     queueQuestXP)
+        self:RegisterEvent("PLAYER_XP_UPDATE",     queueQuestXP)
+        self:RegisterEvent("PLAYER_LEVEL_UP",      queueQuestXP)
+        self:RegisterEvent("PLAYER_ENTERING_WORLD", queueQuestXP)
+
+        -- La barre change de largeur avec la disposition (mode édition, barre
+        -- d'action du bas) : le vert se remesure avec elle.
+        for _, bar in ipairs(W.QuestXPFill.Bars()) do
+            U.GuardedScript(bar.StatusBar, "OnSizeChanged", queueQuestXP, function()
+                local mod = OUI.Modules:Get(MODULE)
+                return mod ~= nil and mod:IsEnabled()
+            end)
+        end
+
         self:RegisterEvent("QUEST_DETAIL",         function() onQuestDetail(self) end)
         self:RegisterEvent("QUEST_ACCEPT_CONFIRM", function() onQuestAcceptConfirm(self) end)
         self:RegisterEvent("QUEST_PROGRESS",       function() onQuestProgress(self) end)
@@ -211,7 +294,13 @@ OUI:RegisterModule(MODULE, {
         self:RegisterEvent("QUEST_GREETING",       function() onQuestGreeting(self) end)
     end,
 
-    -- Rien à défaire : le module n'a modifié aucune frame du client, et ses
-    -- abonnements sont révoqués par le core.
-    OnDisable = nil,
+    -- Le vert posé sur la barre d'XP se cache ; le reste — les abonnements,
+    -- le crochet de taille rendu inerte — est défait par le core.
+    OnDisable = function()
+        W.QuestXPFill.Hide()
+    end,
+
+    OnSettingChanged = function(self)
+        applyQuestXP(self)
+    end,
 })

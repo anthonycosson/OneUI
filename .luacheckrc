@@ -187,6 +187,8 @@ read_globals = {
     -- sur un secret est refusée, on ne peut donc pas le calculer nous-mêmes.
     "UnitHealth", "UnitHealthMax", "AbbreviateNumbers",
     "UnitHealthPercent", "UnitPowerPercent", "CurveConstants",
+    "UnitXP", "UnitXPMax", "GetQuestLogRewardXP",
+    "StatusTrackingBarManager", "StatusTrackingBarInfo",
     "UnitThreatSituation", "GetSpecializationRole",
 
     -- Sélecteur de couleur du client. On n'en écrit pas : il en a un, et il a
