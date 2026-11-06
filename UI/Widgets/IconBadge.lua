@@ -42,6 +42,7 @@ local W    = OUI.Widgets
 ---@field getPos? fun(): number, number
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean
+---@field isCentered? fun(): boolean
 ---@field getScale? fun(): number|nil
 ---@field setScale? fun(scale: number)
 
@@ -78,6 +79,7 @@ function W.IconBadge(opts)
         getPos   = opts.getPos,
         setPos   = opts.setPos,
         isLocked = opts.isLocked,
+        isCentered = opts.isCentered,
 
         -- Le cadre ne se retaille pas, il change d'**échelle** : ce que le
         -- joueur règle est de quelle taille il voit la rangée, et les icônes

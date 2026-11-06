@@ -101,7 +101,7 @@ local function newMarkerButton(panel, index)
 end
 
 --- Panneau d'outils de groupe, masqué au départ.
----@param opts table  { getPos, setPos, getScale, setScale, isLocked, libellés, onReadyCheck, onPull }
+---@param opts table  { getPos, setPos, getScale, setScale, isLocked, isCentered, libellés, onReadyCheck, onPull }
 ---@return table
 function W.MarkerBar(opts)
     local panel = W.Panel({
@@ -114,6 +114,7 @@ function W.MarkerBar(opts)
         getPos   = opts.getPos,
         setPos   = opts.setPos,
         isLocked = opts.isLocked,
+        isCentered = opts.isCentered,
 
         getScale  = opts.getScale,
         setScale  = opts.setScale,

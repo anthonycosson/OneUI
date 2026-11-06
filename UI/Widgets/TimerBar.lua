@@ -52,6 +52,7 @@ function W.TimerBar(opts)
         getPos   = opts.getPos,
         setPos   = opts.setPos,
         isLocked = opts.isLocked,
+        isCentered = opts.isCentered,
 
         -- Le cadre ne se retaille pas, il change d'**échelle** : la
         -- disposition est arrêtée ici, et ce que le joueur règle est de quelle

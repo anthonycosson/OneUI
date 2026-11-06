@@ -65,6 +65,7 @@ end
 ---@field getPos? fun(): number, number
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean
+---@field isCentered? fun(): boolean
 
 --- Rangée de ressource, masquée au départ.
 ---@param opts OUI.ResourceBarOpts
@@ -81,6 +82,7 @@ function W.ResourceBar(opts)
         getPos   = opts.getPos,
         setPos   = opts.setPos,
         isLocked = opts.isLocked,
+        isCentered = opts.isCentered,
     })
 
     local cells = {}

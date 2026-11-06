@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+- Every frame you can move in edit mode gets a **Center horizontally** option,
+  next to its lock: the frame stays in the middle of the screen and only moves
+  up or down.
+
 ## 3.0.3 — 2026-11-05
 
 ### Fixed

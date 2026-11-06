@@ -214,6 +214,7 @@ end
 ---@field SetScale fun(name: string, scale: number|nil)
 ---@field PlaceLoot fun(): boolean          l'emplacement du butin est-il à nous ?
 ---@field LootLocked fun(): boolean         l'aperçu refuse-t-il le glisser ?
+---@field LootCentered fun(): boolean       l'aperçu et la fenêtre restent-ils sur l'axe ?
 ---@field LootPreview fun(): boolean        l'aperçu est-il demandé ?
 
 ---@type OUI.MoveHost|nil
@@ -1146,7 +1147,14 @@ end
 local function lootWanted()
     if not host then return nil, nil end
     if host.PlaceLoot() ~= true then return nil, nil end
-    return host.GetPosition(LOOT_NAME), host.GetScale(LOOT_NAME)
+
+    -- Centrée, la fenêtre reste sur l'axe même quand l'aperçu, qui range le
+    -- zéro au passage (voir `W.Panel:ApplyPosition`), n'est pas affiché.
+    local pos = host.GetPosition(LOOT_NAME)
+    if pos and host.LootCentered() == true and pos.x ~= 0 then
+        pos = { x = 0, y = pos.y }
+    end
+    return pos, host.GetScale(LOOT_NAME)
 end
 
 --- Pose le conteneur pour que le premier jet tombe sur la position rangée, à
@@ -1246,6 +1254,7 @@ local function lootPreview()
         strata = "DIALOG",
 
         isLocked = function() return host ~= nil and host.LootLocked() == true end,
+        isCentered = function() return host ~= nil and host.LootCentered() == true end,
 
         getPos = function()
             local pos = host and host.GetPosition(LOOT_NAME)

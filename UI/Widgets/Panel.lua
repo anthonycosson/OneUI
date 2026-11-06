@@ -36,6 +36,7 @@ local W    = OUI.Widgets
 ---@field getPos? fun(): number, number   décalage du centre, en pixels d'écran
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean        gèle la position et retire la poignée
+---@field isCentered? fun(): boolean      garde le centre sur l'axe vertical de l'écran
 ---@field minScale? number                donne une poignée d'échelle
 ---@field maxScale? number
 ---@field getScale? fun(): number|nil
@@ -101,6 +102,16 @@ function W.Panel(opts)
     --  Position
     -- ---------------------------------------------------------------------
 
+    ---@return boolean
+    local function locked()
+        return opts.isLocked ~= nil and opts.isLocked() == true
+    end
+
+    ---@return boolean
+    local function centered()
+        return opts.isCentered ~= nil and opts.isCentered() == true
+    end
+
     --- Repose le panneau à la position que l'appelant a rangée.
     ---
     --- **Le décalage d'un ancrage s'exprime dans l'échelle du cadre ancré**, pas
@@ -109,9 +120,20 @@ function W.Panel(opts)
     --- unités de `UIParent` — c'est la seule qui reste vraie quand l'échelle
     --- change. On la convertit donc ici, et un panneau agrandi grandit autour de
     --- son centre au lieu de partir en diagonale.
+    ---
+    --- **Centré, le décalage horizontal est ramené à zéro — et rangé ainsi.**
+    --- Forcer le zéro à l'affichage seul aurait suffi pour le panneau, pas pour
+    --- ce qu'il représente : l'aperçu de la fenêtre de jet pose la vraie fenêtre
+    --- à la position rangée. On range donc le zéro, une fois, et tout ce qui lit
+    --- la position la voit centrée sans avoir à connaître le réglage.
     function panel:ApplyPosition()
         local x, y = 0, 0
         if opts.getPos then x, y = opts.getPos() end
+
+        if centered() and (x or 0) ~= 0 then
+            x = 0
+            if opts.setPos then opts.setPos(0, y or 0) end
+        end
 
         local factor = UIParent:GetEffectiveScale() / self:GetEffectiveScale()
 
@@ -134,13 +156,10 @@ function W.Panel(opts)
         local scale  = panel:GetEffectiveScale()
         local parent = UIParent:GetEffectiveScale()
 
-        opts.setPos((x * scale - px * parent) / parent,
-                    (y * scale - py * parent) / parent)
-    end
-
-    ---@return boolean
-    local function locked()
-        return opts.isLocked ~= nil and opts.isLocked() == true
+        -- Centré, le glisser ne retient que la hauteur : le panneau a suivi le
+        -- curseur de côté le temps du geste, il revient sur l'axe au lâcher.
+        local dx = centered() and 0 or (x * scale - px * parent) / parent
+        opts.setPos(dx, (y * scale - py * parent) / parent)
     end
 
     panel:EnableMouse(true)

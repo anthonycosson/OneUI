@@ -42,7 +42,7 @@ local W    = OUI.Widgets
 ---@field duration? number       durée pleine
 
 --- Suivi posé sur une icône de sort, masqué au départ.
----@param opts table  { getPos, setPos, isLocked, source: fun(): OUI.TrackerInfo|nil }
+---@param opts table  { getPos, setPos, isLocked, isCentered, source: fun(): OUI.TrackerInfo|nil }
 ---@return table
 function W.IconTracker(opts)
     -- Le panneau **est** l'icône : mêmes bords, aucune marge. Il ne sert plus
@@ -55,6 +55,7 @@ function W.IconTracker(opts)
         getPos   = opts.getPos,
         setPos   = opts.setPos,
         isLocked = opts.isLocked,
+        isCentered = opts.isCentered,
     })
 
     local icon = panel:CreateTexture(nil, "ARTWORK")

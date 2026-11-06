@@ -350,6 +350,7 @@ local function apply(mod)
     if not bar then
         bar = W.ResourceBar({
             isLocked = function() return mod:Get("locked") == true end,
+            isCentered = function() return mod:Get("centered") == true end,
             getPos   = function() return mod:Get("x"), mod:Get("y") end,
             setPos   = function(x, y)
                 mod:Set("x", x)
@@ -394,6 +395,7 @@ OUI:RegisterModule(MODULE, {
     defaults = {
         show          = false,
         locked        = false,
+        centered = false,
         preview       = false,
         showCount     = false,
         hideWhenEmpty = false,
@@ -456,6 +458,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock resource bar"],
             tooltip  = L["Lock resource bar tip"],
+            disabled = requires("show"),
+        },
+        {
+            type     = "toggle",
+            key      = "centered",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("show"),
         },
 

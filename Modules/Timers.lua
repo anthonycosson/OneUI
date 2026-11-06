@@ -384,6 +384,7 @@ local function applyFlightBar(mod)
             title    = L["Time remaining"],
             source   = function() return flightSource(mod) end,
             isLocked = function() return mod:Get("lockFlightBar") == true end,
+            isCentered = function() return mod:Get("centerFlightBar") == true end,
             getPos   = function() return mod:Get("flightBarX"), mod:Get("flightBarY") end,
             setPos   = function(x, y)
                 mod:Set("flightBarX", x)
@@ -413,6 +414,7 @@ local function applyCraftBar(mod)
             title    = L["Time remaining"],
             source   = function() return craftSource(mod) end,
             isLocked = function() return mod:Get("lockCraftBar") == true end,
+            isCentered = function() return mod:Get("centerCraftBar") == true end,
             getPos   = function() return mod:Get("craftBarX"), mod:Get("craftBarY") end,
             setPos   = function(x, y)
                 mod:Set("craftBarX", x)
@@ -465,6 +467,7 @@ OUI:RegisterModule(MODULE, {
         showFlightBar    = false,
         previewFlightBar = false,
         lockFlightBar    = false,
+        centerFlightBar = false,
         -- Position des cadres, en décalage de centre à centre, et leur échelle.
         -- Réglages sans contrôle dans la page : ils se changent en faisant
         -- glisser le cadre, ou en tirant son coin.
@@ -475,6 +478,7 @@ OUI:RegisterModule(MODULE, {
         showCraftBar    = false,
         previewCraftBar = false,
         lockCraftBar    = false,
+        centerCraftBar = false,
         -- Le cadre du craft démarre une hauteur plus bas que celui du vol. En
         -- jeu les deux ne s'affichent jamais ensemble — on ne fabrique pas sur
         -- un griffon —, mais leurs deux **aperçus** s'allument bien en même
@@ -508,6 +512,13 @@ OUI:RegisterModule(MODULE, {
             tooltip  = L["Lock flight timer tip"],
             disabled = requires("showFlightBar"),
         },
+        {
+            type     = "toggle",
+            key      = "centerFlightBar",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
+            disabled = requires("showFlightBar"),
+        },
 
         { type = "header", text = L["Crafting"] },
         {
@@ -530,6 +541,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock craft timer"],
             tooltip  = L["Lock craft timer tip"],
+            disabled = requires("showCraftBar"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerCraftBar",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("showCraftBar"),
         },
     },

@@ -30,6 +30,10 @@ OUI:RegisterLocale("frFR", {
     ["Edit mode tip"] =
         "Active d'un coup tous les aperçus de cadre et déverrouille toutes les "
         .. "positions. En sortir remet tout comme avant.",
+    ["Center on screen"]        = "Centrer horizontalement",
+    ["Center on screen tip"] =
+        "Garde le cadre au milieu de l'écran, de gauche à droite : il ne se déplace "
+        .. "plus que vers le haut ou le bas.",
     ["Yes"]                     = "Oui",
     ["Cancel"]                  = "Annuler",
     ["Open OneUI"]         = "Ouvrir OneUI",

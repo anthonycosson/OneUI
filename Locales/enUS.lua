@@ -32,6 +32,11 @@ OUI:RegisterLocale("enUS", {
     ["Edit mode tip"] =
         "Turns on every frame preview and unlocks every position at once. Leaving it puts "
         .. "everything back as it was.",
+    -- Case commune à chaque cadre déplaçable (UI/Widgets/Panel.lua, `isCentered`).
+    ["Center on screen"]        = "Center horizontally",
+    ["Center on screen tip"] =
+        "Keeps the frame in the middle of the screen, left to right: it then only moves up "
+        .. "or down.",
     ["Yes"]                     = "Yes",
     ["Cancel"]                  = "Cancel",
     ["Open OneUI"]         = "Open OneUI",

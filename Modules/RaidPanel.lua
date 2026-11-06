@@ -129,6 +129,7 @@ local function applyMarkerBar(mod)
             getScale    = function() return mod:Get("markerScale") end,
             setScale    = function(scale) mod:Set("markerScale", scale) end,
             isLocked    = function() return mod:Get("lockMarkers") == true end,
+            isCentered    = function() return mod:Get("centerMarkers") == true end,
             markerLabel = L["World marker number"],
             markerTip   = L["World marker tip"],
             clearLabel  = L["Clear markers"],
@@ -188,6 +189,7 @@ end
 local APPLIERS = {
     worldMarkers      = applyMarkerBar,
     lockMarkers       = applyMarkerBar,
+    centerMarkers = applyMarkerBar,
     markersOnHover    = applyMarkerBar,
     pullTimer         = applyMarkerBar,
     hideBlizzardPanel = applyHideManager,
@@ -211,6 +213,7 @@ OUI:RegisterModule(MODULE, {
         -- Sa disposition, elle, ne se règle pas.
         markerScale    = 1,
         lockMarkers    = false,
+        centerMarkers = false,
         markersOnHover = false,
         pullTimer      = 10,
 
@@ -238,6 +241,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock group tools"],
             tooltip  = L["Lock group tools tip"],
+            disabled = requires("worldMarkers"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerMarkers",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("worldMarkers"),
         },
         {

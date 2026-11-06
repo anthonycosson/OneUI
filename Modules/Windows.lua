@@ -104,6 +104,7 @@ local function makeHost(mod)
         -- joueur l'a demandée.
         PlaceLoot   = function() return mod:Get("lootMove") == true end,
         LootLocked  = function() return mod:Get("lootLocked") == true end,
+        LootCentered = function() return mod:Get("lootCentered") == true end,
         LootPreview = function() return mod:Get("lootPreview") == true end,
     }
 end
@@ -162,6 +163,7 @@ OUI:RegisterModule(MODULE, {
         lootMove    = false,
         lootPreview = false,
         lootLocked  = false,
+        lootCentered = false,
 
         positions = {},
         scales    = {},
@@ -218,6 +220,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock loot roll window"],
             tooltip  = L["Lock loot roll window tip"],
+            disabled = requires("lootMove"),
+        },
+        {
+            type     = "toggle",
+            key      = "lootCentered",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("lootMove"),
         },
 
@@ -285,7 +294,8 @@ OUI:RegisterModule(MODULE, {
             return
         end
 
-        if key == "lootMove" or key == "lootPreview" or key == "lootLocked" then
+        if key == "lootMove" or key == "lootPreview" or key == "lootLocked"
+            or key == "lootCentered" then
             OUI.Move:RefreshLoot()
         end
     end,

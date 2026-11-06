@@ -498,6 +498,7 @@ local function applyBattleRes(mod)
         resTracker = W.IconTracker({
             source   = function() return battleResSource(mod) end,
             isLocked = function() return mod:Get("lockBattleRes") == true end,
+            isCentered = function() return mod:Get("centerBattleRes") == true end,
             getPos   = function() return mod:Get("battleResX"), mod:Get("battleResY") end,
             setPos   = function(x, y)
                 mod:Set("battleResX", x)
@@ -530,6 +531,7 @@ local function applyLust(mod)
         lustTracker = W.IconTracker({
             source   = function() return lustSource(mod) end,
             isLocked = function() return mod:Get("lockLust") == true end,
+            isCentered = function() return mod:Get("centerLust") == true end,
             getPos   = function() return mod:Get("lustX"), mod:Get("lustY") end,
             setPos   = function(x, y)
                 mod:Set("lustX", x)
@@ -564,12 +566,14 @@ local APPLIERS = {
     battleResShaded  = applyBattleRes,
     battleResPreview = applyBattleRes,
     lockBattleRes    = applyBattleRes,
+    centerBattleRes = applyBattleRes,
 
     lustTracker    = applyLust,
     lustSize       = applyLust,
     lustShaded     = applyLust,
     lustPreview    = applyLust,
     lockLust       = applyLust,
+    centerLust = applyLust,
     hideLustDebuff = applyHideDebuff,
 }
 
@@ -587,6 +591,7 @@ OUI:RegisterModule(MODULE, {
         battleResShaded  = false,
         battleResPreview = false,
         lockBattleRes    = false,
+        centerBattleRes = false,
         battleResSize    = T.SIZE.TRACKER_ICON,
         -- Position de l'icône, en décalage de centre à centre. Réglages sans
         -- contrôle : ils se changent en la déplaçant à la souris.
@@ -597,6 +602,7 @@ OUI:RegisterModule(MODULE, {
         lustShaded     = false,
         lustPreview    = false,
         lockLust       = false,
+        centerLust = false,
         hideLustDebuff = false,
         lustSize       = T.SIZE.TRACKER_ICON,
         -- Décalée de la largeur d'une icône : les deux suivis allumés ensemble
@@ -630,6 +636,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock battle res"],
             tooltip  = L["Lock battle res tip"],
+            disabled = requires("battleResTracker"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerBattleRes",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("battleResTracker"),
         },
         {
@@ -671,6 +684,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock lust"],
             tooltip  = L["Lock lust tip"],
+            disabled = requires("lustTracker"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerLust",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("lustTracker"),
         },
         {

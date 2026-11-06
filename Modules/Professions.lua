@@ -200,6 +200,7 @@ local function apply(mod)
         badge = W.IconBadge({
             slots    = slots,
             isLocked = function() return mod:Get("lockBadge") == true end,
+            isCentered = function() return mod:Get("centerBadge") == true end,
             getPos   = function() return mod:Get("badgeX"), mod:Get("badgeY") end,
             setPos   = function(x, y)
                 mod:Set("badgeX", x)
@@ -249,6 +250,7 @@ OUI:RegisterModule(MODULE, {
         showBadge = false,
         preview   = false,
         lockBadge = false,
+        centerBadge = false,
         hideInBattleground = false,
         -- Position du cadre, en décalage de centre à centre, et son échelle.
         -- Réglages sans contrôle dans la page : ils se changent en faisant
@@ -280,6 +282,13 @@ OUI:RegisterModule(MODULE, {
             edit     = "lock",
             text     = L["Lock missing tracking"],
             tooltip  = L["Lock missing tracking tip"],
+            disabled = requires("showBadge"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerBadge",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
             disabled = requires("showBadge"),
         },
         {
