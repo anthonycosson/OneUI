@@ -53,7 +53,7 @@ mécanisme de Blizzard lui-même, et celui d'Auctionator.
 quels** ; leurs options ont été triées une à une, et ce que Forever n'a pas
 est retiré par `Core/Forever.lua` (ci-dessous).
 
-L'inverse existe aussi : `Professions` et `Sparkles` ne chargent que sur
+L'inverse existe aussi : `Sparkles` ne charge que sur
 Forever, `[AllowLoadGameType camelot] [ExcludeLoadGameType standard]`. **Les
 deux directives sont nécessaires** : le client retail ne connaît pas `camelot`
 et charge une ligne qui n'a que la première — constaté en jeu le

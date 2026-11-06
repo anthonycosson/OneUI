@@ -45,7 +45,7 @@ local U   = OUI.Util
 local DB = {}
 OUI.DB = DB
 
-local SCHEMA_VERSION   = 20
+local SCHEMA_VERSION   = 21
 local DEFAULT_PROFILE  = "Default"
 
 --- moduleName -> table de défauts (référence, pas une copie)
@@ -739,6 +739,47 @@ function DB:RunMigrations()
             end
         end
         from = 20
+    end
+
+    -- Palier 21 — la page « Pêche » n'existe plus : ses trois réglages vivent
+    -- dans « Métiers », sous des noms qui disent qu'ils sont à la pêche (une
+    -- page qui tient trois sujets ne peut plus appeler l'un d'eux « sound »).
+    --
+    -- Une pêche éteinte n'emporte rien : ses réglages ne s'appliquaient pas,
+    -- les recopier les allumerait. Une pêche réglée sur une page « Métiers »
+    -- éteinte rallume celle-ci — c'est la seule façon de garder ce que le
+    -- joueur avait coché, et rien d'autre n'y change, tout y est éteint par
+    -- défaut.
+    if from < 21 then
+        local RENAMED = {
+            castKey     = "fishKey",
+            doubleClick = "fishDoubleClick",
+            sound       = "fishSound",
+        }
+
+        for _, profile in pairs(OneUIDB.profiles) do
+            local modules = profile.modules
+            local fishing = modules and modules.Fishing
+
+            if fishing then
+                if fishing.enabled ~= false then
+                    local target = modules.Professions or {}
+                    local moved  = false
+
+                    for old, new in pairs(RENAMED) do
+                        if fishing[old] ~= nil and target[new] == nil then
+                            target[new] = fishing[old]
+                            moved = true
+                        end
+                    end
+
+                    if moved and target.enabled == false then target.enabled = nil end
+                    if next(target) then modules.Professions = target end
+                end
+                modules.Fishing = nil
+            end
+        end
+        from = 21
     end
 
     OneUIDB.schema = math.max(from, SCHEMA_VERSION)

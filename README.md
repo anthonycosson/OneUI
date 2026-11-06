@@ -32,7 +32,7 @@ One addon. No dependencies. Nothing changes until you choose.
 - Chat history kept between sessions, a copy window, resizable chat
 - One menu for all your hearthstones and dungeon portals
 - Skip cinematics, hide talking heads, auto-answer !keys
-- Fishing: one key to cast and hook, with a sound when something bites
+- Professions: one key to fish and hook with a sound when something bites, your profession levels on screen, and a warning when a gathering tracking is off
 
 **Mythic+ and raid**
 - +2 and +3 thresholds on the game's own timer, boss times, death count

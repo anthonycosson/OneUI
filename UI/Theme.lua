@@ -561,6 +561,21 @@ T.SIZE = {
     BADGE_SCALE_MIN = 0.5,
     BADGE_SCALE_MAX = 2.5,
 
+    -- Bloc de texte posé à même l'écran (`W.TextBlock`), les niveaux de
+    -- métier. Sans habillage : la marge n'est là que pour qu'on puisse le
+    -- saisir sans viser une lettre. Ses bornes d'échelle sont celles de la
+    -- rangée d'icônes, pour la même raison.
+    TEXT_BLOCK_PAD       = 4,
+    -- Entre deux lignes : collées, elles se lisaient comme un seul pavé.
+    TEXT_BLOCK_LINE_GAP  = 4,
+    -- Entre deux morceaux d'une ligne, de part et d'autre de la barre d'un
+    -- « 63 / 150 ». Aucun blanc ajouté : les chiffres de la police ont tous la
+    -- largeur du plus large, et l'approche qu'ils portent suffit à séparer la
+    -- barre (voir `W.TextBlock`).
+    TEXT_BLOCK_PIECE_GAP = 0,
+    TEXT_BLOCK_SCALE_MIN = 0.5,
+    TEXT_BLOCK_SCALE_MAX = 2.5,
+
     -- Aperçu de la fenêtre de jet de butin. Ces deux nombres ne sont pas un
     -- goût : ce sont les mesures du cadre de jet du client
     -- (`GroupLootFrameBaseTemplate`). L'aperçu sert à choisir un emplacement, il
@@ -1078,6 +1093,11 @@ local FONT_CANDIDATES = {
     NOTICE       = { "GameFontDisable", "GameFontDisableSmall" },
     SIDEBAR_CAT  = { "GameFontNormalMedium", "GameFontNormal" },
     SIDEBAR_ITEM = { "GameFontHighlightMedium", "GameFontHighlight" },
+
+    -- Bloc de texte posé à même le jeu (`W.TextBlock`). À contour : il se lit
+    -- par-dessus le décor, quel qu'il soit, et un texte sans contour disparaît
+    -- sur la neige.
+    TEXT_BLOCK   = { "GameFontHighlightOutline", "GameFontHighlight" },
 }
 
 T.FONT = {}
@@ -1735,7 +1755,6 @@ end
 function T.Colorize(color, text)
     return color:WrapTextInColorCode(text)
 end
-
 --- Couleur d'un niveau d'objet, prise sur la qualité de l'objet.
 ---
 --- Trois chemins, du plus récent au plus ancien : la fonction a migré dans
@@ -2128,7 +2147,6 @@ end
 --- Toute nouvelle entrée passe par ici : aucun chemin littéral dans un widget.
 T.TEXTURE = {
     RESIZE_GRIP = "Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up",
-
     -- Bandeau des en-têtes de catégorie. Une pierre tuilable du client, présente
     -- depuis toujours et jamais retouchée : c'est ce grain-là qui distingue un
     -- en-tête d'un aplat de couleur, et qui le rapproche du panneau Options.

@@ -1215,7 +1215,7 @@ OUI:RegisterLocale("frFR", {
         "Choisissez d'abord un palier.",
 
     -- =====================================================================
-    --  Métiers (Forever) — l'avis de suivi de minicarte manquant
+    --  Métiers — l'avis de suivi de minicarte manquant
     -- =====================================================================
     ["Professions"]                    = "Métiers",
     ["Gathering"]                      = "Récolte",
@@ -1338,10 +1338,17 @@ OUI:RegisterLocale("frFR", {
     ["Not bound"]                      = "Aucune touche",
     ["Press a key"]                    = "Appuyez sur une touche…",
 
-    -- Module Fishing
     ["Fishing"]                        = "Pêche",
-    ["Casting"]                        = "Lancer",
-    ["Fishing key"]                    = "Touche pour pêcher et ferrer",
+    ["Profession levels"]              = "Niveaux",
+    ["Show profession levels"]         = "Afficher les niveaux de métier à l'écran",
+    ["Show profession levels tip"] =
+        "Écrit à l'écran chaque métier appris, avec votre niveau et le maximum de votre "
+        .. "rang actuel. Faites-le glisser où vous voulez.",
+    ["Lock profession levels"]         = "Verrouiller la position",
+    ["Lock profession levels tip"] =
+        "Le texte ne se déplace plus à la souris, et vos clics passent au travers.",
+    ["Profession level"]               = "%s : %d",
+    ["Fishing key"]                   = "Touche pour pêcher et ferrer",
     ["Fishing key tip"] =
         "Une touche lance la ligne, puis ferre le bouchon pendant la pêche. Clic gauche "
         .. "pour choisir une touche, clic droit pour la retirer.",
@@ -1349,7 +1356,6 @@ OUI:RegisterLocale("frFR", {
     ["Double right-click to fish tip"] =
         "Un double clic droit rapide dans le monde lance la ligne. Pas sur un personnage "
         .. "survolé, ni pendant la pêche.",
-    ["Sound"]                          = "Son",
     ["Fishing sound"]                  = "Entendre le bouchon",
     ["Fishing sound tip"] =
         "Pendant la pêche, les effets sonores passent au maximum, la musique et l'ambiance "

@@ -1187,7 +1187,7 @@ OUI:RegisterLocale("enUS", {
         "Set a colour change point first.",
 
     -- =====================================================================
-    --  Métiers (Forever) — l'avis de suivi de minicarte manquant
+    --  Métiers — l'avis de suivi de minicarte manquant
     -- =====================================================================
     ["Professions"]                    = "Professions",
     ["Gathering"]                      = "Gathering",
@@ -1306,10 +1306,21 @@ OUI:RegisterLocale("enUS", {
     ["Not bound"]                      = "Not bound",
     ["Press a key"]                    = "Press a key…",
 
-    -- Module Fishing
+    -- Métiers — la pêche (anciennement sa propre page) et les niveaux
     ["Fishing"]                        = "Fishing",
-    ["Casting"]                        = "Casting",
-    ["Fishing key"]                    = "Fish and hook key",
+    ["Profession levels"]              = "Levels",
+    ["Show profession levels"]         = "Show profession levels on screen",
+    ["Show profession levels tip"] =
+        "Writes each profession you know on screen, with your skill and the maximum of "
+        .. "your current rank. Drag it where you want it.",
+    ["Lock profession levels"]         = "Lock in place",
+    ["Lock profession levels tip"] =
+        "Stops the text from being dragged with the mouse, and lets your clicks go "
+        .. "through it.",
+    -- Début d'une ligne du bloc : le nom du métier et le niveau atteint. La
+    -- barre et le maximum suivent, posés à part (voir `W.TextBlock`).
+    ["Profession level"]               = "%s: %d",
+    ["Fishing key"]                   = "Fish and hook key",
     ["Fishing key tip"] =
         "One key casts the line, then hooks the bobber while you fish. Left-click to pick "
         .. "a key, right-click to clear it.",
@@ -1317,7 +1328,6 @@ OUI:RegisterLocale("enUS", {
     ["Double right-click to fish tip"] =
         "A quick double right-click in the world casts the line. Not on a character you "
         .. "hover, nor while fishing.",
-    ["Sound"]                          = "Sound",
     ["Fishing sound"]                  = "Louder splash",
     ["Fishing sound tip"] =
         "While fishing, sound effects go to maximum and music and ambience go quiet. "
