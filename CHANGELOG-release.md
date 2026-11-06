@@ -1,6 +1,7 @@
-## 3.0.3 — 2026-11-05
+## 3.1.0 — 2026-11-06
 
-### Fixed
-- Dark mode: the elite and rare dragon on nameplates kept its gold or silver
-  colour instead of turning black.
+### Added
+- Every frame you can move in edit mode gets a **Center horizontally** option,
+  next to its lock: the frame stays in the middle of the screen and only moves
+  up or down.
 
