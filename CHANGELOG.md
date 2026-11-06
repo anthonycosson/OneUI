@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.2.0 — 2026-11-06
+
 ### Added
 - Professions: **Show profession levels on screen** writes each profession you
   know with your skill and the maximum of your rank (for example
