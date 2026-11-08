@@ -8,8 +8,8 @@
 --  Même présentation que le suivi de récolte des métiers : un cadre sans texte
 --  (`W.IconBadge`), une icône par catégorie suivie et non couverte, et plus de
 --  cadre du tout quand rien ne manque. Une catégorie est couverte dès qu'**un**
---  de ses buffs est actif : on ne choisit pas lesquels. La catégorie Buffs
---  demande davantage : le buff de sa classe, et un buff de camp permis par ses
+--  de ses buffs est actif : on ne choisit pas lesquels. Deux catégories
+--  regardent le personnage : le buff de sa classe, et un buff de camp permis par ses
 --  métiers, ou le buff de classe équivalent reçu d'un autre joueur.
 --
 --  ## D'où viennent les listes
@@ -66,7 +66,7 @@ local KINGS     = { 20217, 25898 }
 local EARTH     = { 8076, 8162, 8163, 10441, 25362 }    -- Force de la terre
 local CRITICAL  = { 24907, 24932 }                      -- Sélénien, Chef de meute
 
---- Le buff de sa propre classe : la première moitié de la catégorie Buffs. Un
+--- Le buff de sa propre classe : la catégorie du même nom. Un
 --- seul de la liste suffit, et peu importe qui l'a lancé. Une classe absente
 --- d'ici et de `CLASS_WEAPON` n'a rien à prouver.
 local CLASS_BUFFS = {
@@ -341,7 +341,7 @@ local function scan()
 
     found.weapon = oilOrStone
 
-    -- Les deux moitiés : son propre buff de classe, et un buff de camp permis
+    -- Deux catégories : son propre buff de classe, et un buff de camp permis
     -- par ses métiers. Sans rien à lancer ni à poser, rien n'est attendu.
     local class   = UnitClassBase("player")
     local ownList = CLASS_BUFFS[class]
@@ -353,7 +353,8 @@ local function scan()
         ownBuff = anyActive(ownList) or not canCastBuff(ownList)
     end
 
-    found.buff = ownBuff and campCovered()
+    found.buff = ownBuff
+    found.camp = campCovered()
 
     wipe(covered)
     for category, value in pairs(found) do covered[category] = value end
@@ -367,6 +368,7 @@ end
 --- lui donne son image — un sort ou un objet, demandé au client.
 local CATEGORIES = {
     { key = "buff",   setting = "trackBuff",   title = "Buff tracker buff",   spell = 1243 },
+    { key = "camp",   setting = "trackCamp",   title = "Buff tracker camp",   spell = 818 },
     { key = "weapon", setting = "trackWeapon", title = "Buff tracker weapon", item  = 12404 },
     { key = "food",   setting = "trackFood",   title = "Buff tracker food",   spell = WELL_FED },
     { key = "flask",  setting = "trackFlask",  title = "Buff tracker flask",  item  = 13510 },
@@ -378,6 +380,21 @@ local badge
 ---@param category table
 ---@return number|nil
 local function categoryIcon(category)
+    if category.key == "buff" then
+        local class  = UnitClassBase("player")
+        local weapon = CLASS_WEAPON[class]
+        local spells = weapon and weapon.spells or CLASS_BUFFS[class]
+        local known  = IsPlayerSpell or IsSpellKnown
+
+        -- Le premier sort de sa classe que le personnage connaît : c'est le
+        -- buff qu'il ira lancer. L'icône générique ne reste que faute de mieux.
+        if spells and known and C_Spell and C_Spell.GetSpellTexture then
+            for i = 1, #spells do
+                if known(spells[i]) then return C_Spell.GetSpellTexture(spells[i]) end
+            end
+        end
+    end
+
     if category.item then
         return C_Item and C_Item.GetItemIconByID and C_Item.GetItemIconByID(category.item)
     end
@@ -480,6 +497,7 @@ OUI:RegisterModule(MODULE, {
         locked      = false,
         centered    = false,
         trackBuff   = false,
+        trackCamp   = false,
         trackWeapon = false,
         trackFood   = false,
         trackFlask  = false,
@@ -525,6 +543,7 @@ OUI:RegisterModule(MODULE, {
 
         { type = "header", text = L["Buff tracker categories"] },
         categoryOption("trackBuff",   "Buff tracker buff"),
+        categoryOption("trackCamp",   "Buff tracker camp"),
         categoryOption("trackWeapon", "Buff tracker weapon"),
         categoryOption("trackFood",   "Buff tracker food"),
         categoryOption("trackFlask",  "Buff tracker flask"),
