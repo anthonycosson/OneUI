@@ -36,6 +36,7 @@ local W    = OUI.Widgets
 ---@field title? string               titre de son infobulle
 ---@field tip? string                 corps de son infobulle
 ---@field onClick? fun()              ce que le clic déclenche
+---@field reserved? fun(): boolean  garde-t-elle sa place dans la rangée ? (`fixedSlots`)
 
 ---@class OUI.IconBadgeOpts
 ---@field slots OUI.IconBadgeSlot[]
@@ -43,6 +44,7 @@ local W    = OUI.Widgets
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean
 ---@field isCentered? fun(): boolean
+---@field fixedSlots? boolean        chaque case garde sa place, même quand une voisine est cachée
 ---@field getScale? fun(): number|nil
 ---@field setScale? fun(scale: number)
 
@@ -162,6 +164,32 @@ function W.IconBadge(opts)
         end
     end
 
+    --- Repose les cases à leur place attitrée : l'ordre et l'emplacement ne
+    --- dépendent que des cases réservées, jamais de celles qu'on montre. Une
+    --- case cachée laisse son trou, et rien ne glisse quand elle revient.
+    ---@param visible table  indices des cases à montrer
+    local function reflowFixed(visible)
+        local step, count, places = T.SIZE.BADGE_ICON + T.SIZE.BADGE_GAP, 0, {}
+
+        for index = 1, #slots do
+            if slots[index].reserved == nil or slots[index].reserved() then
+                places[index] = count
+                count = count + 1
+            end
+        end
+
+        local width = count * T.SIZE.BADGE_ICON + (count - 1) * T.SIZE.BADGE_GAP
+        panel:SetWidth(width)
+        panel:SetHeight(T.SIZE.BADGE_ICON)
+
+        for i = 1, #visible do
+            local button = buttons[visible[i]]
+            button:ClearAllPoints()
+            button:SetPoint("LEFT", panel, "CENTER", -width / 2 + places[visible[i]] * step, 0)
+            button:Show()
+        end
+    end
+
     --- Les cases à montrer, du passage en cours. Une seule table, réemployée :
     --- elle est refaite à chaque relecture, et en créer une par passage ne
     --- servirait qu'à donner du travail au ramasse-miettes (règle 7).
@@ -203,7 +231,7 @@ function W.IconBadge(opts)
             return
         end
 
-        reflow(visible)
+        if opts.fixedSlots then reflowFixed(visible) else reflow(visible) end
         self:Show()
     end
 

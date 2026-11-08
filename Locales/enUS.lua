@@ -1338,6 +1338,25 @@ OUI:RegisterLocale("enUS", {
         "While fishing, sound effects go to maximum and music and ambience go quiet. "
         .. "Your volumes come back a few seconds after the last catch.",
 
+    -- Module BuffTracker (Forever)
+    ["Buff tracker"]                   = "Buff tracker",
+    ["Buff tracker frame"]             = "Frame",
+    ["Buff tracker categories"]        = "Categories to track",
+    ["Buff tracker show"]              = "Warn when a buff category is missing",
+    ["Buff tracker show tip"] =
+        "Shows one icon per tracked category with no active buff, and nothing once all "
+        .. "are covered. Tick the categories to track below.",
+    ["Buff tracker preview"]           = "Preview",
+    ["Buff tracker preview tip"]       = "Shows every tracked category, to place the frame.",
+    ["Buff tracker lock"]              = "Lock in place",
+    ["Buff tracker lock tip"]          = "Stops the frame from being dragged with the mouse.",
+    ["Buff tracker missing tip"]       = "No active buff in this category.",
+    ["Buff tracker buff"]              = "Buffs (class, personal, scroll, camp)",
+    ["Buff tracker weapon"]            = "Weapon enchant (enchanter oil, blacksmith stone)",
+    ["Buff tracker food"]              = "Food",
+    ["Buff tracker flask"]             = "Flasks",
+    ["Buff tracker elixir"]            = "Elixirs",
+
     -- Module Sparkles (Forever)
     ["Sparkles"]                       = "Sparkles",
     ["Loot"]                           = "Loot",

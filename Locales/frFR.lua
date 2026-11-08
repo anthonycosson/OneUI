@@ -1366,6 +1366,25 @@ OUI:RegisterLocale("frFR", {
         "Pendant la pêche, les effets sonores passent au maximum, la musique et l'ambiance "
         .. "se taisent. Vos volumes reviennent quelques secondes après la dernière prise.",
 
+    -- Module BuffTracker (Forever)
+    ["Buff tracker"]                   = "Suivi des buffs",
+    ["Buff tracker frame"]             = "Cadre",
+    ["Buff tracker categories"]        = "Catégories à suivre",
+    ["Buff tracker show"]              = "Prévenir quand une catégorie de buff manque",
+    ["Buff tracker show tip"] =
+        "Affiche une icône par catégorie suivie sans buff actif, et plus rien quand toutes "
+        .. "sont couvertes. Cochez plus bas les catégories à suivre.",
+    ["Buff tracker preview"]           = "Aperçu",
+    ["Buff tracker preview tip"]       = "Montre toutes les catégories suivies, pour placer le cadre.",
+    ["Buff tracker lock"]              = "Verrouiller la position",
+    ["Buff tracker lock tip"]          = "Le cadre ne se déplace plus à la souris.",
+    ["Buff tracker missing tip"]       = "Aucun buff actif dans cette catégorie.",
+    ["Buff tracker buff"]              = "Buffs (classe, personnels, parchemin, feu de camp)",
+    ["Buff tracker weapon"]            = "Enchantement d'arme (huile d'enchanteur, pierre de forgeron)",
+    ["Buff tracker food"]              = "Nourriture",
+    ["Buff tracker flask"]             = "Flacons",
+    ["Buff tracker elixir"]            = "Élixirs",
+
     -- Module Sparkles (Forever)
     ["Sparkles"]                       = "Scintillements",
     ["Loot"]                           = "Butin",

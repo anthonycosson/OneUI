@@ -149,6 +149,7 @@ Modules\Chat.lua
 # préréglages éteignent l'étincelle de butin.
 Modules\Professions.lua
 Modules\Sparkles.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
+Modules\BuffTracker.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
 Modules\Bags.lua
 Modules\AuctionHouse.lua [AllowLoadGameType standard]
 Modules\Quest.lua

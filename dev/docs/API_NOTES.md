@@ -5502,3 +5502,27 @@ Sans argument, la fonction lit la quête sélectionnée dans le journal
 (`Blizzard_UIPanels_Game/Mainline/QuestInfo.lua`) — la sélectionner pour la
 lire changerait ce que le joueur regarde. `C_QuestLog.ReadyForTurnIn(questID)`
 dit qu'elle est prête à rendre.
+
+## Le suivi des buffs : d'où viennent les identifiants
+
+**Buffs de camp** : l'aura `1229741` récapitule les bénéfices du camp, et chaque
+objet a la sienne (`1230124` endurance, `1230172` force, `1229513` intelligence,
+`1229718` esprit, `1230098` caractéristiques, `1230653` armure, `1230164`
+puissance d'attaque, `1230552` puissance des sorts, `1229519` critique, `1230587`
+mana). Ce sont des variantes de buffs de classe, non cumulables avec eux
+(tableau Blizzard du 21 octobre, repris par les guides). Identifiants relevés
+dans les données publiées par les addons NaowhForever et KroolWorldForever :
+des faits sur le jeu, aucun code n'en est repris. **Pas vérifiés en jeu.**
+
+**Consommables** : par objet, via `C_Item.GetItemSpell`, à partir de la liste de
+Method (flacons et élixirs de Forever). Sur Forever, flacons et élixirs
+se cumulent.
+
+**Enchantement d'arme** : pas une aura. `GetWeaponEnchantInfo`, annoncé par
+`UNIT_INVENTORY_CHANGED`.
+
+**Sur Forever l'enchantement se lit par arme** : `C_Item.GetWeaponEnchantInfo(slot)`
+(`Enum.WeaponSlot`) rend une liste avec `hasEnchant` et `enchantID`, et c'est
+l'identifiant qui sépare huile, pierre, arme de chaman et poison. Identifiants
+relevés dans les données publiées par ForeverEnhancedCooldownManager et
+Readycheck, pas vérifiés en jeu.
