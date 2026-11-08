@@ -1,7 +1,7 @@
-## 3.3.0 — 2026-11-06
+## 3.4.0 — 2026-11-08
 
 ### Added
-- Quests: **Show XP from completed quests** adds a green fill on the game's
-  experience bar. It shows where your XP will be once you turn in the quests
-  you have completed.
+- **Buff tracker**, new page under Tools (*Forever*): one icon for each tracked
+  category with no active buff. Categories are buffs (class, scroll, camp),
+  weapon enchants (oils and stones), food, flasks and elixirs.
 
