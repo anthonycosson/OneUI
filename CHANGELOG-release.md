@@ -1,7 +1,7 @@
-## 3.4.0 — 2026-11-08
+## 3.4.1 — 2026-11-08
 
-### Added
-- **Buff tracker**, new page under Tools (*Forever*): one icon for each tracked
-  category with no active buff. Categories are buffs (class, scroll, camp),
-  weapon enchants (oils and stones), food, flasks and elixirs.
+### Changed
+- Buff tracker: the **Buffs** category now needs your own class buff and a camp
+  buff from your professions, or the class buff equivalent to it. Scrolls no
+  longer count.
 
