@@ -1,7 +1,7 @@
-## 3.4.1 — 2026-11-08
+## 3.4.2 — 2026-11-08
 
 ### Changed
-- Buff tracker: the **Buffs** category now needs your own class buff and a camp
-  buff from your professions, or the class buff equivalent to it. Scrolls no
-  longer count.
+- Buff tracker: the **Buffs** category is split in two, **Class buff** and
+  **Camp buff**, each with its own checkbox and icon. Tick **Camp buff** to
+  keep tracking camp buffs.
 
