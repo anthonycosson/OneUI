@@ -1379,7 +1379,7 @@ OUI:RegisterLocale("frFR", {
     ["Buff tracker lock"]              = "Verrouiller la position",
     ["Buff tracker lock tip"]          = "Le cadre ne se déplace plus à la souris.",
     ["Buff tracker missing tip"]       = "Aucun buff actif dans cette catégorie.",
-    ["Buff tracker buff"]              = "Buffs (classe, personnels, parchemin, feu de camp)",
+    ["Buff tracker buff"]              = "Buffs (classe, feu de camp)",
     ["Buff tracker weapon"]            = "Enchantement d'arme (huile d'enchanteur, pierre de forgeron)",
     ["Buff tracker food"]              = "Nourriture",
     ["Buff tracker flask"]             = "Flacons",

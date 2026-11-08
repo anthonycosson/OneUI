@@ -8,7 +8,9 @@
 --  Même présentation que le suivi de récolte des métiers : un cadre sans texte
 --  (`W.IconBadge`), une icône par catégorie suivie et non couverte, et plus de
 --  cadre du tout quand rien ne manque. Une catégorie est couverte dès qu'**un**
---  de ses buffs est actif : on ne choisit pas lesquels.
+--  de ses buffs est actif : on ne choisit pas lesquels. La catégorie Buffs
+--  demande davantage : le buff de sa classe, et un buff de camp permis par ses
+--  métiers, ou le buff de classe équivalent reçu d'un autre joueur.
 --
 --  ## D'où viennent les listes
 --
@@ -43,57 +45,107 @@ local function set(ids)
     return out
 end
 
---- Buffs de classe, parchemins et buffs de camp.
----
---- Les buffs de camp sont des variantes des buffs de classe et ne se cumulent
---- pas avec eux, mais ce sont bien leurs propres auras : ils ont leur place ici.
---- La tente et le récupérateur arcanique n'y sont pas : ils ne donnent aucun
---- effet de combat.
----
---- Peu importe qui l'a lancé : son propre buff valide autant que celui d'un
---- autre, d'où les buffs personnels dans la liste.
-local CLASS_SPELLS = {
-    -- Intelligence des arcanes, Illumination
-    10157, 10156, 1461, 1460, 1459, 23028,
-    -- Mot de pouvoir : Robustesse, Prière de robustesse
-    10938, 10937, 2791, 1245, 1244, 1243, 21564, 21562,
-    -- Esprit divin, Prière d'esprit
-    27841, 14819, 14818, 14752, 27681,
-    -- Marque du fauve, Don du fauve, Épines
-    9885, 9884, 8907, 5234, 6756, 5232, 1126, 21850, 21849,
-    9910, 9756, 8914, 1075, 782, 467,
-    -- Bénédictions de puissance, sagesse, rois, lumière, salut
-    25291, 19838, 19837, 19836, 19835, 19834, 19740, 25916, 25782,
-    25290, 19854, 19853, 19852, 19850, 19742, 25918, 25894,
-    20217, 25898, 19979, 19978, 19977, 25890, 1038, 25895,
+--- Réunit plusieurs listes d'identifiants en une seule.
+---@return number[]
+local function merge(...)
+    local out = {}
+    for i = 1, select("#", ...) do
+        local list = select(i, ...)
+        for j = 1, #list do out[#out + 1] = list[j] end
+    end
+    return out
+end
 
-    -- Personnels : armures de démoniste et de mage, Cri de guerre, Feu
-    -- intérieur, Forme d'ombre, aspects et Aura de précision du chasseur.
-    11735, 11734, 11733, 1086, 706, 696, 687, 403619,
-    22783, 22782, 6117, 10220, 10219, 7320, 7302, 7301, 7300, 168,
-    25289, 11551, 11550, 11549, 6192, 5242, 6673,
-    10952, 10951, 1006, 602, 7128, 588,
-    15473,
-    25296, 14322, 14321, 14320, 14319, 14318, 13165, 13163, 5118, 13159,
-    1299447, 1299446, 1299445, 13161, 20190, 20043,
-    20906, 20905, 19506, 1299348, 1299346,
+local INTELLECT = { 10157, 10156, 1461, 1460, 1459, 23028 }
+local FORTITUDE = { 10938, 10937, 2791, 1245, 1244, 1243, 21564, 21562 }
+local SPIRIT    = { 27841, 14819, 14818, 14752, 27681 }
+local WILD      = { 9885, 9884, 8907, 5234, 6756, 5232, 1126, 21850, 21849 }
+local MIGHT     = { 25291, 19838, 19837, 19836, 19835, 19834, 19740, 25916, 25782 }
+local WISDOM    = { 25290, 19854, 19853, 19852, 19850, 19742, 25918, 25894 }
+local KINGS     = { 20217, 25898 }
+local EARTH     = { 8076, 8162, 8163, 10441, 25362 }    -- Force de la terre
+local CRITICAL  = { 24907, 24932 }                      -- Sélénien, Chef de meute
+
+--- Le buff de sa propre classe : la première moitié de la catégorie Buffs. Un
+--- seul de la liste suffit, et peu importe qui l'a lancé. Une classe absente
+--- d'ici et de `CLASS_WEAPON` n'a rien à prouver.
+local CLASS_BUFFS = {
+    MAGE = merge(INTELLECT, {
+        22783, 22782, 6117, 10220, 10219, 7320, 7302, 7301, 7300, 168,
+    }),
+    PRIEST = merge(FORTITUDE, SPIRIT, {
+        10952, 10951, 1006, 602, 7128, 588, 15473,
+    }),
+    DRUID = merge(WILD, { 9910, 9756, 8914, 1075, 782, 467 }),
+    PALADIN = merge(MIGHT, WISDOM, KINGS, {
+        19979, 19978, 19977, 25890, 1038, 25895,
+    }),
+    WARLOCK = { 11735, 11734, 11733, 1086, 706, 696, 687, 403619 },
+    WARRIOR = { 25289, 11551, 11550, 11549, 6192, 5242, 6673 },
+    HUNTER = {
+        25296, 14322, 14321, 14320, 14319, 14318, 13165, 13163, 5118, 13159,
+        1299447, 1299446, 1299445, 13161, 20190, 20043,
+        20906, 20905, 19506, 1299348, 1299346,
+    },
 }
 
-local BUFF_AURAS = set(CLASS_SPELLS)
+--- Rang à partir duquel un métier fabrique son objet de camp.
+local CAMP_OBJECT_SKILL = 20
 
-for _, id in ipairs({
-    -- Parchemins : agilité, intelligence, protection, esprit, endurance, force
-    8115, 8116, 8117, 12174, 8096, 8097, 8098, 12176, 8091, 8094, 8095, 12175,
-    8112, 8113, 8114, 12177, 8099, 8100, 8101, 12178, 8118, 8119, 8120, 12179,
+--- Ligne de compétence du métier -> ce qui couvre son objet de camp : le buff
+--- de l'objet, puis le buff de classe dont il est la variante, qu'un autre
+--- joueur du groupe peut fournir. La tente, l'ingénierie et la cuisine n'y sont
+--- pas : leurs objets ne donnent aucune caractéristique.
+local CAMP_BY_SKILL = {
+    [129] = merge({ 1230124 }, FORTITUDE),      -- Secourisme, trousse
+    [356] = merge({ 1230098 }, KINGS),          -- Pêche, bocal
+    [171] = merge({ 1230587 }, WISDOM),         -- Alchimie, puits de mana
+    [164] = merge({ 1230172 }, EARTH),          -- Forge, meule
+    [186] = merge({ 1230164 }, MIGHT),          -- Minage, magnétite
+    [333] = merge({ 1230653 }, WILD),           -- Enchantement, luth
+    [182] = merge({ 1229513 }, INTELLECT),      -- Herboristerie, bougie
+    [393] = merge({ 1229519 }, CRITICAL),       -- Dépeçage, chaise
+    [197] = merge({ 1229718 }, SPIRIT),         -- Couture, bannière
+}
 
-    -- Camp : l'aura qui récapitule, puis endurance, force, intelligence,
-    -- esprit, caractéristiques, armure, puissance d'attaque, puissance des
-    -- sorts, critique, mana.
-    1229741,
-    1230124, 1230172, 1229513, 1229718, 1230098, 1230653, 1230164, 1230552,
-    1229519, 1230587,
-}) do
-    BUFF_AURAS[id] = true
+--- Sorts actifs de la lecture en cours (règle 7).
+local active = {}
+
+---@param spells number[]
+---@return boolean
+local function anyActive(spells)
+    for i = 1, #spells do
+        if active[spells[i]] then return true end
+    end
+    return false
+end
+
+--- Un buff de camp ou son équivalent est-il actif, parmi ce que nos métiers
+--- permettent de poser ? Sans métier à objet de camp, rien n'est attendu.
+---
+--- Le rang dit que l'objet est accessible ; le client ne publie pas si son
+--- patron a été appris.
+---@return boolean
+local function campCovered()
+    if not (GetProfessions and GetProfessionInfo) then return true end
+
+    local expected = false
+    local indices  = { GetProfessions() }
+
+    for i = 1, select("#", GetProfessions()) do
+        local index = indices[i]
+        if index then
+            local _, _, rank, _, _, _, skillLine = GetProfessionInfo(index)
+            local spells = not U.IsSecret(skillLine) and CAMP_BY_SKILL[skillLine]
+
+            if spells and type(rank) == "number" and not U.IsSecret(rank)
+               and rank >= CAMP_OBJECT_SKILL then
+                expected = true
+                if anyActive(spells) then return true end
+            end
+        end
+    end
+    return not expected
 end
 
 --- Les classes dont le buff est **sur l'arme** : pour elles, la catégorie Buffs
@@ -265,6 +317,7 @@ local function scan()
     if not (C_UnitAuras and C_UnitAuras.GetBuffDataByIndex) then return end
 
     wipe(found)
+    wipe(active)
     local wellFed = C_Spell and C_Spell.GetSpellName and C_Spell.GetSpellName(WELL_FED)
 
     local index = 1
@@ -273,7 +326,7 @@ local function scan()
         local spellID, name = aura.spellId, aura.name
         if U.IsSecret(spellID) or U.IsSecret(name) then return end
 
-        if BUFF_AURAS[spellID] then found.buff = true end
+        if spellID then active[spellID] = true end
         if FOOD_AURAS[spellID] or (wellFed and name == wellFed) then found.food = true end
         if inItems("flask", spellID, name)  then found.flask  = true end
         if inItems("elixir", spellID, name) then found.elixir = true end
@@ -288,12 +341,19 @@ local function scan()
 
     found.weapon = oilOrStone
 
-    -- Sans aucun buff à lancer, le personnage n'a rien à se reprocher.
+    -- Les deux moitiés : son propre buff de classe, et un buff de camp permis
+    -- par ses métiers. Sans rien à lancer ni à poser, rien n'est attendu.
+    local class   = UnitClassBase("player")
+    local ownList = CLASS_BUFFS[class]
+    local ownBuff = true
+
     if classWeapon then
-        found.buff = onWeapon or not canCastBuff(classWeapon.spells)
-    elseif not found.buff and not canCastBuff(CLASS_SPELLS) then
-        found.buff = true
+        ownBuff = onWeapon or not canCastBuff(classWeapon.spells)
+    elseif ownList then
+        ownBuff = anyActive(ownList) or not canCastBuff(ownList)
     end
+
+    found.buff = ownBuff and campCovered()
 
     wipe(covered)
     for category, value in pairs(found) do covered[category] = value end
@@ -484,6 +544,8 @@ OUI:RegisterModule(MODULE, {
         -- Un enchantement d'arme temporaire n'est pas une aura : c'est
         -- l'inventaire qui annonce sa pose et sa fin.
         self:RegisterEvent("UNIT_INVENTORY_CHANGED", onPlayer)
+        -- Un point de métier peut débloquer un objet de camp.
+        self:RegisterEvent("SKILL_LINES_CHANGED", queueRefresh)
         self:RegisterEvent("PLAYER_ENTERING_WORLD", queueRefresh)
         self:RegisterEvent("GET_ITEM_INFO_RECEIVED", queueItems)
         self:RegisterEvent("SPELLS_CHANGED", function()

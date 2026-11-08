@@ -5526,3 +5526,9 @@ se cumulent.
 l'identifiant qui sépare huile, pierre, arme de chaman et poison. Identifiants
 relevés dans les données publiées par ForeverEnhancedCooldownManager et
 Readycheck, pas vérifiés en jeu.
+
+**Chaque objet de camp a son aura** en plus du récapitulatif `1229741`. La
+catégorie Buffs lit l'aura de l'objet ou le buff de classe dont il est la
+variante, selon les métiers du personnage (rang 20 : le client ne publie pas si
+le patron est appris). `24907` et `24932` (Sélénien, Chef de meute) et les auras
+de Force de la terre sont à confirmer en jeu.
