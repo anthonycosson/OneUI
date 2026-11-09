@@ -367,11 +367,63 @@ local function applyMarkers(mod, bar)
     powerMarkers.Set(markerScratch)
 end
 
+-- =========================================================================
+--  Barre de mana séparée
+-- =========================================================================
+-- Une barre à part, et non la barre du client : celle-ci passe à l'énergie ou
+-- à la rage en forme animale. Le type de ressource est demandé explicitement,
+-- donc la forme du moment ne change rien à ce qu'elle montre.
+
+local MANA_POWER = Enum and Enum.PowerType and Enum.PowerType.Mana or 0
+
+---@type table|nil
+local manaBar
+
+local function refreshMana()
+    if not (manaBar and manaBar:IsShown()) then return end
+    manaBar:SetMana(UnitPower("player", MANA_POWER), UnitPowerMax("player", MANA_POWER))
+end
+
+--- La ressource affichée en ce moment est-elle déjà le mana ?
+---@return boolean
+local function manaDisplayed()
+    local power = UnitPowerType("player")
+    return not U.IsSecret(power) and power == MANA_POWER
+end
+
+--- Montre, range et dimensionne la barre selon les réglages.
+---@param mod table
+local function applyManaBar(mod)
+    if not (mod:IsEnabled() and mod:Get("druidMana"))
+       or (mod:Get("druidManaHideInManaForm") and manaDisplayed()) then
+        if manaBar then manaBar:Hide() end
+        return
+    end
+
+    if not manaBar then
+        manaBar = W.ManaBar({
+            isLocked   = function() return mod:Get("druidManaLocked") == true end,
+            isCentered = function() return mod:Get("druidManaCentered") == true end,
+            getPos     = function() return mod:Get("druidManaX"), mod:Get("druidManaY") end,
+            setPos     = function(x, y)
+                mod:Set("druidManaX", x)
+                mod:Set("druidManaY", y)
+            end,
+        })
+    end
+
+    manaBar:SetBarSize(mod:Get("druidManaWidth"), mod:Get("druidManaHeight"))
+    manaBar:Show()
+    refreshMana()
+end
+
 --- Reconstruit tout : ancrages, corps, visibilité, silence du client. Ne
 --- tourne que sur changement de réglage ou d'arrivée en jeu — jamais depuis un
 --- chemin qui bat.
 ---@param mod table
 local function apply(mod)
+    applyManaBar(mod)
+
     local health = healthBar()
     if health then setupBar(mod, health, "health") end
 
@@ -426,6 +478,17 @@ OUI:RegisterModule(MODULE, {
         powerMarker1        = 0,
         powerMarker2        = 0,
         powerMarker3        = 0,
+
+        -- Barre de mana séparée du druide. Position et taille se règlent en
+        -- la faisant glisser et avec les glissières de la page.
+        druidMana           = false,
+        druidManaHideInManaForm = false,
+        druidManaLocked     = false,
+        druidManaCentered   = false,
+        druidManaWidth      = T.SIZE.MANA_BAR_W,
+        druidManaHeight     = T.SIZE.MANA_BAR_H,
+        druidManaX          = 0,
+        druidManaY          = T.SIZE.MANA_BAR_Y,
     },
 
     options = (function()
@@ -494,6 +557,13 @@ OUI:RegisterModule(MODULE, {
                 max      = 200,
                 step     = 5,
             }
+        end
+
+        --- Grise une ligne tant que la barre de mana est décochée.
+        ---@return boolean
+        local function manaOff()
+            local mod = OUI.Modules:Get(MODULE)
+            return not (mod and mod:Get("druidMana"))
         end
 
         return {
@@ -592,6 +662,53 @@ OUI:RegisterModule(MODULE, {
 
             { type = "header", text = L["Personal markers"], indent = true },
             markerRow(1), markerRow(2), markerRow(3),
+
+            { type = "header", text = L["Druid mana bar"] },
+            {
+                type    = "toggle",
+                key     = "druidMana",
+                text    = L["Druid mana show"],
+                tooltip = L["Druid mana show tip"],
+            },
+            {
+                type     = "toggle",
+                key      = "druidManaHideInManaForm",
+                text     = L["Druid mana hide in mana form"],
+                tooltip  = L["Druid mana hide in mana form tip"],
+                disabled = manaOff,
+            },
+            {
+                type     = "toggle",
+                key      = "druidManaLocked",
+                text     = L["Druid mana lock"],
+                tooltip  = L["Druid mana lock tip"],
+                disabled = manaOff,
+            },
+            {
+                type     = "toggle",
+                key      = "druidManaCentered",
+                text     = L["Center on screen"],
+                tooltip  = L["Center on screen tip"],
+                disabled = manaOff,
+            },
+            {
+                type     = "slider",
+                key      = "druidManaWidth",
+                text     = L["Druid mana width"],
+                min      = T.SIZE.MANA_BAR_W_MIN,
+                max      = T.SIZE.MANA_BAR_W_MAX,
+                step     = 1,
+                disabled = manaOff,
+            },
+            {
+                type     = "slider",
+                key      = "druidManaHeight",
+                text     = L["Druid mana height"],
+                min      = T.SIZE.MANA_BAR_H_MIN,
+                max      = T.SIZE.MANA_BAR_H_MAX,
+                step     = 1,
+                disabled = manaOff,
+            },
         }
     end)(),
 
@@ -611,6 +728,7 @@ OUI:RegisterModule(MODULE, {
         local powerChanged = function(_, unit)
             if unit ~= "player" then return end
             refreshPower(self)
+            refreshMana()
         end
         self:RegisterEvent("UNIT_POWER_UPDATE",   powerChanged)
         self:RegisterEvent("UNIT_POWER_FREQUENT", powerChanged)
@@ -621,6 +739,8 @@ OUI:RegisterModule(MODULE, {
         local maxChanged = function(_, unit)
             if unit ~= "player" then return end
             refreshPower(self)
+            -- Un changement de forme peut montrer ou cacher la barre de mana.
+            applyManaBar(self)
             local bar = powerBar()
             if bar then applyMarkers(self, bar) end
         end
@@ -640,6 +760,7 @@ OUI:RegisterModule(MODULE, {
         end
 
         if powerMarkers then powerMarkers.Hide() end
+        if manaBar then manaBar:Hide() end
         -- On ne rend que ce qu'on a pris : les textes que le réglage du jeu
         -- cachait déjà restent cachés (voir `muted`).
         for fs in pairs(muted) do

@@ -237,6 +237,18 @@ OUI:RegisterLocale("enUS", {
     ["Show personal resources tip"] =
         "The game's own setting: shows your health and resource bars under "
         .. "your character. Changing it is refused during combat.",
+    ["Druid mana bar"]                 = "Mana bar",
+    ["Druid mana hide in mana form"]   = "Hide in a mana form",
+    ["Druid mana hide in mana form tip"] =
+        "Hides the bar while the game's resource bar already shows your mana.",
+    ["Druid mana show"]                = "Show a separate mana bar",
+    ["Druid mana show tip"] =
+        "Adds a bar that always shows your mana, even when shapeshifted. "
+        .. "Drag it to place it.",
+    ["Druid mana lock"]                = "Lock in place",
+    ["Druid mana lock tip"]            = "Stops the bar from being dragged with the mouse.",
+    ["Druid mana width"]               = "Width",
+    ["Druid mana height"]              = "Height",
     ["Health bar"]                     = "Health bar",
     ["Resource bar"]                   = "Resource bar",
     ["Personal markers"]               = "Markers",

@@ -237,6 +237,18 @@ OUI:RegisterLocale("frFR", {
     ["Show personal resources tip"] =
         "Le réglage du jeu lui-même : affiche vos barres de vie et de ressource "
         .. "sous le personnage. Le changer est refusé en combat.",
+    ["Druid mana bar"]                 = "Barre de mana",
+    ["Druid mana hide in mana form"]   = "Masquer dans une forme à mana",
+    ["Druid mana hide in mana form tip"] =
+        "Cache la barre quand la barre de ressource du jeu montre déjà votre mana.",
+    ["Druid mana show"]                = "Afficher une barre de mana séparée",
+    ["Druid mana show tip"] =
+        "Ajoute une barre qui montre toujours votre mana, même transformé. "
+        .. "Faites-la glisser pour la placer.",
+    ["Druid mana lock"]                = "Verrouiller la position",
+    ["Druid mana lock tip"]            = "La barre ne se déplace plus à la souris.",
+    ["Druid mana width"]               = "Largeur",
+    ["Druid mana height"]              = "Hauteur",
     ["Health bar"]                     = "Barre de vie",
     ["Resource bar"]                   = "Barre de ressource",
     ["Personal markers"]               = "Repères",

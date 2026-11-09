@@ -643,6 +643,19 @@ T.SIZE = {
     RESOURCE_CELL_MAX = 80,
     RESOURCE_GAP_MAX  = 20,
 
+    -- Barre de mana séparée. Les débords du fond sont ceux du client.
+    MANA_BAR_BG_LEFT   = -2,
+    MANA_BAR_BG_TOP    = 3,
+    MANA_BAR_BG_RIGHT  = 6,
+    MANA_BAR_BG_BOTTOM = -7,
+    MANA_BAR_W     = 180,
+    MANA_BAR_W_MIN = 40,
+    MANA_BAR_W_MAX = 500,
+    MANA_BAR_H     = 14,
+    MANA_BAR_H_MIN = 4,
+    MANA_BAR_H_MAX = 60,
+    MANA_BAR_Y     = -180,
+
     -- Plafond de cases **construites**. Une frame ne se détruit pas (règle 7) :
     -- on bâtit une fois ce plafond, et chaque ressource n'en montre que ce qu'il
     -- lui faut. Douze laisse de la marge sur la plus fournie qu'on connaisse — les
@@ -1269,6 +1282,9 @@ T.COLOR.TIER_THREE = T.COLOR.FRAME_GOLD
 -- remplissage se lirait comme un réglage qui ne marche pas.
 T.COLOR.RESOURCE_FILL  = T.COLOR.ACCENT
 T.COLOR.RESOURCE_ALERT = T.COLOR.FRAME_GOLD
+
+-- Le bleu du mana sur la ressource personnelle du client.
+T.COLOR.MANA_BAR = CreateColor(0.10, 0.25, 1.00)
 
 -- Teintes de départ des deux paliers suivants. Trois paliers se lisent comme une
 -- **montée**, et une montée a un vocabulaire déjà écrit dans l'addon : l'or de ce
@@ -2118,6 +2134,8 @@ T.ATLAS = {
     -- Le violet de l'XP désaturé puis teint donnait un vert terne : une
     -- texture grise teinte ne devient jamais plus vive que son gris.
     XP_QUEST_FILL = "UI-HUD-ExperienceBar-Fill-Reputation-Faction-Green",
+    MANA_BAR_FILL = "UI-HUD-CoolDownManager-Bar",
+    MANA_BAR_BG   = "UI-HUD-CoolDownManager-Bar-BG",
 
     -- Pastilles des lignes du suivi d'objectifs : la coche d'un objectif rempli et
     -- la puce d'un objectif en cours. Ce sont celles que le client pose lui-même sur
