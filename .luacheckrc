@@ -174,7 +174,7 @@ read_globals = {
     "NamePlateConstants",
     "CompactUnitFrame_UpdateHealthColor", "CompactUnitFrame_UpdateName",
     "UnitSelectionColor", "UnitClassification", "UnitLevel", "UnitEffectiveLevel",
-    "UnitClassBase", "UnitIsBossMob", "UnitCanAttack", "UnitIsFriend",
+    "GetInventoryItemID", "UnitClassBase", "UnitIsBossMob", "UnitCanAttack", "UnitIsFriend",
     -- Ressource de classe. `PowerBarColor` est la table où le client range la
     -- teinte de chacune : on la lit plutôt que d'en recopier sept (règle 2).
     "UnitPower", "UnitPowerMax", "PowerBarColor",

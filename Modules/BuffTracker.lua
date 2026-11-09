@@ -364,12 +364,87 @@ end
 --  Le cadre
 -- =========================================================================
 
+--- Le buff que ce personnage lancerait : le premier sort de sa classe qu'il
+--- connaît, les listes allant du meilleur rang au moins bon.
+---@return number|nil
+local function classSpell()
+    local class  = UnitClassBase("player")
+    local weapon = CLASS_WEAPON[class]
+    local spells = weapon and weapon.spells or CLASS_BUFFS[class]
+    local known  = IsPlayerSpell or IsSpellKnown
+    if not (spells and known) then return nil end
+
+    for i = 1, #spells do
+        if known(spells[i]) then return spells[i] end
+    end
+    return nil
+end
+
+--- Le clic sur le buff de classe. Le voleur n'a rien à lancer : son sort de
+--- poisons n'ouvre que la fenêtre de fabrication.
+---@return table|nil
+local function classBuffAction()
+    if UnitClassBase("player") == "ROGUE" then return nil end
+    local spell = classSpell()
+    return spell and { type = "spell", spell = spell, unit = "player" } or nil
+end
+
+--- Huiles d'enchanteur, puis pierres de forgeron, du meilleur au moins bon.
+--- Les versions bénie et consacrée, réservées aux morts-vivants, passent après.
+local OILS       = { 20749, 20748, 20750, 20747, 20746, 20745, 20744, 23123 }
+local SHARPENING = { 18262, 12404, 7964, 2871, 2863, 2862, 23122 }
+local WEIGHT     = { 12643, 7965, 3241, 3240, 3239 }
+
+--- Sous-classes d'arme que chaque pierre accepte. Pour les armes de pugilat,
+--- les deux.
+local TAKES_SHARPENING = set({ 0, 1, 6, 7, 8, 13, 15 })  -- haches, armes d'hast, épées, dagues
+local TAKES_WEIGHT     = set({ 4, 5, 10, 13 })           -- masses, bâtons
+
+local MAIN_HAND = 16
+
+--- Le premier objet de cette liste présent dans les sacs.
+---@param items number[]
+---@return number|nil
+local function firstOwned(items)
+    for i = 1, #items do
+        if C_Item.GetItemCount(items[i]) > 0 then return items[i] end
+    end
+    return nil
+end
+
+--- Le meilleur objet des sacs que l'arme en main accepte.
+---@return number|nil
+local function weaponEnchantItem()
+    if not (C_Item and C_Item.GetItemCount and C_Item.GetItemInfoInstant) then return nil end
+
+    local weapon = GetInventoryItemID("player", MAIN_HAND)
+    if not weapon then return nil end
+
+    local subclass = select(7, C_Item.GetItemInfoInstant(weapon))
+    return firstOwned(OILS)
+        or (TAKES_SHARPENING[subclass] and firstOwned(SHARPENING))
+        or (TAKES_WEIGHT[subclass] and firstOwned(WEIGHT))
+        or nil
+end
+
+--- Le clic sur l'enchantement d'arme : cet objet, appliqué sur l'arme en main.
+---@return table|nil
+local function weaponEnchantAction()
+    local item = weaponEnchantItem()
+    if not item then return nil end
+
+    return { type = "macro", macrotext = ("/use item:%d\n/use %d"):format(item, MAIN_HAND) }
+end
+
 --- Chaque catégorie : sa clé, le réglage qui la suit, son libellé, et ce qui
---- lui donne son image — un sort ou un objet, demandé au client.
+--- lui donne son image — un sort ou un objet, demandé au client. `action` est
+--- ce que le clic déclenche, pour celles qui en ont un.
 local CATEGORIES = {
-    { key = "buff",   setting = "trackBuff",   title = "Buff tracker buff",   spell = 1243 },
+    { key = "buff",   setting = "trackBuff",   title = "Buff tracker buff",   spell = 1243,
+      action = classBuffAction },
     { key = "camp",   setting = "trackCamp",   title = "Buff tracker camp",   spell = 818 },
-    { key = "weapon", setting = "trackWeapon", title = "Buff tracker weapon", item  = 12404 },
+    { key = "weapon", setting = "trackWeapon", title = "Buff tracker weapon", item  = 12404,
+      action = weaponEnchantAction },
     { key = "food",   setting = "trackFood",   title = "Buff tracker food",   spell = WELL_FED },
     { key = "flask",  setting = "trackFlask",  title = "Buff tracker flask",  item  = 13510 },
     { key = "elixir", setting = "trackElixir", title = "Buff tracker elixir", item  = 13452 },
@@ -381,22 +456,18 @@ local badge
 ---@return number|nil
 local function categoryIcon(category)
     if category.key == "buff" then
-        local class  = UnitClassBase("player")
-        local weapon = CLASS_WEAPON[class]
-        local spells = weapon and weapon.spells or CLASS_BUFFS[class]
-        local known  = IsPlayerSpell or IsSpellKnown
-
-        -- Le premier sort de sa classe que le personnage connaît : c'est le
-        -- buff qu'il ira lancer. L'icône générique ne reste que faute de mieux.
-        if spells and known and C_Spell and C_Spell.GetSpellTexture then
-            for i = 1, #spells do
-                if known(spells[i]) then return C_Spell.GetSpellTexture(spells[i]) end
-            end
+        -- C'est le buff que le clic lancera. L'icône générique ne reste que
+        -- faute de mieux.
+        local spell = classSpell()
+        if spell and C_Spell and C_Spell.GetSpellTexture then
+            return C_Spell.GetSpellTexture(spell)
         end
     end
 
     if category.item then
-        return C_Item and C_Item.GetItemIconByID and C_Item.GetItemIconByID(category.item)
+        -- L'objet que le clic utilisera ; l'image de la catégorie sans objet.
+        local item = category.key == "weapon" and weaponEnchantItem() or category.item
+        return C_Item and C_Item.GetItemIconByID and C_Item.GetItemIconByID(item)
     end
     return C_Spell and C_Spell.GetSpellTexture and C_Spell.GetSpellTexture(category.spell)
 end
@@ -411,6 +482,9 @@ end
 
 ---@param mod table
 local function apply(mod)
+    -- Les cases cliquables sont protégées : tout attend la sortie de combat.
+    if InCombatLockdown() then return end
+
     if not mod:Get("show") then
         if badge then badge:Stop() end
         return
@@ -419,13 +493,16 @@ local function apply(mod)
     if not badge then
         local slots = {}
         for i = 1, #CATEGORIES do
-            local category = CATEGORIES[i]
+            local category  = CATEGORIES[i]
+            local clickable = category.action
+                and not (category.key == "buff" and UnitClassBase("player") == "ROGUE")
             slots[i] = {
                 shown = function() return categoryShown(mod, category) end,
                 reserved = function() return mod:Get(category.setting) == true end,
                 icon  = function() return categoryIcon(category) end,
                 title = L[category.title],
-                tip   = L["Buff tracker missing tip"],
+                tip   = L[clickable and "Buff tracker click tip" or "Buff tracker missing tip"],
+                action = category.action,
             }
         end
 
@@ -490,6 +567,8 @@ OUI:RegisterModule(MODULE, {
     title    = L["Buff tracker"],
     category = "MythicRaid",
     order    = 30,
+    -- Ses cases cliquables sont protégées : ni allumage ni extinction en combat.
+    secure   = true,
 
     defaults = {
         show        = false,
@@ -567,6 +646,10 @@ OUI:RegisterModule(MODULE, {
         self:RegisterEvent("SKILL_LINES_CHANGED", queueRefresh)
         self:RegisterEvent("PLAYER_ENTERING_WORLD", queueRefresh)
         self:RegisterEvent("GET_ITEM_INFO_RECEIVED", queueItems)
+        -- Ce que le clic utilise dépend des sacs.
+        self:RegisterEvent("BAG_UPDATE_DELAYED", queueRefresh)
+        -- Rattrape ce que le combat a gelé.
+        self:RegisterEvent("PLAYER_REGEN_ENABLED", queueRefresh)
         self:RegisterEvent("SPELLS_CHANGED", function()
             canCast = nil
             queueRefresh()

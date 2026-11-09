@@ -37,6 +37,7 @@ local W    = OUI.Widgets
 ---@field tip? string                 corps de son infobulle
 ---@field onClick? fun()              ce que le clic déclenche
 ---@field reserved? fun(): boolean  garde-t-elle sa place dans la rangée ? (`fixedSlots`)
+---@field action? fun(): table|nil   attributs de l'action sécurisée du clic (`type`, `spell`, `unit`, `macrotext`)
 
 ---@class OUI.IconBadgeOpts
 ---@field slots OUI.IconBadgeSlot[]
@@ -67,11 +68,37 @@ local function paint(texture, source)
     return false
 end
 
+--- Ce qu'une action sécurisée peut porter.
+local ACTION_ATTRIBUTES = { "type", "spell", "unit", "macrotext" }
+
+--- Pose l'action d'un clic ; sans action, le clic ne fait plus rien.
+---@param button table
+---@param action table|nil
+local function arm(button, action)
+    for i = 1, #ACTION_ATTRIBUTES do
+        local name = ACTION_ATTRIBUTES[i]
+        button:SetAttribute(name, action and action[name] or nil)
+    end
+end
+
 --- Rangée d'icônes, masquée au départ.
 ---@param opts OUI.IconBadgeOpts
 ---@return table
 function W.IconBadge(opts)
     local slots = opts.slots or {}
+
+    -- **Une case sécurisée protège tout le cadre** : en combat, le client
+    -- refuse de le montrer, le cacher, le retailler ou le déplacer. La rangée
+    -- reste alors telle quelle, et l'appelant la relit à la sortie de combat.
+    local secure = false
+    for index = 1, #slots do
+        if slots[index].action then secure = true end
+    end
+
+    ---@return boolean
+    local function frozen()
+        return secure and InCombatLockdown()
+    end
 
     -- Taille provisoire : le cadre se mesure sur les cases qu'il montre, à
     -- chaque passage.
@@ -80,7 +107,9 @@ function W.IconBadge(opts)
         height   = T.SIZE.BADGE_ICON,
         getPos   = opts.getPos,
         setPos   = opts.setPos,
-        isLocked = opts.isLocked,
+        isLocked = function()
+            return frozen() or (opts.isLocked ~= nil and opts.isLocked() == true)
+        end,
         isCentered = opts.isCentered,
 
         -- Le cadre ne se retaille pas, il change d'**échelle** : ce que le
@@ -107,9 +136,18 @@ function W.IconBadge(opts)
 
     for index = 1, #slots do
         local slot   = slots[index]
-        local button = CreateFrame("Button", nil, panel)
+        local template = slot.action and T.Template("SECURE_ACTION")
+        local button = CreateFrame("Button", nil, panel, template or nil)
         button:SetSize(T.SIZE.BADGE_ICON, T.SIZE.BADGE_ICON)
         button:Hide()
+
+        -- Au relâchement seulement, pour que l'action ne parte pas deux fois
+        -- (voir `UI/Widgets/SecureMenu.lua`).
+        if template then
+            button:RegisterForClicks("AnyUp")
+            button:SetAttribute("useOnKeyDown", false)
+            button.secureAction = true
+        end
 
         local image = button:CreateTexture(nil, "ARTWORK")
         image:SetAllPoints(button)
@@ -206,6 +244,7 @@ function W.IconBadge(opts)
             local show   = slot.shown == nil or slot.shown() == true
 
             if show and paint(button.image, slot.icon and slot.icon()) then
+                if button.secureAction then arm(button, slot.action()) end
                 showing[#showing + 1] = index
             else
                 button:Hide()
@@ -224,6 +263,8 @@ function W.IconBadge(opts)
     --- Poser une boucle pour relire une image qui ne bouge qu'au clic serait
     --- payer pour rien (règle 7).
     function panel:Refresh()
+        if frozen() then return end
+
         local visible = collect()
 
         if #visible == 0 then
@@ -238,6 +279,7 @@ function W.IconBadge(opts)
     --- Range le cadre. Position et taille restent : rallumer ne redemande
     --- rien.
     function panel:Stop()
+        if frozen() then return end
         self:Hide()
     end
 

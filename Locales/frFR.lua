@@ -1379,6 +1379,7 @@ OUI:RegisterLocale("frFR", {
     ["Buff tracker lock"]              = "Verrouiller la position",
     ["Buff tracker lock tip"]          = "Le cadre ne se déplace plus à la souris.",
     ["Buff tracker missing tip"]       = "Aucun buff actif dans cette catégorie.",
+    ["Buff tracker click tip"]         = "Aucun buff actif dans cette catégorie. Cliquez pour l'appliquer.",
     ["Buff tracker buff"]              = "Buff de classe",
     ["Buff tracker camp"]              = "Buff de camp (ou son équivalent de classe)",
     ["Buff tracker weapon"]            = "Enchantement d'arme (huile d'enchanteur, pierre de forgeron)",

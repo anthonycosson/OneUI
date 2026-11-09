@@ -1351,6 +1351,7 @@ OUI:RegisterLocale("enUS", {
     ["Buff tracker lock"]              = "Lock in place",
     ["Buff tracker lock tip"]          = "Stops the frame from being dragged with the mouse.",
     ["Buff tracker missing tip"]       = "No active buff in this category.",
+    ["Buff tracker click tip"]         = "No active buff in this category. Click to apply it.",
     ["Buff tracker buff"]              = "Class buff",
     ["Buff tracker camp"]              = "Camp buff (or its class equivalent)",
     ["Buff tracker weapon"]            = "Weapon enchant (enchanter oil, blacksmith stone)",
