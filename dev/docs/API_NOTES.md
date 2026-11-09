@@ -5532,3 +5532,13 @@ catégorie Buffs lit l'aura de l'objet ou le buff de classe dont il est la
 variante, selon les métiers du personnage (rang 20 : le client ne publie pas si
 le patron est appris). `24907` et `24932` (Sélénien, Chef de meute) et les auras
 de Force de la terre sont à confirmer en jeu.
+
+Objets de camp (identifiants relevés dans les données publiques de Skillwright et
+B.O.L.T, pas vérifiés en jeu) : `279968` trousse, `279967` bocal, `279956` puits
+de mana, `279944` meule, `279960` magnétite, `279976` luth, `279962` bougie,
+`279979` chaise, `279972`/`279973` bannière. Un objet dans les sacs prime sur le
+rang de métier pour décider ce qui valide la catégorie.
+
+Plats « Bien nourri » : identifiants relevés dans les données publiques de JustAC
+(`Data/ForeverConsumables.lua`), triés par points de vie rendus, pas vérifiés en
+jeu.

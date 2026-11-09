@@ -92,21 +92,27 @@ local CLASS_BUFFS = {
 --- Rang à partir duquel un métier fabrique son objet de camp.
 local CAMP_OBJECT_SKILL = 20
 
---- Ligne de compétence du métier -> ce qui couvre son objet de camp : le buff
---- de l'objet, puis le buff de classe dont il est la variante, qu'un autre
---- joueur du groupe peut fournir. La tente, l'ingénierie et la cuisine n'y sont
---- pas : leurs objets ne donnent aucune caractéristique.
-local CAMP_BY_SKILL = {
-    [129] = merge({ 1230124 }, FORTITUDE),      -- Secourisme, trousse
-    [356] = merge({ 1230098 }, KINGS),          -- Pêche, bocal
-    [171] = merge({ 1230587 }, WISDOM),         -- Alchimie, puits de mana
-    [164] = merge({ 1230172 }, EARTH),          -- Forge, meule
-    [186] = merge({ 1230164 }, MIGHT),          -- Minage, magnétite
-    [333] = merge({ 1230653 }, WILD),           -- Enchantement, luth
-    [182] = merge({ 1229513 }, INTELLECT),      -- Herboristerie, bougie
-    [393] = merge({ 1229519 }, CRITICAL),       -- Dépeçage, chaise
-    [197] = merge({ 1229718 }, SPIRIT),         -- Couture, bannière
+--- Chaque objet de camp : le métier qui le fabrique, l'objet, et ce qui le
+--- couvre — le buff de l'objet, puis le buff de classe dont il est la variante,
+--- qu'un autre joueur du groupe peut fournir. La tente, l'ingénierie et la
+--- cuisine n'y sont pas : leurs objets ne donnent aucune caractéristique.
+local CAMP_OBJECTS = {
+    { skill = 129, items = { 279968 },         spells = merge({ 1230124 }, FORTITUDE) },  -- Secourisme, trousse
+    { skill = 356, items = { 279967 },         spells = merge({ 1230098 }, KINGS) },      -- Pêche, bocal
+    { skill = 171, items = { 279956 },         spells = merge({ 1230587 }, WISDOM) },     -- Alchimie, puits de mana
+    { skill = 164, items = { 279944 },         spells = merge({ 1230172 }, EARTH) },      -- Forge, meule
+    { skill = 186, items = { 279960 },         spells = merge({ 1230164 }, MIGHT) },      -- Minage, magnétite
+    { skill = 333, items = { 279976 },         spells = merge({ 1230653 }, WILD) },       -- Enchantement, luth
+    { skill = 182, items = { 279962 },         spells = merge({ 1229513 }, INTELLECT) },  -- Herboristerie, bougie
+    { skill = 393, items = { 279979 },         spells = merge({ 1229519 }, CRITICAL) },   -- Dépeçage, chaise
+    { skill = 197, items = { 279972, 279973 }, spells = merge({ 1229718 }, SPIRIT) },     -- Couture, bannière
 }
+
+--- Ligne de compétence du métier -> ce qui couvre son objet de camp.
+local CAMP_BY_SKILL = {}
+for i = 1, #CAMP_OBJECTS do
+    CAMP_BY_SKILL[CAMP_OBJECTS[i].skill] = CAMP_OBJECTS[i].spells
+end
 
 --- Sorts actifs de la lecture en cours (règle 7).
 local active = {}
@@ -120,13 +126,46 @@ local function anyActive(spells)
     return false
 end
 
---- Un buff de camp ou son équivalent est-il actif, parmi ce que nos métiers
---- permettent de poser ? Sans métier à objet de camp, rien n'est attendu.
+--- L'objet de cette liste présent dans les sacs, s'il y en a un.
+---@param items number[]
+---@return number|nil
+local function firstOwned(items)
+    if not (C_Item and C_Item.GetItemCount) then return nil end
+
+    for i = 1, #items do
+        if C_Item.GetItemCount(items[i]) > 0 then return items[i] end
+    end
+    return nil
+end
+
+--- Le premier objet de camp présent dans les sacs : celui du clic et de l'icône.
+---@return number|nil
+local function campItem()
+    for i = 1, #CAMP_OBJECTS do
+        local item = firstOwned(CAMP_OBJECTS[i].items)
+        if item then return item end
+    end
+    return nil
+end
+
+--- Le buff de camp est-il couvert ? Avec un objet de camp dans les sacs, seul
+--- son buff ou son équivalent de classe compte. Sans objet, on retombe sur ce
+--- que nos métiers permettent de poser ; sans métier à objet de camp, rien
+--- n'est attendu.
 ---
 --- Le rang dit que l'objet est accessible ; le client ne publie pas si son
 --- patron a été appris.
 ---@return boolean
 local function campCovered()
+    local carried = false
+    for i = 1, #CAMP_OBJECTS do
+        if firstOwned(CAMP_OBJECTS[i].items) then
+            carried = true
+            if anyActive(CAMP_OBJECTS[i].spells) then return true end
+        end
+    end
+    if carried then return false end
+
     if not (GetProfessions and GetProfessionInfo) then return true end
 
     local expected = false
@@ -218,6 +257,20 @@ local FOOD_AURAS = set({
     19705, 19706, 19708, 19709, 19710, 19711, 24799, 24870, 25694, 25941,
     25661, 18125,
 })
+
+--- Les plats qui donnent « Bien nourri », du plus nourrissant au moins
+--- nourrissant.
+local FOOD_ITEMS = {
+    21023, 238638, 13935, 250067, 250070, 250069, 13933, 13934, 13932, 250075,
+    250068, 20452, 250066, 250071, 250072, 13810, 16971, 13927, 12212, 12218,
+    13931, 250076, 18254, 250065, 17222, 6887, 18045, 287973, 4457, 250074,
+    274971, 6038, 250078, 20074, 12215, 13851, 8364, 274976, 250073, 12216,
+    3728, 3664, 3665, 5527, 3666, 3727, 5480, 12209, 4592, 12214, 12210, 21217,
+    1017, 3729, 2685, 3726, 3220, 250080, 12213, 2684, 2683, 5479, 3662, 2687,
+    268912, 268913, 724, 1082, 787, 21072, 250077, 2888, 6290, 11584, 7807,
+    7808, 2682, 12224, 17198, 17197, 6888, 5472, 7806, 3663, 263512, 5095,
+    2681, 5474, 263509, 6890, 2680, 5477, 250079,
+}
 
 --- L'aura qui donne son nom à toutes les autres : son nom, dans la langue du
 --- client, reconnaît un plat que la liste ci-dessus n'aurait pas.
@@ -402,16 +455,6 @@ local TAKES_WEIGHT     = set({ 4, 5, 10, 13 })           -- masses, bâtons
 
 local MAIN_HAND = 16
 
---- Le premier objet de cette liste présent dans les sacs.
----@param items number[]
----@return number|nil
-local function firstOwned(items)
-    for i = 1, #items do
-        if C_Item.GetItemCount(items[i]) > 0 then return items[i] end
-    end
-    return nil
-end
-
 --- Le meilleur objet des sacs que l'arme en main accepte.
 ---@return number|nil
 local function weaponEnchantItem()
@@ -436,16 +479,49 @@ local function weaponEnchantAction()
     return { type = "macro", macrotext = ("/use item:%d\n/use %d"):format(item, MAIN_HAND) }
 end
 
+--- Le clic sur le buff de camp : pose l'objet de camp des sacs.
+---@return table|nil
+local function campAction()
+    local item = campItem()
+    return item and { type = "macro", macrotext = ("/use item:%d"):format(item) } or nil
+end
+
+--- Le meilleur plat des sacs que le personnage a le niveau de manger. Un plat
+--- dont le client ne connaît pas encore le niveau est tenté quand même.
+---@return number|nil
+local function foodItem()
+    if not (C_Item and C_Item.GetItemCount) then return nil end
+
+    local level = UnitLevel("player")
+    for i = 1, #FOOD_ITEMS do
+        local item = FOOD_ITEMS[i]
+        if C_Item.GetItemCount(item) > 0 then
+            local minLevel = C_Item.GetItemInfo and select(5, C_Item.GetItemInfo(item))
+            if not minLevel or minLevel <= level then return item end
+        end
+    end
+    return nil
+end
+
+--- Le clic sur la nourriture : mange le plat choisi.
+---@return table|nil
+local function foodAction()
+    local item = foodItem()
+    return item and { type = "macro", macrotext = ("/use item:%d"):format(item) } or nil
+end
+
 --- Chaque catégorie : sa clé, le réglage qui la suit, son libellé, et ce qui
 --- lui donne son image — un sort ou un objet, demandé au client. `action` est
 --- ce que le clic déclenche, pour celles qui en ont un.
 local CATEGORIES = {
     { key = "buff",   setting = "trackBuff",   title = "Buff tracker buff",   spell = 1243,
       action = classBuffAction },
-    { key = "camp",   setting = "trackCamp",   title = "Buff tracker camp",   spell = 818 },
+    { key = "camp",   setting = "trackCamp",   title = "Buff tracker camp",   spell = 818,
+      action = campAction },
     { key = "weapon", setting = "trackWeapon", title = "Buff tracker weapon", item  = 12404,
       action = weaponEnchantAction },
-    { key = "food",   setting = "trackFood",   title = "Buff tracker food",   spell = WELL_FED },
+    { key = "food",   setting = "trackFood",   title = "Buff tracker food",   spell = WELL_FED,
+      action = foodAction },
     { key = "flask",  setting = "trackFlask",  title = "Buff tracker flask",  item  = 13510 },
     { key = "elixir", setting = "trackElixir", title = "Buff tracker elixir", item  = 13452 },
 }
@@ -461,6 +537,13 @@ local function categoryIcon(category)
         local spell = classSpell()
         if spell and C_Spell and C_Spell.GetSpellTexture then
             return C_Spell.GetSpellTexture(spell)
+        end
+    end
+
+    if category.key == "camp" or category.key == "food" then
+        local item = category.key == "camp" and campItem() or foodItem()
+        if item and C_Item and C_Item.GetItemIconByID then
+            return C_Item.GetItemIconByID(item)
         end
     end
 
