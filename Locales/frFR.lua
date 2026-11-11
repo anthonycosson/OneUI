@@ -1264,44 +1264,18 @@ OUI:RegisterLocale("frFR", {
         .. "sans avoir à l'ouvrir.",
 
     -- =====================================================================
-    --  Suivi des temps restants — Flight timer (Forever) et Craft timer
+    --  Temps de fabrication (page Métiers)
     -- =====================================================================
-    ["Remaining times"]                = "Suivi des temps restants",
-    ["Flight"]                         = "Vol",
     -- « Fabrication », et non « Métiers » : la page des métiers existe
     -- maintenant pour elle-même, et deux intitulés identiques dans la barre
     -- latérale et dans une page feraient chercher deux fois.
     ["Crafting"]                       = "Fabrication",
     ["Time remaining"]                 = "Temps restant",
-    ["Flight timer"]                   = "Temps de vol restant",
-    ["Flight timer tip"] =
-        "Affiche le temps restant d'un vol de griffon ou de wyverne, dans un petit cadre "
-        .. "déplaçable. Le jeu ne publie jamais cette durée : le premier vol sur un trajet "
-        .. "donné affiche donc une estimation calculée à partir de la distance ; une fois ce "
-        .. "trajet précis volé une fois, le temps mesuré remplace l'estimation à chaque vol "
-        .. "suivant.",
-    ["Flight timer preview"]           = "Aperçu",
-    ["Flight timer preview tip"] =
-        "Montre le cadre avec un temps d'exemple, pour le placer sans attendre un vol.",
-    ["Lock flight timer"]              = "Verrouiller la position",
-    ["Lock flight timer tip"] =
-        "Fige le cadre où il est et range sa poignée. Glissez le cadre pour le déplacer, "
-        .. "son coin bas-droit pour le redimensionner.",
-    ["Flight diagnostic"]              = "Dernier embarquement :",
-    ["Flight diagnostic none"] =
-        "aucun embarquement vu depuis la connexion — le crochet sur TakeTaxiNode "
-        .. "n'a jamais été appelé.",
-    ["Flight diagnostic route"]        = "trajet :",
-    ["Flight diagnostic estimate"]     = "estimation :",
-    ["Flight diagnostic measured"]     = "mesuré :",
-    ["Flight diagnostic distance"]     = "distance :",
-    ["Flight diagnostic boarded"]      = "embarquement récent :",
-    ["Flight diagnostic unavailable"]  = "Le module Temps de vol restant ne tourne pas.",
 
     ["Craft timer"]                    = "Temps de craft restant",
     ["Craft timer tip"] =
-        "Affiche le temps restant d'un lot de craft, dans le même cadre que le temps de "
-        .. "vol. Rien n'est deviné ici : le jeu publie le début et la fin de chaque "
+        "Affiche le temps restant d'un lot de craft, dans un petit cadre déplaçable. "
+        .. "Rien n'est deviné ici : le jeu publie le début et la fin de chaque "
         .. "incantation de métier, et la taille du lot est connue au moment où l'on clique "
         .. "sur « Tout créer » — le décompte est donc exact dès le premier objet.",
     ["Craft timer preview"]            = "Aperçu",

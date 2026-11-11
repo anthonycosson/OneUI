@@ -6,20 +6,12 @@
 --  `UI/Widgets/MarkerBar.lua`) : un cadre, un fond, une position que le
 --  joueur pose une fois pour toutes. Rien dedans qu'un nombre.
 --
---  **Un seul cadre pour les deux suivis de `Modules/Timers.lua`.** Le vol et
---  le craft comptent deux choses qui n'ont rien à voir ; ils les montrent de
---  la même façon, et c'est ce widget qui le garantit. Deux cadres écrits
---  séparément auraient divergé au premier réglage (CLAUDE.md règle 2).
+--  Il porte le temps de fabrication de `Modules/Professions.lua`.
 --
 --  Le widget ne sait pas d'où vient le temps qu'il affiche : on lui donne une
 --  fonction qui rend les secondes restantes, il l'interroge et l'écrit. Quand
 --  elle rend `nil`, le cadre se cache.
 --
---  **Un temps s'écrit d'une seule façon**, qu'il vienne d'une mesure ou d'une
---  estimation. Le vol a porté un `~` devant les secondes estimées, et il est
---  retiré : la nuance intéressait l'auteur, pas le joueur, qui lit un temps
---  restant et n'a rien à faire de sa provenance. Elle reste écrite là où elle
---  a des conséquences — l'infobulle du réglage.
 -- =========================================================================
 
 local _, ns = ...

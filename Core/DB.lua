@@ -45,7 +45,7 @@ local U   = OUI.Util
 local DB = {}
 OUI.DB = DB
 
-local SCHEMA_VERSION   = 21
+local SCHEMA_VERSION   = 22
 local DEFAULT_PROFILE  = "Default"
 
 --- moduleName -> table de défauts (référence, pas une copie)
@@ -780,6 +780,43 @@ function DB:RunMigrations()
             end
         end
         from = 21
+    end
+
+    -- Palier 22 — « Suivi des temps restants » disparaît. Le suivi des vols
+    -- est retiré, avec ses durées mesurées par trajet ; le temps de craft
+    -- rejoint « Métiers », sous les mêmes clés. Même geste que le palier 21.
+    if from < 22 then
+        local CRAFT_KEYS = {
+            "showCraftBar", "previewCraftBar", "lockCraftBar", "centerCraftBar",
+            "craftBarX", "craftBarY", "craftBarScale",
+        }
+
+        for _, profile in pairs(OneUIDB.profiles) do
+            local modules = profile.modules
+            local timers  = modules and modules.Timers
+
+            if timers then
+                if timers.enabled ~= false then
+                    local target = modules.Professions or {}
+                    local moved  = false
+
+                    for i = 1, #CRAFT_KEYS do
+                        local key = CRAFT_KEYS[i]
+                        if timers[key] ~= nil and target[key] == nil then
+                            target[key] = timers[key]
+                            moved = true
+                        end
+                    end
+
+                    if moved and target.enabled == false then target.enabled = nil end
+                    if next(target) then modules.Professions = target end
+                end
+                modules.Timers = nil
+            end
+        end
+
+        if OneUIDB.moduleData then OneUIDB.moduleData.Timers = nil end
+        from = 22
     end
 
     OneUIDB.schema = math.max(from, SCHEMA_VERSION)

@@ -70,8 +70,16 @@
 --  métiers du client les donne. Il se relit à l'annonce d'un changement de
 --  compétence, jamais avec le temps (règle 7).
 --
---  Les cadres sont posés par `UI/Widgets/IconBadge.lua` et
---  `UI/Widgets/TextBlock.lua` : le module ne dessine rien.
+--  ## La fabrication
+--
+--  Le temps restant d'un lot de craft, dans un petit cadre. `UnitCastingInfo`
+--  donne le début et la fin de chaque incantation, et `C_TradeSkillUI` la
+--  taille du lot au moment du clic : le décompte est exact dès le premier
+--  objet. Il avait sa page, « Suivi des temps restants », jusqu'en 3.6.
+--
+--  Les cadres sont posés par `UI/Widgets/IconBadge.lua`,
+--  `UI/Widgets/TextBlock.lua` et `UI/Widgets/TimerBar.lua` : le module ne
+--  dessine rien.
 --
 --  Réversibilité (règle 6) : les cadres se cachent, les liaisons s'effacent,
 --  les CVars sont rendues, le hook du monde devient inerte et les abonnements
@@ -626,6 +634,176 @@ local queueLevels = U.Debounce(T.TIMING.TRACKING_SETTLE, function()
 end)
 
 -- =========================================================================
+--  Le temps de fabrication
+-- =========================================================================
+
+--- Exemple d'aperçu : l'ordre de grandeur d'un lot ordinaire, quelques
+--- dizaines d'objets à deux ou trois secondes pièce.
+local CRAFT_PREVIEW = 95
+
+--- Secondes restantes et durée pleine de l'incantation de métier en cours.
+---
+--- Rend `nil` dans trois cas qui ne se ressemblent pas mais se traitent
+--- pareil : rien n'est incanté, ce qui l'est n'est pas un craft, ou le client
+--- masque ses horaires (valeur secrète). On préfère ne rien afficher plutôt
+--- qu'un nombre qu'on ne sait pas justifier.
+---@return number|nil remaining, number|nil duration
+local function readCraftCast()
+    if not UnitCastingInfo then return nil, nil end
+
+    local _, _, _, startMs, endMs, isTradeskill = UnitCastingInfo("player")
+    if not isTradeskill then return nil, nil end
+    if type(startMs) ~= "number" or type(endMs) ~= "number" then return nil, nil end
+    if U.IsSecret(startMs) or U.IsSecret(endMs) then return nil, nil end
+
+    local duration = (endMs - startMs) / 1000
+    if duration <= 0 then return nil, nil end
+
+    return (endMs / 1000) - GetTime(), duration
+end
+
+--- Taille du lot, relevée au lancement — avant que la première incantation ne
+--- commence. C'est le seul moment où le client la dit.
+local craftPending = {}
+
+--- Le lot qui court, ou rien.
+local batch = {}
+
+local function stopBatch()
+    batch.active, batch.left, batch.castEnd, batch.castDuration = false, nil, nil, nil
+end
+
+--- Le joueur vient de lancer un lot : on retient combien d'objets il a
+--- demandés. La première incantation s'en saisira.
+---@param numCasts any
+local function onCraftLaunched(numCasts)
+    craftPending.total = (type(numCasts) == "number" and numCasts > 0) and numCasts or nil
+end
+
+--- Une incantation de métier vient de commencer.
+---
+--- Deux lectures d'un même événement : elle **ouvre** le lot si aucun ne
+--- court, et elle en **retranche un** sinon — une incantation qui commence
+--- veut dire que la précédente est finie. Le client ne publie aucun compteur
+--- de ce qui reste ; celui-ci se tient donc tout seul, à partir de la taille
+--- demandée et du nombre d'incantations vues.
+---@return boolean crafting  faux si ce n'était pas une incantation de métier
+local function onCraftCastStart()
+    local remaining, duration = readCraftCast()
+    if not remaining then return false end
+
+    if batch.active and batch.left then
+        batch.left = batch.left - 1
+    else
+        batch.active = true
+        batch.left   = craftPending.total or 1
+    end
+    craftPending.total = nil
+
+    batch.castEnd      = GetTime() + remaining
+    batch.castDuration = duration
+    return true
+end
+
+local craftBar
+
+---@param mod table
+---@return number|nil remaining
+local function craftSource(mod)
+    if batch.active and batch.left and batch.castEnd then
+        local current = batch.castEnd - GetTime()
+        if current < 0 then current = 0 end
+
+        local remaining = current + (batch.left - 1) * (batch.castDuration or 0)
+
+        -- Le dernier objet est sorti : on referme soi-même, sans attendre
+        -- l'événement de fin. Il arrive, mais s'en remettre à lui seul
+        -- laisserait un lot fantôme le jour où il manquerait.
+        if remaining <= 0 then
+            stopBatch()
+            return nil
+        end
+
+        return remaining
+    end
+
+    if mod:Get("previewCraftBar") then return CRAFT_PREVIEW end
+end
+
+---@param mod table
+local function applyCraftBar(mod)
+    if not mod:Get("showCraftBar") then
+        if craftBar then craftBar:Stop() end
+        return
+    end
+
+    if not craftBar then
+        craftBar = W.TimerBar({
+            title    = L["Time remaining"],
+            source   = function() return craftSource(mod) end,
+            isLocked = function() return mod:Get("lockCraftBar") == true end,
+            isCentered = function() return mod:Get("centerCraftBar") == true end,
+            getPos   = function() return mod:Get("craftBarX"), mod:Get("craftBarY") end,
+            setPos   = function(x, y)
+                mod:Set("craftBarX", x)
+                mod:Set("craftBarY", y)
+            end,
+            getScale = function() return mod:Get("craftBarScale") end,
+            setScale = function(scale) mod:Set("craftBarScale", scale) end,
+        })
+        if not craftBar then return end
+    end
+
+    craftBar:ApplyScale()
+    craftBar:ApplyLock()
+    craftBar:ApplyPosition()
+    craftBar:Start()
+end
+
+--- Les trois portes d'entrée d'un lot de craft. Toutes portent `numCasts` en
+--- deuxième argument, et le bouton « Tout créer » du client y arrive par
+--- `ProfessionsRecipeTransactionMixin:CraftRecipe`, qui ne fait que les
+--- appeler : coiffer les trois suffit à tout couvrir.
+local CRAFT_CALLS = { "CraftRecipe", "CraftEnchant", "CraftSalvage" }
+
+---@param mod table
+local function enableCraft(mod)
+    applyCraftBar(mod)
+
+    local live = function() return mod:IsEnabled() end
+
+    if C_TradeSkillUI then
+        for i = 1, #CRAFT_CALLS do
+            local name = CRAFT_CALLS[i]
+            if type(C_TradeSkillUI[name]) == "function" then
+                U.GuardedHook(C_TradeSkillUI, name, function(_, numCasts)
+                    onCraftLaunched(numCasts)
+                end, live)
+            end
+        end
+    end
+
+    -- L'événement arrive pour **tout** ce que le joueur incante ; seul un craft
+    -- ouvre le cadre. Le rappel rouvre un cadre caché, qui ne reçoit plus
+    -- d'`OnUpdate` (voir `W.TimerBar`).
+    mod:RegisterEvent("UNIT_SPELLCAST_START", function(_, unit)
+        if unit ~= "player" then return end
+        if onCraftCastStart() then applyCraftBar(mod) end
+    end)
+
+    -- La fin du lot, par les trois chemins que le client emprunte : la
+    -- séquence s'arrête, elle est interrompue, ou elle échoue.
+    mod:RegisterEvent("UPDATE_TRADESKILL_CAST_STOPPED", stopBatch)
+
+    local failed = function(_, unit)
+        if unit ~= "player" then return end
+        stopBatch()
+    end
+    mod:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", failed)
+    mod:RegisterEvent("UNIT_SPELLCAST_FAILED",      failed)
+end
+
+-- =========================================================================
 --  Déclaration du module
 -- =========================================================================
 
@@ -673,6 +851,15 @@ OUI:RegisterModule(MODULE, {
         levelsX      = 0,
         levelsY      = 0,
         levelsScale  = 1,
+
+        showCraftBar    = false,
+        previewCraftBar = false,
+        lockCraftBar    = false,
+        centerCraftBar  = false,
+        -- Mêmes réglages sans contrôle que ceux du cadre de récolte.
+        craftBarX       = 0,
+        craftBarY       = -(T.SIZE.COUNTDOWN_TEXT + T.SIZE.SECTION_H + T.SIZE.TOOL_PAD * 2),
+        craftBarScale   = 1,
     },
 
     options = {
@@ -737,6 +924,37 @@ OUI:RegisterModule(MODULE, {
             disabled = requires("showLevels"),
         },
 
+        { type = "header", text = L["Crafting"] },
+        {
+            type    = "toggle",
+            key     = "showCraftBar",
+            text    = L["Craft timer"],
+            tooltip = L["Craft timer tip"],
+        },
+        {
+            type     = "toggle",
+            key      = "previewCraftBar",
+            edit     = "preview",
+            text     = L["Craft timer preview"],
+            tooltip  = L["Craft timer preview tip"],
+            disabled = requires("showCraftBar"),
+        },
+        {
+            type     = "toggle",
+            key      = "lockCraftBar",
+            edit     = "lock",
+            text     = L["Lock craft timer"],
+            tooltip  = L["Lock craft timer tip"],
+            disabled = requires("showCraftBar"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerCraftBar",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
+            disabled = requires("showCraftBar"),
+        },
+
         { type = "header", text = L["Fishing"] },
         {
             type    = "keybind",
@@ -762,6 +980,7 @@ OUI:RegisterModule(MODULE, {
         apply(self)
         applyLevels(self)
         enableFishing(self)
+        enableCraft(self)
 
         -- Le client annonce chaque changement de suivi : c'est l'événement qui
         -- allume et éteint les icônes.
@@ -785,12 +1004,15 @@ OUI:RegisterModule(MODULE, {
     OnDisable = function()
         if badge then badge:Stop() end
         if levelsBlock then levelsBlock:Stop() end
+        stopBatch()
+        if craftBar then craftBar:Stop() end
         disableFishing()
     end,
 
     OnSettingChanged = function(self)
         apply(self)
         applyLevels(self)
+        applyCraftBar(self)
         fishingSettingChanged(self)
     end,
 })

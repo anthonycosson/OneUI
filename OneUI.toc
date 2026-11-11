@@ -162,9 +162,6 @@ Modules\GroupFinder.lua [AllowLoadGameType standard]
 Modules\Queue.lua
 Modules\Teleports.lua [AllowLoadGameType standard]
 Modules\RaidCooldowns.lua [AllowLoadGameType standard]
-# Suivi des temps restants : le vol et le craft, sur une seule page. Elle
-# charge partout — rien n'y dépend du client, tout dépend de ce qu'il publie.
-Modules\Timers.lua
 Modules\MythicTimer.lua [AllowLoadGameType standard]
 Modules\RaidPanel.lua
 Modules\CombatLog.lua
