@@ -1,7 +1,9 @@
-## 3.6.0 — 2026-11-09
+## 3.7.0 — 2026-11-11
 
-### Added
-- Personal resources: a **separate mana bar** stays visible in every form, with
-  its own width, height and position, and the look of the game's resource bar.
-  It can hide while the game's bar already shows your mana.
+### Changed
+- The **craft timer** moves to the Professions page, with its settings. The
+  Remaining times page is gone.
+
+### Removed
+- The **flight timer** and the `/oui vol` command.
 
