@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.8.0 — 2026-11-12
+
 ### Added
 - Buff tracker: a second frame, **Group / raid buffs**, shown in a group only.
   It lists each buff a class in your group can give you and you lack. Paladin
