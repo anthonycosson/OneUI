@@ -215,7 +215,7 @@ read_globals = {
     "IsActiveQuestTrivial", "IsAvailableQuestTrivial",
 
     -- Groupe et raid
-    "IsInGroup", "IsInRaid", "GetNumGroupMembers", "UnitName", "UnitIsConnected",
+    "IsInGroup", "IsInRaid", "GetNumGroupMembers", "GetNumSubgroupMembers", "UnitName", "UnitIsConnected",
     "UnitIsGroupLeader", "UnitIsGroupAssistant", "SendChatMessage",
     "DoReadyCheck", "C_PartyInfo", "LE_PARTY_CATEGORY_INSTANCE",
     -- Le panneau de contrôle des cadres de raid : on teste sa présence avant de

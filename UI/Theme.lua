@@ -554,6 +554,13 @@ T.SIZE = {
     -- grandir avec l'icône — ce qu'on vise est plus gros, pas plus loin.
     BADGE_ICON = 56,
     BADGE_GAP  = 4,
+    BADGE_PER_ROW_MAX = 12,
+
+    -- Le cran des glissières « Taille » des cadres, et les bornes de la
+    -- fenêtre de jet de butin (les mêmes que la molette, voir `UI/Move.lua`).
+    FRAME_SCALE_STEP = 0.05,
+    LOOT_SCALE_MIN   = 0.5,
+    LOOT_SCALE_MAX   = 2.0,
 
     -- Bornes de son échelle. Les mêmes valeurs et la même raison que
     -- ci-dessus, sous leur propre nom pour la même raison encore : ce cadre

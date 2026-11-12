@@ -31,6 +31,7 @@
 
 local _, ns = ...
 local OUI = ns.OUI
+local T    = OUI.Theme
 local W    = OUI.Widgets
 local L    = ns.L
 
@@ -190,6 +191,7 @@ local APPLIERS = {
     worldMarkers      = applyMarkerBar,
     lockMarkers       = applyMarkerBar,
     centerMarkers = applyMarkerBar,
+    markerScale   = applyMarkerBar,
     markersOnHover    = applyMarkerBar,
     pullTimer         = applyMarkerBar,
     hideBlizzardPanel = applyHideManager,
@@ -248,6 +250,17 @@ OUI:RegisterModule(MODULE, {
             key      = "centerMarkers",
             text     = L["Center on screen"],
             tooltip  = L["Center on screen tip"],
+            disabled = requires("worldMarkers"),
+        },
+        {
+            type     = "slider",
+            key      = "markerScale",
+            text     = L["Frame scale"],
+            tooltip  = L["Frame scale tip"],
+            min      = T.SIZE.MARKER_SCALE_MIN,
+            max      = T.SIZE.MARKER_SCALE_MAX,
+            step     = T.SIZE.FRAME_SCALE_STEP,
+            decimals = 2,
             disabled = requires("worldMarkers"),
         },
         {

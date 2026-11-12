@@ -99,7 +99,7 @@
     "GetActiveTitle", "SelectActiveQuest", "SelectAvailableQuest",
     "IsActiveQuestTrivial", "IsAvailableQuestTrivial",
 
-    "IsInGroup", "IsInRaid", "GetNumGroupMembers", "UnitName", "UnitIsConnected",
+    "IsInGroup", "IsInRaid", "GetNumGroupMembers", "GetNumSubgroupMembers", "UnitName", "UnitIsConnected",
     "UnitIsGroupLeader", "UnitIsGroupAssistant", "SendChatMessage",
     "DoReadyCheck", "C_PartyInfo", "LE_PARTY_CATEGORY_INSTANCE",
     "CompactRaidFrameManager",

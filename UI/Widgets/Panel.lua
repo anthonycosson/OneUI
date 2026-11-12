@@ -37,6 +37,7 @@ local W    = OUI.Widgets
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean        gèle la position et retire la poignée
 ---@field isCentered? fun(): boolean      garde le centre sur l'axe vertical de l'écran
+---@field getAnchor? fun(): string        point du panneau qui reste fixe ("CENTER", "TOPLEFT"…)
 ---@field minScale? number                donne une poignée d'échelle
 ---@field maxScale? number
 ---@field getScale? fun(): number|nil
@@ -112,6 +113,60 @@ function W.Panel(opts)
         return opts.isCentered ~= nil and opts.isCentered() == true
     end
 
+    --- Le point du panneau qui reste fixe quand il change de taille. Centré, il
+    --- perd sa part gauche ou droite : c'est son milieu qui reste sur l'axe.
+    ---@return string
+    local function anchor()
+        local point = opts.getAnchor and opts.getAnchor() or "CENTER"
+        if centered() then
+            point = point:gsub("LEFT", ""):gsub("RIGHT", "")
+            if point == "" then point = "CENTER" end
+        end
+        return point
+    end
+
+    --- Coordonnées d'un point du cadre, dans l'échelle de ce cadre.
+    ---@param frame table
+    ---@param point string
+    ---@return number|nil x, number|nil y
+    local function pointOf(frame, point)
+        local cx, cy = frame:GetCenter()
+        if not cx then return nil, nil end
+
+        local x = point:find("LEFT") and frame:GetLeft()
+            or point:find("RIGHT") and frame:GetRight() or cx
+        local y = point:find("TOP") and frame:GetTop()
+            or point:find("BOTTOM") and frame:GetBottom() or cy
+        return x, y
+    end
+
+    --- Relève la position du point fixe et la rend à l'appelant, en décalage
+    --- depuis le centre de l'écran et en pixels de `UIParent`.
+    ---@param point string
+    local function savePosition(point)
+        if not opts.setPos then return end
+
+        local x, y   = pointOf(panel, point)
+        local px, py = UIParent:GetCenter()
+        if not (x and px) then return end
+
+        -- Les deux points sont exprimés chacun dans l'échelle de son cadre : on
+        -- les ramène en pixels d'écran avant de les soustraire, sinon un panneau
+        -- mis à l'échelle par le joueur se décale de la différence.
+        local scale  = panel:GetEffectiveScale()
+        local parent = UIParent:GetEffectiveScale()
+
+        -- Centré, le glisser ne retient que la hauteur : le panneau a suivi le
+        -- curseur de côté le temps du geste, il revient sur l'axe au lâcher.
+        local dx = centered() and 0 or (x * scale - px * parent) / parent
+        opts.setPos(dx, (y * scale - py * parent) / parent)
+    end
+
+    --- Le point fixe de la dernière pose. Quand il change, la position rangée
+    --- est relevée sur le nouveau point avant d'être reposée : le panneau ne
+    --- saute pas quand on change son sens d'agrandissement.
+    local appliedAnchor
+
     --- Repose le panneau à la position que l'appelant a rangée.
     ---
     --- **Le décalage d'un ancrage s'exprime dans l'échelle du cadre ancré**, pas
@@ -127,6 +182,10 @@ function W.Panel(opts)
     --- à la position rangée. On range donc le zéro, une fois, et tout ce qui lit
     --- la position la voit centrée sans avoir à connaître le réglage.
     function panel:ApplyPosition()
+        local point = anchor()
+        if appliedAnchor and appliedAnchor ~= point then savePosition(point) end
+        appliedAnchor = point
+
         local x, y = 0, 0
         if opts.getPos then x, y = opts.getPos() end
 
@@ -138,28 +197,7 @@ function W.Panel(opts)
         local factor = UIParent:GetEffectiveScale() / self:GetEffectiveScale()
 
         self:ClearAllPoints()
-        self:SetPoint("CENTER", UIParent, "CENTER", (x or 0) * factor, (y or 0) * factor)
-    end
-
-    --- Relève la position courante et la rend à l'appelant, en décalage de
-    --- centre à centre et en pixels d'écran.
-    local function savePosition()
-        if not opts.setPos then return end
-
-        local x, y   = panel:GetCenter()
-        local px, py = UIParent:GetCenter()
-        if not (x and px) then return end
-
-        -- Les deux centres sont exprimés chacun dans l'échelle de son cadre : on
-        -- les ramène en pixels d'écran avant de les soustraire, sinon un panneau
-        -- mis à l'échelle par le joueur se décale de la différence.
-        local scale  = panel:GetEffectiveScale()
-        local parent = UIParent:GetEffectiveScale()
-
-        -- Centré, le glisser ne retient que la hauteur : le panneau a suivi le
-        -- curseur de côté le temps du geste, il revient sur l'axe au lâcher.
-        local dx = centered() and 0 or (x * scale - px * parent) / parent
-        opts.setPos(dx, (y * scale - py * parent) / parent)
+        self:SetPoint(point, UIParent, "CENTER", (x or 0) * factor, (y or 0) * factor)
     end
 
     panel:EnableMouse(true)
@@ -174,7 +212,7 @@ function W.Panel(opts)
     end)
     panel:SetScript("OnDragStop", function(self)
         self:StopMovingOrSizing()
-        savePosition()
+        savePosition(anchor())
         -- Reposé tout de suite en centre à centre : `StartMoving` laisse le
         -- cadre ancré par le coin que le moteur a choisi, et un ancrage par un
         -- coin ferait glisser le panneau dès que son contenu change de taille.

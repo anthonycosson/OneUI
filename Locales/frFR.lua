@@ -1354,20 +1354,53 @@ OUI:RegisterLocale("frFR", {
 
     -- Module BuffTracker (Forever)
     ["Buff tracker"]                   = "Suivi des buffs",
-    ["Buff tracker frame"]             = "Cadre",
+    ["Buff tracker frame"]             = "Buffs perso",
     ["Buff tracker categories"]        = "Catégories à suivre",
-    ["Buff tracker show"]              = "Prévenir quand une catégorie de buff manque",
+    ["Buff tracker show"]              = "Prévenir quand un buff perso manque",
     ["Buff tracker show tip"] =
-        "Affiche une icône par catégorie suivie sans buff actif, et plus rien quand toutes "
-        .. "sont couvertes. Cochez plus bas les catégories à suivre.",
+        "Ce que vous pouvez vous mettre seul : une icône par buff de classe que vous savez "
+        .. "lancer, et une par catégorie suivie sans buff actif. Plus rien quand tout est "
+        .. "couvert. Cochez plus bas les catégories à suivre.",
+    ["Buff tracker group"]             = "Buffs de groupe / raid",
+    ["Buff tracker group show"]        = "Prévenir quand un buff de groupe manque",
+    ["Buff tracker group show tip"] =
+        "Un second cadre, en groupe et en raid seulement : une icône par buff qu'une classe "
+        .. "du groupe peut vous donner et que vous n'avez pas. Il faut autant de bénédictions "
+        .. "et d'auras différentes que de paladins.",
+    ["Buff tracker group preview tip"] = "Montre tous les buffs de groupe, pour placer le cadre.",
+    ["Buff tracker group tip"]         = "Un joueur du groupe peut vous le donner.",
+    ["Buff tracker group count tip"] =
+        "Un paladin du groupe peut vous la donner. Le chiffre dit combien il en manque.",
+    ["Buff tracker blessings"]         = "Bénédictions de paladin",
+    ["Buff tracker auras"]             = "Auras de paladin",
+    ["Buff tracker blessing"]          = "Bénédiction",
+    ["Buff tracker aura"]              = "Aura",
+    ["Buff tracker aspect"]            = "Aspect",
+    ["Buff tracker armor"]             = "Armure",
+    ["Frame scale"]                    = "Taille",
+    ["Frame scale tip"] =
+        "La taille du cadre, 1 étant la taille normale. La poignée dans son coin la change "
+        .. "aussi ; ce chiffre permet de donner exactement la même taille à deux cadres.",
+    ["Icons per row"]                  = "Icônes par ligne",
+    ["Icons per row tip"] =
+        "Au-delà, les icônes passent à la ligne suivante. Zéro les garde toutes sur une ligne.",
+    ["Growth direction"]               = "Sens d'agrandissement",
+    ["Growth direction tip"] =
+        "Le coin du cadre qui reste fixe quand des icônes s'ajoutent, et le sens dans lequel "
+        .. "elles s'ajoutent.",
+    ["Growth CENTER"]                  = "Depuis le centre",
+    ["Growth RIGHT_DOWN"]              = "Vers la droite, puis vers le bas",
+    ["Growth LEFT_DOWN"]               = "Vers la gauche, puis vers le bas",
+    ["Growth RIGHT_UP"]                = "Vers la droite, puis vers le haut",
+    ["Growth LEFT_UP"]                 = "Vers la gauche, puis vers le haut",
     ["Buff tracker preview"]           = "Aperçu",
     ["Buff tracker preview tip"]       = "Montre toutes les catégories suivies, pour placer le cadre.",
     ["Buff tracker lock"]              = "Verrouiller la position",
     ["Buff tracker lock tip"]          = "Le cadre ne se déplace plus à la souris.",
     ["Buff tracker missing tip"]       = "Aucun buff actif dans cette catégorie.",
     ["Buff tracker click tip"]         = "Aucun buff actif dans cette catégorie. Cliquez pour l'appliquer.",
-    ["Buff tracker buff"]              = "Buff de classe",
-    ["Buff tracker camp"]              = "Buff de camp (ou son équivalent de classe)",
+    ["Buff tracker buff"]              = "Buffs de classe",
+    ["Buff tracker camp"]              = "Buff de camp",
     ["Buff tracker weapon"]            = "Enchantement d'arme (huile d'enchanteur, pierre de forgeron)",
     ["Buff tracker food"]              = "Nourriture",
     ["Buff tracker flask"]             = "Flacons",

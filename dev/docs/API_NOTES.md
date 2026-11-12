@@ -5527,17 +5527,29 @@ l'identifiant qui sépare huile, pierre, arme de chaman et poison. Identifiants
 relevés dans les données publiées par ForeverEnhancedCooldownManager et
 Readycheck, pas vérifiés en jeu.
 
-**Chaque objet de camp a son aura** en plus du récapitulatif `1229741`. La
-catégorie Buffs lit l'aura de l'objet ou le buff de classe dont il est la
-variante, selon les métiers du personnage (rang 20 : le client ne publie pas si
-le patron est appris). `24907` et `24932` (Sélénien, Chef de meute) et les auras
-de Force de la terre sont à confirmer en jeu.
+**Chaque objet de camp a son aura** en plus du récapitulatif `1229741`. Depuis
+3.8, n'importe laquelle valide le buff de camp : l'équivalent de classe et les
+métiers ne comptent plus.
 
 Objets de camp (identifiants relevés dans les données publiques de Skillwright et
 B.O.L.T, pas vérifiés en jeu) : `279968` trousse, `279967` bocal, `279956` puits
 de mana, `279944` meule, `279960` magnétite, `279976` luth, `279962` bougie,
-`279979` chaise, `279972`/`279973` bannière. Un objet dans les sacs prime sur le
-rang de métier pour décider ce qui valide la catégorie.
+`279979` chaise, `279972`/`279973` bannière. Ils servent à l'icône et au clic.
+
+Buff de classe équivalent à chaque objet : relevé dans les données publiques de
+KroolWorldForever (`Features/Camp/Data.lua`). Un objet des sacs est couvert par
+n'importe quel rang de son équivalent de classe, sans comparer les valeurs.
+
+**Buffs de classe et de groupe** (3.8). Les rangs des bénédictions (dont
+Lumière `19977`-`19979`, Sanctuaire `20911`-`20914`, versions supérieures
+`25890`, `25895`, `25898`, `25899`), des auras de paladin, d'Épines, de Feu
+intérieur, de Protection contre l'ombre et du Cri de guerre sont ceux de Classic
+Era, pas vérifiés sur *Forever*. `1299445`-`1299447` (aspects) et `1299346`,
+`1299348` (Aura de précision) viennent des anciennes listes du module, classés
+par voisinage. Un buff de groupe de talent (Esprit divin, Aura de précision)
+n'est attendu qu'une fois vu sur un membre du groupe : le client ne publie pas
+les talents des autres. Dans un raid, `partyN` désigne son propre sous-groupe,
+ce qui limite les cris et les auras à lui.
 
 Plats « Bien nourri » : identifiants relevés dans les données publiques de JustAC
 (`Data/ForeverConsumables.lua`), triés par points de vie rendus, pas vérifiés en

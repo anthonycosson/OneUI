@@ -1326,20 +1326,53 @@ OUI:RegisterLocale("enUS", {
 
     -- Module BuffTracker (Forever)
     ["Buff tracker"]                   = "Buff tracker",
-    ["Buff tracker frame"]             = "Frame",
+    ["Buff tracker frame"]             = "Personal buffs",
     ["Buff tracker categories"]        = "Categories to track",
-    ["Buff tracker show"]              = "Warn when a buff category is missing",
+    ["Buff tracker show"]              = "Warn when a personal buff is missing",
     ["Buff tracker show tip"] =
-        "Shows one icon per tracked category with no active buff, and nothing once all "
-        .. "are covered. Tick the categories to track below.",
+        "What you can put on yourself: one icon per class buff you can cast, and one per "
+        .. "tracked category with no active buff. Nothing once all is covered. Tick the "
+        .. "categories to track below.",
+    ["Buff tracker group"]             = "Group / raid buffs",
+    ["Buff tracker group show"]        = "Warn when a group buff is missing",
+    ["Buff tracker group show tip"] =
+        "A second frame, in a group or raid only: one icon per buff a class in your group "
+        .. "can give you and you lack. You need as many different blessings and auras as "
+        .. "there are Paladins.",
+    ["Buff tracker group preview tip"] = "Shows every group buff, to place the frame.",
+    ["Buff tracker group tip"]         = "A player in your group can give it to you.",
+    ["Buff tracker group count tip"] =
+        "A Paladin in your group can give it to you. The number says how many are missing.",
+    ["Buff tracker blessings"]         = "Paladin blessings",
+    ["Buff tracker auras"]             = "Paladin auras",
+    ["Buff tracker blessing"]          = "Blessing",
+    ["Buff tracker aura"]              = "Aura",
+    ["Buff tracker aspect"]            = "Aspect",
+    ["Buff tracker armor"]             = "Armor",
+    ["Frame scale"]                    = "Size",
+    ["Frame scale tip"] =
+        "The frame's size, 1 being its normal size. The grip in its corner changes it too; "
+        .. "this number lets you give two frames exactly the same size.",
+    ["Icons per row"]                  = "Icons per row",
+    ["Icons per row tip"] =
+        "Past this, icons move on to the next row. Zero keeps them all on one row.",
+    ["Growth direction"]               = "Growth direction",
+    ["Growth direction tip"] =
+        "The corner of the frame that stays put when icons are added, and the way they are "
+        .. "added.",
+    ["Growth CENTER"]                  = "From the center",
+    ["Growth RIGHT_DOWN"]              = "Rightward, then down",
+    ["Growth LEFT_DOWN"]               = "Leftward, then down",
+    ["Growth RIGHT_UP"]                = "Rightward, then up",
+    ["Growth LEFT_UP"]                 = "Leftward, then up",
     ["Buff tracker preview"]           = "Preview",
     ["Buff tracker preview tip"]       = "Shows every tracked category, to place the frame.",
     ["Buff tracker lock"]              = "Lock in place",
     ["Buff tracker lock tip"]          = "Stops the frame from being dragged with the mouse.",
     ["Buff tracker missing tip"]       = "No active buff in this category.",
     ["Buff tracker click tip"]         = "No active buff in this category. Click to apply it.",
-    ["Buff tracker buff"]              = "Class buff",
-    ["Buff tracker camp"]              = "Camp buff (or its class equivalent)",
+    ["Buff tracker buff"]              = "Class buffs",
+    ["Buff tracker camp"]              = "Camp buff",
     ["Buff tracker weapon"]            = "Weapon enchant (enchanter oil, blacksmith stone)",
     ["Buff tracker food"]              = "Food",
     ["Buff tracker flask"]             = "Flasks",

@@ -18,7 +18,8 @@
 --  fois pour toutes — les frames ne se détruisent pas (règle 7) —, mais seules
 --  celles qui ont quelque chose à montrer sont posées, et le cadre se remesure
 --  sur elles. Une case cachée ne laisse donc pas de trou : deux icônes, une
---  icône, ou pas de cadre du tout.
+--  icône, ou pas de cadre du tout. L'appelant peut demander un nombre
+--  d'icônes par ligne et le sens dans lequel le cadre grandit.
 --
 --  Le widget ne sait pas ce qu'il montre : chaque case lui donne une fonction
 --  qui dit s'il y a lieu de paraître, une qui rend l'image, et ce que le clic
@@ -38,6 +39,7 @@ local W    = OUI.Widgets
 ---@field onClick? fun()              ce que le clic déclenche
 ---@field reserved? fun(): boolean  garde-t-elle sa place dans la rangée ? (`fixedSlots`)
 ---@field action? fun(): table|nil   attributs de l'action sécurisée du clic (`type`, `spell`, `unit`, `macrotext`)
+---@field count? fun(): number|nil   chiffre posé dans le coin de l'icône, montré à partir de 2
 
 ---@class OUI.IconBadgeOpts
 ---@field slots OUI.IconBadgeSlot[]
@@ -48,6 +50,21 @@ local W    = OUI.Widgets
 ---@field fixedSlots? boolean        chaque case garde sa place, même quand une voisine est cachée
 ---@field getScale? fun(): number|nil
 ---@field setScale? fun(scale: number)
+---@field getLayout? fun(): number|nil, string|nil  icônes par ligne (0 = toutes) et sens (`GROWTH`)
+
+--- Sens d'agrandissement -> point du cadre qui reste fixe, coin d'où partent
+--- les icônes, et sens des colonnes et des lignes. « Depuis le centre » garde
+--- le cadre centré sur sa position, comme avant que le sens se choisisse.
+local GROWTH = {
+    CENTER     = { anchor = "CENTER",      corner = "TOPLEFT",     sx =  1, sy = -1 },
+    RIGHT_DOWN = { anchor = "TOPLEFT",     corner = "TOPLEFT",     sx =  1, sy = -1 },
+    LEFT_DOWN  = { anchor = "TOPRIGHT",    corner = "TOPRIGHT",    sx = -1, sy = -1 },
+    RIGHT_UP   = { anchor = "BOTTOMLEFT",  corner = "BOTTOMLEFT",  sx =  1, sy =  1 },
+    LEFT_UP    = { anchor = "BOTTOMRIGHT", corner = "BOTTOMRIGHT", sx = -1, sy =  1 },
+}
+
+--- Les sens proposés, dans l'ordre d'une liste de réglages.
+W.ICON_BADGE_GROWTH = { "CENTER", "RIGHT_DOWN", "LEFT_DOWN", "RIGHT_UP", "LEFT_UP" }
 
 --- Pose une image sur une texture. Un nom d'atlas ou un identifiant de
 --- fichier : le premier est une chaîne, le second un nombre, et c'est tout ce
@@ -100,6 +117,14 @@ function W.IconBadge(opts)
         return secure and InCombatLockdown()
     end
 
+    --- Icônes par ligne (0 = toutes sur une) et sens d'agrandissement.
+    ---@return number perRow, table growth
+    local function layout()
+        local perRow, growth
+        if opts.getLayout then perRow, growth = opts.getLayout() end
+        return math.max(math.floor(tonumber(perRow) or 0), 0), GROWTH[growth] or GROWTH.CENTER
+    end
+
     -- Taille provisoire : le cadre se mesure sur les cases qu'il montre, à
     -- chaque passage.
     local panel = W.Panel({
@@ -111,6 +136,10 @@ function W.IconBadge(opts)
             return frozen() or (opts.isLocked ~= nil and opts.isLocked() == true)
         end,
         isCentered = opts.isCentered,
+        getAnchor  = function()
+            local _, growth = layout()
+            return growth.anchor
+        end,
 
         -- Le cadre ne se retaille pas, il change d'**échelle** : ce que le
         -- joueur règle est de quelle taille il voit la rangée, et les icônes
@@ -160,6 +189,13 @@ function W.IconBadge(opts)
         -- curseur, et rien n'annoncerait que ça se clique.
         button:SetHighlightTexture(T.TEXTURE.ICON_HIGHLIGHT, "ADD")
 
+        -- Le chiffre dit combien il en manque, quand une icône en vaut plusieurs.
+        if slot.count then
+            local count = button:CreateFontString(nil, "OVERLAY", T.FONT.SLOT_BADGE)
+            count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -T.SIZE.BADGE_GAP, T.SIZE.BADGE_GAP)
+            button.count = count
+        end
+
         if slot.onClick then
             button:SetScript("OnClick", function() slot.onClick() end)
         end
@@ -176,54 +212,60 @@ function W.IconBadge(opts)
         buttons[index] = button
     end
 
-    --- Repose les cases visibles côte à côte et remesure le cadre.
+    --- Place de chaque case dans la grille (à partir de 0). Une seule table,
+    --- réemployée (règle 7).
+    local places = {}
+
+    --- Pose les cases visibles sur la grille et remesure le cadre.
+    ---
+    --- Avec `fixedSlots`, la place d'une case ne dépend que des cases
+    --- réservées, jamais de celles qu'on montre : une case cachée laisse son
+    --- trou, et rien ne glisse quand elle revient. Sans, les cases visibles se
+    --- suivent.
+    ---
+    --- **Le cadre est la grille, au pixel près** : aucune marge, ni pour
+    --- respirer ni pour loger la poignée. Il porte des icônes, qui sont déjà des
+    --- carrés finis, et l'habillage les cerne de lui-même en débordant vers
+    --- l'extérieur (voir `W.PanelChrome`).
     ---@param visible table  indices des cases à montrer, dans l'ordre
     local function reflow(visible)
-        local count = #visible
-        local width = count * T.SIZE.BADGE_ICON + (count - 1) * T.SIZE.BADGE_GAP
+        wipe(places)
+        local count = 0
 
-        -- **Le cadre est la rangée, au pixel près** : aucune marge, ni pour
-        -- respirer ni pour loger la poignée. Ce panneau ne porte pas de texte
-        -- qu'un bord viendrait toucher — il porte des icônes, qui sont déjà
-        -- des carrés finis, et l'habillage les cerne de lui-même en débordant
-        -- vers l'extérieur (voir `W.PanelChrome`).
-        panel:SetWidth(width)
-        panel:SetHeight(T.SIZE.BADGE_ICON)
-
-        -- Posées à partir du bord gauche de la rangée, qui est celui du cadre.
-        local x = -width / 2
-
-        for i = 1, count do
-            local button = buttons[visible[i]]
-            button:ClearAllPoints()
-            button:SetPoint("LEFT", panel, "CENTER", x, 0)
-            button:Show()
-            x = x + T.SIZE.BADGE_ICON + T.SIZE.BADGE_GAP
+        if opts.fixedSlots then
+            for index = 1, #slots do
+                if slots[index].reserved == nil or slots[index].reserved() then
+                    places[index] = count
+                    count = count + 1
+                end
+            end
         end
-    end
 
-    --- Repose les cases à leur place attitrée : l'ordre et l'emplacement ne
-    --- dépendent que des cases réservées, jamais de celles qu'on montre. Une
-    --- case cachée laisse son trou, et rien ne glisse quand elle revient.
-    ---@param visible table  indices des cases à montrer
-    local function reflowFixed(visible)
-        local step, count, places = T.SIZE.BADGE_ICON + T.SIZE.BADGE_GAP, 0, {}
-
-        for index = 1, #slots do
-            if slots[index].reserved == nil or slots[index].reserved() then
-                places[index] = count
+        -- Une case visible sans place réservée prend la suivante.
+        for i = 1, #visible do
+            if not places[visible[i]] then
+                places[visible[i]] = count
                 count = count + 1
             end
         end
 
-        local width = count * T.SIZE.BADGE_ICON + (count - 1) * T.SIZE.BADGE_GAP
-        panel:SetWidth(width)
-        panel:SetHeight(T.SIZE.BADGE_ICON)
+        local perRow, growth = layout()
+        local columns = (perRow > 0 and perRow < count) and perRow or count
+        local rows    = math.ceil(count / columns)
+        local icon, gap = T.SIZE.BADGE_ICON, T.SIZE.BADGE_GAP
+        local step    = icon + gap
 
+        panel:SetSize(columns * icon + (columns - 1) * gap, rows * icon + (rows - 1) * gap)
+
+        -- Posées depuis le coin d'où le cadre grandit, qui est aussi celui qui
+        -- reste fixe à l'écran (voir `W.Panel`).
         for i = 1, #visible do
+            local place  = places[visible[i]]
             local button = buttons[visible[i]]
             button:ClearAllPoints()
-            button:SetPoint("LEFT", panel, "CENTER", -width / 2 + places[visible[i]] * step, 0)
+            button:SetPoint(growth.corner, panel, growth.corner,
+                growth.sx * (place % columns) * step,
+                growth.sy * math.floor(place / columns) * step)
             button:Show()
         end
     end
@@ -245,6 +287,10 @@ function W.IconBadge(opts)
 
             if show and paint(button.image, slot.icon and slot.icon()) then
                 if button.secureAction then arm(button, slot.action()) end
+                if button.count then
+                    local n = slot.count()
+                    button.count:SetText(n and n > 1 and tostring(n) or "")
+                end
                 showing[#showing + 1] = index
             else
                 button:Hide()
@@ -272,7 +318,9 @@ function W.IconBadge(opts)
             return
         end
 
-        if opts.fixedSlots then reflowFixed(visible) else reflow(visible) end
+        reflow(visible)
+        -- Le sens peut avoir changé, et avec lui le point fixe du cadre.
+        self:ApplyPosition()
         self:Show()
     end
 

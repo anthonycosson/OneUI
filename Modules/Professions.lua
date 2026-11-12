@@ -817,6 +817,26 @@ local function requires(key)
     end
 end
 
+--- La taille d'un cadre, en chiffres : la même que sa poignée.
+---@param key string
+---@param needs string
+---@param min number
+---@param max number
+---@return table
+local function scaleRow(key, needs, min, max)
+    return {
+        type     = "slider",
+        key      = key,
+        text     = L["Frame scale"],
+        tooltip  = L["Frame scale tip"],
+        min      = min,
+        max      = max,
+        step     = T.SIZE.FRAME_SCALE_STEP,
+        decimals = 2,
+        disabled = requires(needs),
+    }
+end
+
 OUI:RegisterModule(MODULE, {
     title    = L["Professions"],
     category = "QoL",
@@ -893,6 +913,7 @@ OUI:RegisterModule(MODULE, {
             tooltip  = L["Center on screen tip"],
             disabled = requires("showBadge"),
         },
+        scaleRow("badgeScale", "showBadge", T.SIZE.BADGE_SCALE_MIN, T.SIZE.BADGE_SCALE_MAX),
         {
             type     = "toggle",
             key      = "hideInBattleground",
@@ -923,6 +944,7 @@ OUI:RegisterModule(MODULE, {
             tooltip  = L["Center on screen tip"],
             disabled = requires("showLevels"),
         },
+        scaleRow("levelsScale", "showLevels", T.SIZE.TEXT_BLOCK_SCALE_MIN, T.SIZE.TEXT_BLOCK_SCALE_MAX),
 
         { type = "header", text = L["Crafting"] },
         {
@@ -954,6 +976,7 @@ OUI:RegisterModule(MODULE, {
             tooltip  = L["Center on screen tip"],
             disabled = requires("showCraftBar"),
         },
+        scaleRow("craftBarScale", "showCraftBar", T.SIZE.TIMER_SCALE_MIN, T.SIZE.TIMER_SCALE_MAX),
 
         { type = "header", text = L["Fishing"] },
         {

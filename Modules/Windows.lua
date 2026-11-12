@@ -16,10 +16,14 @@
 
 local _, ns = ...
 local OUI = ns.OUI
+local T    = OUI.Theme
 local W    = OUI.Widgets
 local L    = ns.L
 
 local MODULE = "Windows"
+
+--- Le nom sous lequel le moteur range la fenêtre de jet (voir `UI/Move.lua`).
+local LOOT_FRAME = "LootRoll"
 
 --- Grise une ligne tant que l'interrupteur qui la commande est éteint.
 ---@param key string
@@ -227,6 +231,29 @@ OUI:RegisterModule(MODULE, {
             key      = "lootCentered",
             text     = L["Center on screen"],
             tooltip  = L["Center on screen tip"],
+            disabled = requires("lootMove"),
+        },
+        {
+            -- Rangée avec les échelles des autres fenêtres : la poignée de
+            -- l'aperçu écrit au même endroit (voir `UI/Move.lua`).
+            type     = "slider",
+            text     = L["Frame scale"],
+            tooltip  = L["Frame scale tip"],
+            min      = T.SIZE.LOOT_SCALE_MIN,
+            max      = T.SIZE.LOOT_SCALE_MAX,
+            step     = T.SIZE.FRAME_SCALE_STEP,
+            decimals = 2,
+            get      = function()
+                local mod = OUI.Modules:Get(MODULE)
+                return mod and scales(mod)[LOOT_FRAME] or 1
+            end,
+            set      = function(value)
+                local mod = OUI.Modules:Get(MODULE)
+                local stored = mod and mod:Get("scales")
+                if not stored then return end
+                stored[LOOT_FRAME] = value
+                OUI.Move:RefreshLoot()
+            end,
             disabled = requires("lootMove"),
         },
 
