@@ -113,7 +113,7 @@
     "COMBATLOG_OBJECT_TYPE_PLAYER", "COMBATLOG_OBJECT_AFFILIATION_MINE",
     "COMBATLOG_OBJECT_AFFILIATION_PARTY", "COMBATLOG_OBJECT_AFFILIATION_RAID",
 
-    "C_UnitAuras", "GetSpellCharges", "GetWeaponEnchantInfo",
+    "C_UnitAuras", "C_Secrets", "GetSpellCharges", "GetWeaponEnchantInfo",
 
     "C_SkillInfo", "C_TradeSkillUI", "GetProfessions", "GetProfessionInfo",
     "LOCALIZED_CLASS_NAMES_MALE", "LOCALIZED_CLASS_NAMES_FEMALE",

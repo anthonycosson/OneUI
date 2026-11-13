@@ -256,7 +256,7 @@ read_globals = {
     "LoggingCombat",
 
     -- Auras, charges de sort et enchantements d'arme
-    "C_DurationUtil", "C_UnitAuras", "GetSpellCharges", "GetWeaponEnchantInfo",
+    "C_DurationUtil", "C_UnitAuras", "C_Secrets", "GetSpellCharges", "GetWeaponEnchantInfo",
 
     -- Suivi des buffs (Forever) : métiers, noms de classes, compétences
     "C_SkillInfo", "C_TradeSkillUI", "GetProfessions", "GetProfessionInfo",

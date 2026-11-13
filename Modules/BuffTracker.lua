@@ -430,19 +430,44 @@ local function readWeapons(classEnchants)
     return oilOrStone, classCount
 end
 
+--- Le client accepte-t-il qu'on lise les buffs en ce moment ? Il les rend
+--- secrets par moments (en combat notamment), et `GetBuffDataByIndex` lève
+--- alors une erreur au lieu de répondre (relevé en jeu sur *Forever*). On
+--- demande d'abord ; on ne lit pas.
+---@return boolean
+local function aurasReadable()
+    if not (C_UnitAuras and C_UnitAuras.GetBuffDataByIndex) then return false end
+    if C_Secrets and C_Secrets.ShouldAurasBeSecret and C_Secrets.ShouldAurasBeSecret() then
+        return false
+    end
+    return true
+end
+
+--- Un buff d'une unité, ou `nil`. Le second retour dit si la lecture a été
+--- refusée : un refus n'est pas « plus de buffs », il interrompt la lecture.
+---@param unit string
+---@param index number
+---@return table|nil aura, boolean refused
+local function buffAt(unit, index)
+    local ok, aura = pcall(C_UnitAuras.GetBuffDataByIndex, unit, index)
+    if not ok then return nil, true end
+    return aura, false
+end
+
 --- Relit les buffs du joueur. Une valeur secrète interrompt la lecture sans
 --- rien publier : conclure sur une liste incomplète ferait clignoter les
 --- icônes.
 ---@return boolean read
 local function scanPlayer()
-    if not (C_UnitAuras and C_UnitAuras.GetBuffDataByIndex) then return false end
+    if not aurasReadable() then return false end
 
     wipe(found)
     wipe(active)
     local wellFed = C_Spell and C_Spell.GetSpellName and C_Spell.GetSpellName(WELL_FED)
 
     local index = 1
-    local aura  = C_UnitAuras.GetBuffDataByIndex("player", index)
+    local aura, refused = buffAt("player", index)
+    if refused then return false end
     while aura do
         local spellID, name = aura.spellId, aura.name
         if U.IsSecret(spellID) or U.IsSecret(name) then return false end
@@ -454,7 +479,8 @@ local function scanPlayer()
         if inItems("elixir", spellID, name) then found.elixir = true end
 
         index = index + 1
-        aura  = C_UnitAuras.GetBuffDataByIndex("player", index)
+        aura, refused = buffAt("player", index)
+        if refused then return false end
     end
 
     local class  = UnitClassBase("player")
@@ -496,14 +522,16 @@ end
 ---@return boolean read
 local function scanTalents(unit, talentSpells)
     local index = 1
-    local aura  = C_UnitAuras.GetBuffDataByIndex(unit, index)
+    local aura, refused = buffAt(unit, index)
+    if refused then return false end
     while aura do
         local spellID = aura.spellId
         if U.IsSecret(spellID) then return false end
         if talentSpells[spellID] then seen[talentSpells[spellID]] = true end
 
         index = index + 1
-        aura  = C_UnitAuras.GetBuffDataByIndex(unit, index)
+        aura, refused = buffAt(unit, index)
+        if refused then return false end
     end
     return true
 end

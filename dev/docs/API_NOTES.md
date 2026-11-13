@@ -5536,6 +5536,13 @@ B.O.L.T, pas vérifiés en jeu) : `279968` trousse, `279967` bocal, `279956` pui
 de mana, `279944` meule, `279960` magnétite, `279976` luth, `279962` bougie,
 `279979` chaise, `279972`/`279973` bannière. Ils servent à l'icône et au clic.
 
+**Lire les buffs peut lever une erreur** (relevé en jeu sur *Forever*, 3.8.0) :
+quand le client rend les auras secrètes, `C_UnitAuras.GetBuffDataByIndex` lève
+« Auras cannot be accessed when secret while tainted » au lieu de répondre. La
+documentation du client le dit (`RequiresUnitAuraAccess`,
+`SecretWhenUnitAuraRestricted`). On demande d'abord
+`C_Secrets.ShouldAurasBeSecret()`, et chaque lecture passe sous `pcall`.
+
 Buff de classe équivalent à chaque objet : relevé dans les données publiques de
 KroolWorldForever (`Features/Camp/Data.lua`). Un objet des sacs est couvert par
 n'importe quel rang de son équivalent de classe, sans comparer les valeurs.
