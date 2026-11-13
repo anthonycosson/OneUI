@@ -1,6 +1,6 @@
-## 3.8.1 — 2026-11-13
+## 3.8.2 — 2026-11-13
 
 ### Fixed
-- Buff tracker: no more Lua error when the game hides auras (in combat on
-  *Forever*). The frames keep what they showed and update after combat.
+- Raid manager: no more blocked action when a setting of the tool bar changes in
+  combat, for example by toggling Edit Mode. It applies after combat.
 
