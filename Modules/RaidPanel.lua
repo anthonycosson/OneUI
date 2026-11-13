@@ -115,6 +115,12 @@ end
 
 ---@param mod table
 local function applyMarkerBar(mod)
+    -- Les cases de marqueurs sont protégées, et le panneau avec elles : en
+    -- combat, le client refuse de le retailler, de le déplacer ou de le
+    -- montrer. Un réglage changé en combat (le mode édition, la taille…)
+    -- attend donc la sortie, qui rappelle cette fonction (voir `OnEnable`).
+    if InCombatLockdown() then return end
+
     if not mod:Get("worldMarkers") then
         if markerBar then markerBar:SetShownOutOfCombat(false) end
         return

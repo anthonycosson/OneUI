@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+- Raid manager: no more blocked action when a setting of the tool bar changes in
+  combat, for example by toggling Edit Mode. It applies after combat.
+
 ## 3.8.1 — 2026-11-13
 
 ### Fixed
