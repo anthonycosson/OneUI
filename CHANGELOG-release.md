@@ -1,6 +1,8 @@
-## 3.8.2 — 2026-11-13
+## 3.9.0 — 2026-11-16
 
-### Fixed
-- Raid manager: no more blocked action when a setting of the tool bar changes in
-  combat, for example by toggling Edit Mode. It applies after combat.
+### Added
+- New **Classes** category, visible to every class, with a **Rogue** page.
+- Rogue: while hovering a locked chest, right-click casts **Pick Lock**, then
+  click the chest to pick it. An icon also shows while a locked box is in your
+  bags: one click picks it.
 
