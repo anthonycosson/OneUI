@@ -1359,16 +1359,10 @@ OUI:RegisterLocale("enUS", {
     ["Rogue"]                          = "Rogue",
     ["Lockpicking"]                    = "Lockpicking",
     ["Rogue only"]                     = "Only works on a Rogue who knows Pick Lock.",
-    ["Pick lock click"]                = "Right-click a locked chest to cast Pick Lock",
-    ["Pick lock click tip"] =
-        "While hovering a locked chest, right-click casts Pick Lock; then click the chest to "
-        .. "pick it. The game does not let an addon target the chest for you, hence the second "
-        .. "click. Elsewhere, and in combat, right-click stays yours.",
     ["Lockbox show"]                   = "Icon to pick a lockbox in your bags",
     ["Lockbox show tip"] =
         "Shows an icon while a locked box is in your bags. A click casts Pick Lock and applies "
         .. "it to the box.",
-    ["Lockbox preview tip"]            = "Shows the icon, to place the frame.",
     ["Lockbox title"]                  = "Locked box",
     ["Lockbox tip"]                    = "Click to pick it.",
     ["Icons per row"]                  = "Icons per row",

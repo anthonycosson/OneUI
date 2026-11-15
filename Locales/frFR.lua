@@ -1387,16 +1387,10 @@ OUI:RegisterLocale("frFR", {
     ["Rogue"]                          = "Voleur",
     ["Lockpicking"]                    = "Crochetage",
     ["Rogue only"]                     = "N'agit que sur un voleur qui connaît Crochetage.",
-    ["Pick lock click"]                = "Clic droit sur un coffre verrouillé pour lancer Crochetage",
-    ["Pick lock click tip"] =
-        "Au survol d'un coffre verrouillé, le clic droit lance Crochetage ; cliquez ensuite "
-        .. "sur le coffre pour le crocheter. Le jeu interdit de viser le coffre à votre place, "
-        .. "d'où ce second clic. Ailleurs, et en combat, le clic droit reste le vôtre.",
     ["Lockbox show"]                   = "Icône pour crocheter un coffret des sacs",
     ["Lockbox show tip"] =
         "Affiche une icône tant qu'un coffret verrouillé est dans vos sacs. Un clic lance "
         .. "Crochetage et l'applique au coffret.",
-    ["Lockbox preview tip"]            = "Montre l'icône, pour placer le cadre.",
     ["Lockbox title"]                  = "Coffret verrouillé",
     ["Lockbox tip"]                    = "Cliquez pour le crocheter.",
     ["Icons per row"]                  = "Icônes par ligne",

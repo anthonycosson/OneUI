@@ -1,29 +1,18 @@
 -- =========================================================================
 --  OneUI — Modules/Rogue.lua
---  Voleur : crocheter sans chercher le sort dans ses barres.
+--  Voleur : crocheter un coffret des sacs sans chercher le sort.
 --
 --  La page est visible pour toutes les classes, comme toute la catégorie
 --  Classes : le profil est partagé, et un réglage de voleur se règle aussi
 --  depuis un autre personnage. Rien n'agit tant que le personnage ne connaît
 --  pas Crochetage.
 --
---  ## Les coffres du monde
---
---  Le client refuse qu'un addon lance un sort sur un objet du monde à la place
---  du joueur : Crochetage se lance, puis se pose d'un clic sur le coffre. Ce
---  que le module retire, c'est d'aller chercher le sort. Au survol d'un coffre
---  verrouillé (une ligne « Verrouillé » dans son infobulle), le clic droit est
---  relié au sort ; le joueur clique ensuite sur le coffre. La liaison tombe
---  quand l'infobulle se cache ou que le sort part, et ne se pose pas en combat.
---
---  ## Les coffrets des sacs
---
 --  Un objet des sacs se vise juste après le lancement du sort, dans la même
 --  macro : une icône apparaît tant qu'un coffret verrouillé est dans les sacs,
---  et un clic le crochète.
+--  et un clic le crochète. Les coffres du monde ont eu leur réglage ; il a été
+--  retiré, le besoin n'y était pas.
 --
---  Réversibilité (règle 6) : la liaison s'efface, le cadre se cache, les hooks
---  deviennent inertes avec le module.
+--  Réversibilité (règle 6) : le cadre se cache, les abonnements tombent.
 -- =========================================================================
 
 local _, ns = ...
@@ -37,10 +26,6 @@ local MODULE = "Rogue"
 
 --- Crochetage. Un seul sort, le même sur les deux clients.
 local PICK_LOCK = 1804
-
---- Nom global du bouton de lancer : une liaison vise un bouton par son nom
---- (règle 3, exception des noms de frames).
-local BUTTON_NAME = "OneUIPickLockCast"
 
 ---@return table|nil
 local function module()
@@ -57,8 +42,7 @@ local function pickLockName()
 end
 
 --- Une infobulle dit-elle « Verrouillé » ? Le texte du client, dans sa
---- langue : la ligne est celle que le jeu écrit lui-même sous un coffre ou un
---- coffret fermé.
+--- langue : la ligne est celle que le jeu écrit lui-même sous un coffret fermé.
 ---@param lines table|nil
 ---@return boolean
 local function saysLocked(lines)
@@ -71,66 +55,6 @@ local function saysLocked(lines)
         end
     end
     return false
-end
-
--- =========================================================================
---  Les coffres du monde
--- =========================================================================
-
----@type table|nil
-local caster
-local armed = false
-
-local function disarm()
-    if not (armed and caster) or InCombatLockdown() then return end
-    SetOverrideBinding(caster, true, "BUTTON2", nil)
-    armed = false
-end
-
---- Une infobulle d'objet du monde vient de s'afficher : si c'est un coffre
---- verrouillé, le clic droit lance Crochetage.
----@param tooltip table
----@param data table
-local function onObjectTooltip(tooltip, data)
-    if tooltip ~= GameTooltip or armed then return end
-
-    local mod = module()
-    if not (mod and mod:IsEnabled() and mod:Get("pickLockClick")) then return end
-    if not caster or InCombatLockdown() or UnitExists("mouseover") then return end
-
-    local spell = pickLockName()
-    if not (spell and saysLocked(data and data.lines)) then return end
-
-    caster:SetAttribute("type", "spell")
-    caster:SetAttribute("spell", spell)
-    SetOverrideBindingClick(caster, true, "BUTTON2", BUTTON_NAME)
-    armed = true
-end
-
-local hooked = false
-
-local function enableWorld()
-    caster = caster or W.SecureCaster(BUTTON_NAME)
-    if not caster or hooked then return end
-    hooked = true
-
-    -- Le sort est parti : le clic droit redevient le sien.
-    caster:HookScript("PostClick", disarm)
-
-    local live = function()
-        local current = module()
-        return current ~= nil and current:IsEnabled()
-    end
-
-    -- Le curseur a quitté le coffre.
-    U.GuardedScript(GameTooltip, "OnHide", disarm, live)
-
-    -- Pas de retrait possible chez le client : l'appel se tait de lui-même
-    -- quand le module est éteint (voir `onObjectTooltip`).
-    if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall
-       and Enum and Enum.TooltipDataType and Enum.TooltipDataType.Object then
-        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Object, onObjectTooltip)
-    end
 end
 
 -- =========================================================================
@@ -191,9 +115,7 @@ local function applyLockbox(mod)
         badge = W.IconBadge({
             slots = {
                 {
-                    shown  = function()
-                        return mod:Get("lockboxPreview") == true or lockbox.bag ~= nil
-                    end,
+                    shown  = function() return lockbox.bag ~= nil end,
                     icon   = function()
                         local item = lockbox.item
                         local icon = item and C_Item and C_Item.GetItemIconByID
@@ -206,8 +128,6 @@ local function applyLockbox(mod)
                     action = lockboxAction,
                 },
             },
-            isLocked   = function() return mod:Get("lockboxLocked") == true end,
-            isCentered = function() return mod:Get("lockboxCentered") == true end,
             getPos     = function() return mod:Get("lockboxX"), mod:Get("lockboxY") end,
             setPos     = function(x, y)
                 mod:Set("lockboxX", x)
@@ -220,7 +140,6 @@ local function applyLockbox(mod)
     end
 
     badge:ApplyScale()
-    badge:ApplyLock()
     badge:ApplyPosition()
     badge:Refresh()
 end
@@ -237,36 +156,21 @@ end)
 --  Déclaration du module
 -- =========================================================================
 
---- Grise une ligne tant que l'interrupteur qui la commande est éteint.
----@param key string
----@return fun(): boolean
-local function requires(key)
-    return function()
-        local mod = module()
-        return not (mod and mod:Get(key))
-    end
-end
-
 OUI:RegisterModule(MODULE, {
     title    = L["Rogue"],
     category = "Classes",
     order    = 10,
-    -- La liaison du clic droit et l'icône cliquable ne s'écrivent pas en
-    -- combat : le core diffère l'allumage et l'extinction.
+    -- L'icône cliquable ne se montre ni ne se cache en combat : le core
+    -- diffère l'allumage et l'extinction.
     secure   = true,
 
     defaults = {
-        pickLockClick   = false,
-
-        showLockbox     = false,
-        lockboxPreview  = false,
-        lockboxLocked   = false,
-        lockboxCentered = false,
-        -- Position et échelle du cadre : réglages qui se changent en le
-        -- faisant glisser, en tirant son coin, ou avec la glissière Taille.
-        lockboxX        = 0,
-        lockboxY        = 0,
-        lockboxScale    = 1,
+        showLockbox  = false,
+        -- Position et échelle de l'icône : elle se fait glisser, et sa taille
+        -- se règle par son coin ou par la glissière.
+        lockboxX     = 0,
+        lockboxY     = 0,
+        lockboxScale = 1,
     },
 
     options = {
@@ -274,38 +178,9 @@ OUI:RegisterModule(MODULE, {
         { type = "alert",  text = L["Rogue only"] },
         {
             type    = "toggle",
-            key     = "pickLockClick",
-            text    = L["Pick lock click"],
-            tooltip = L["Pick lock click tip"],
-        },
-        {
-            type    = "toggle",
             key     = "showLockbox",
             text    = L["Lockbox show"],
             tooltip = L["Lockbox show tip"],
-        },
-        {
-            type     = "toggle",
-            key      = "lockboxPreview",
-            edit     = "preview",
-            text     = L["Buff tracker preview"],
-            tooltip  = L["Lockbox preview tip"],
-            disabled = requires("showLockbox"),
-        },
-        {
-            type     = "toggle",
-            key      = "lockboxLocked",
-            edit     = "lock",
-            text     = L["Buff tracker lock"],
-            tooltip  = L["Buff tracker lock tip"],
-            disabled = requires("showLockbox"),
-        },
-        {
-            type     = "toggle",
-            key      = "lockboxCentered",
-            text     = L["Center on screen"],
-            tooltip  = L["Center on screen tip"],
-            disabled = requires("showLockbox"),
         },
         {
             type     = "slider",
@@ -316,12 +191,14 @@ OUI:RegisterModule(MODULE, {
             max      = T.SIZE.BADGE_SCALE_MAX,
             step     = T.SIZE.FRAME_SCALE_STEP,
             decimals = 2,
-            disabled = requires("showLockbox"),
+            disabled = function()
+                local mod = module()
+                return not (mod and mod:Get("showLockbox"))
+            end,
         },
     },
 
     OnEnable = function(self)
-        enableWorld()
         findLockbox()
         applyLockbox(self)
 
@@ -329,19 +206,14 @@ OUI:RegisterModule(MODULE, {
         self:RegisterEvent("SPELLS_CHANGED", queueLockbox)
         self:RegisterEvent("PLAYER_ENTERING_WORLD", queueLockbox)
         -- Rattrape ce que le combat a gelé.
-        self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-            disarm()
-            queueLockbox()
-        end)
+        self:RegisterEvent("PLAYER_REGEN_ENABLED", queueLockbox)
     end,
 
     OnDisable = function()
-        disarm()
         if badge then badge:Stop() end
     end,
 
     OnSettingChanged = function(self)
-        if not self:Get("pickLockClick") then disarm() end
         applyLockbox(self)
     end,
 })

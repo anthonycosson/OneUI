@@ -45,7 +45,7 @@ local U   = OUI.Util
 local DB = {}
 OUI.DB = DB
 
-local SCHEMA_VERSION   = 22
+local SCHEMA_VERSION   = 23
 local DEFAULT_PROFILE  = "Default"
 
 --- moduleName -> table de défauts (référence, pas une copie)
@@ -817,6 +817,21 @@ function DB:RunMigrations()
 
         if OneUIDB.moduleData then OneUIDB.moduleData.Timers = nil end
         from = 22
+    end
+
+    -- Palier 23 — la page Voleur ne garde que l'icône des coffrets : le clic
+    -- droit sur les coffres du monde, l'aperçu, le verrou et le centrage de
+    -- l'icône n'ont plus de lecteur.
+    if from < 23 then
+        local GONE = { "pickLockClick", "lockboxPreview", "lockboxLocked", "lockboxCentered" }
+
+        for _, profile in pairs(OneUIDB.profiles) do
+            local rogue = profile.modules and profile.modules.Rogue
+            if rogue then
+                for i = 1, #GONE do rogue[GONE[i]] = nil end
+            end
+        end
+        from = 23
     end
 
     OneUIDB.schema = math.max(from, SCHEMA_VERSION)
