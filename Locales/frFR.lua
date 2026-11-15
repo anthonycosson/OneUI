@@ -13,6 +13,7 @@ OUI:RegisterLocale("frFR", {
     ["Interface"]               = true,
     ["Quality of life"]         = "Qualité de vie",
     ["Tools"]                   = "Outils",
+    ["Classes"]                 = true,
     ["Content scale"]           = "Vue compacte",
     ["Content scale tip"] =
         "Rapetisse tout ce qui est dans la fenêtre sans toucher à la fenêtre "
@@ -1381,6 +1382,23 @@ OUI:RegisterLocale("frFR", {
     ["Frame scale tip"] =
         "La taille du cadre, 1 étant la taille normale. La poignée dans son coin la change "
         .. "aussi ; ce chiffre permet de donner exactement la même taille à deux cadres.",
+
+    -- Module Rogue (catégorie Classes)
+    ["Rogue"]                          = "Voleur",
+    ["Lockpicking"]                    = "Crochetage",
+    ["Rogue only"]                     = "N'agit que sur un voleur qui connaît Crochetage.",
+    ["Pick lock click"]                = "Clic droit sur un coffre verrouillé pour lancer Crochetage",
+    ["Pick lock click tip"] =
+        "Au survol d'un coffre verrouillé, le clic droit lance Crochetage ; cliquez ensuite "
+        .. "sur le coffre pour le crocheter. Le jeu interdit de viser le coffre à votre place, "
+        .. "d'où ce second clic. Ailleurs, et en combat, le clic droit reste le vôtre.",
+    ["Lockbox show"]                   = "Icône pour crocheter un coffret des sacs",
+    ["Lockbox show tip"] =
+        "Affiche une icône tant qu'un coffret verrouillé est dans vos sacs. Un clic lance "
+        .. "Crochetage et l'applique au coffret.",
+    ["Lockbox preview tip"]            = "Montre l'icône, pour placer le cadre.",
+    ["Lockbox title"]                  = "Coffret verrouillé",
+    ["Lockbox tip"]                    = "Cliquez pour le crocheter.",
     ["Icons per row"]                  = "Icônes par ligne",
     ["Icons per row tip"] =
         "Au-delà, les icônes passent à la ligne suivante. Zéro les garde toutes sur une ligne.",

@@ -43,6 +43,10 @@ OUI.CATEGORIES = {
     -- toucherait cinq modules pour changer un intitulé.
     { key = "MythicRaid", label = "Tools" },
 
+    -- Une page par classe. Visible pour tous : un réglage de voleur se règle
+    -- aussi depuis un autre personnage, le profil étant partagé.
+    { key = "Classes",    label = "Classes" },
+
     -- Les réglages **des réglages** : profils, sauvegarde, partage. Rien ici ne
     -- touche au jeu — la catégorie porte donc le nom du geste, pas d'une page :
     -- aucune catégorie ne porte le nom d'un de ses modules (voir plus haut).

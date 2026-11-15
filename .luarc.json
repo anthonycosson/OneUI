@@ -57,7 +57,7 @@
     "FCF_SavePositionAndDimensions", "GENERAL_CHAT_DOCK",
 
     "strfind", "ORANGE_FONT_COLOR",
-    "C_TooltipInfo", "TooltipUtil", "ItemLocation", "AuraUtil",
+    "C_TooltipInfo", "TooltipDataProcessor", "LOCKED", "TooltipUtil", "ItemLocation", "AuraUtil",
     "CharacterFrame", "InspectFrame", "PlayerSpellsFrame",
     "GetInventorySlotInfo", "GetInventoryItemLink",
     "GetItemStats", "GetItemGem", "GetItemIcon", "GetAverageItemLevel",

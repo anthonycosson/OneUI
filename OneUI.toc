@@ -151,6 +151,9 @@ Modules\Chat.lua
 Modules\Professions.lua
 Modules\Sparkles.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
 Modules\BuffTracker.lua [AllowLoadGameType camelot] [ExcludeLoadGameType standard]
+# Voleur charge partout : Crochetage et les coffrets verrouillés existent sur
+# les deux clients.
+Modules\Rogue.lua
 Modules\Bags.lua
 Modules\AuctionHouse.lua [AllowLoadGameType standard]
 Modules\Quest.lua
