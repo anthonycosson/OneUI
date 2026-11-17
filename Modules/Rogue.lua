@@ -65,6 +65,20 @@ end
 --- objet. Réemployé d'une lecture à l'autre (règle 7).
 local lockbox = {}
 
+--- Case ("sac:case") -> objet qu'on vient de crocheter là. Le client ne
+--- prévient pas toujours qu'un coffret s'est déverrouillé, et son infobulle
+--- peut encore dire « Verrouillé » un moment : sans cette mémoire, l'icône
+--- resterait sur le coffret ouvert au lieu de passer au suivant. Une case dont
+--- l'objet a changé (coffret vidé, déplacé) est oubliée.
+local picked = {}
+
+---@param bag number
+---@param slot number
+---@return string
+local function slotKey(bag, slot)
+    return bag .. ":" .. slot
+end
+
 --- Cherche un coffret verrouillé dans les sacs portés. Le même objet, une
 --- fois crocheté, n'est plus verrouillé : on relit son infobulle, et non une
 --- liste d'objets.
@@ -80,7 +94,10 @@ local function findLockbox()
     for bag = 0, NUM_BAG_SLOTS or 4 do
         for slot = 1, (C_Container.GetContainerNumSlots(bag) or 0) do
             local item = C_Container.GetContainerItemID(bag, slot)
-            if item then
+            local key  = slotKey(bag, slot)
+            if picked[key] and picked[key] ~= item then picked[key] = nil end
+
+            if item and not picked[key] then
                 local data = C_TooltipInfo.GetBagItem(bag, slot)
                 if data and saysLocked(data.lines) then
                     lockbox.bag, lockbox.slot, lockbox.item = bag, slot, item
@@ -207,6 +224,14 @@ OUI:RegisterModule(MODULE, {
         self:RegisterEvent("PLAYER_ENTERING_WORLD", queueLockbox)
         -- Rattrape ce que le combat a gelé.
         self:RegisterEvent("PLAYER_REGEN_ENABLED", queueLockbox)
+
+        -- Crochetage réussi : le coffret visé est retenu comme ouvert, et
+        -- l'icône passe au suivant.
+        self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", function(_, unit, _, spellID)
+            if unit ~= "player" or spellID ~= PICK_LOCK or not lockbox.bag then return end
+            picked[slotKey(lockbox.bag, lockbox.slot)] = lockbox.item
+            queueLockbox()
+        end)
     end,
 
     OnDisable = function()

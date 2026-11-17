@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+- Rogue: once a lockbox is picked, the icon moves on to the next locked box,
+  even before the picked one is opened.
+
 ## 3.9.1 — 2026-11-16
 
 ### Removed
