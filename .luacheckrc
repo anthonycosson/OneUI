@@ -188,7 +188,6 @@ read_globals = {
     "UnitHealth", "UnitHealthMax", "AbbreviateNumbers",
     "UnitHealthPercent", "UnitPowerPercent", "CurveConstants",
     "UnitXP", "UnitXPMax", "GetQuestLogRewardXP", "GetMaxPlayerLevel", "IsPlayerAtEffectiveMaxLevel",
-    "BreakUpLargeNumbers",
     "StatusTrackingBarManager", "StatusTrackingBarInfo",
     "UnitThreatSituation", "GetSpecializationRole",
 

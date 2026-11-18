@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Added
+- Quests: a small reset button next to the XP per hour text starts the average over.
+
+### Changed
+- Quests: XP per hour reads in thousands, such as 48.3k instead of 48,250.
+
 ## 3.10.0 — 2026-11-18
 
 ### Added

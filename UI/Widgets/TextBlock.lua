@@ -38,6 +38,13 @@ local W    = OUI.Widgets
 ---@field isCentered? fun(): boolean
 ---@field getScale? fun(): number|nil
 ---@field setScale? fun(scale: number)
+---@field button? OUI.TextBlockButton   un petit bouton à droite de la 1re ligne
+
+---@class OUI.TextBlockButton
+---@field texture string
+---@field title string
+---@field tooltip? string
+---@field onClick fun()
 
 --- Bloc de texte, masqué au départ.
 ---@param opts OUI.TextBlockOpts
@@ -65,6 +72,23 @@ function W.TextBlock(opts)
     if panel.ResizeGrip then
         panel.ResizeGrip:ClearAllPoints()
         panel.ResizeGrip:SetPoint("TOPLEFT", panel, "BOTTOMRIGHT", 0, 0)
+    end
+
+    -- Le bouton reste cliquable bloc verrouillé : c'est un enfant qui
+    -- prend la souris lui-même, quand le cadre la rend au monde.
+    if opts.button then
+        local size = T.SIZE.TEXT_BLOCK_BUTTON
+        local button = CreateFrame("Button", nil, panel)
+        button:SetSize(size, size)
+        button:SetPoint("TOPLEFT", panel, "TOPRIGHT", T.SIZE.TEXT_BLOCK_BUTTON_GAP - pad, -pad)
+        button:SetNormalTexture(opts.button.texture)
+        button:SetHighlightTexture(T.TEXTURE.ICON_HIGHLIGHT, "ADD")
+        button:SetScript("OnClick", function()
+            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+            opts.button.onClick()
+        end)
+        W.Tooltip(button, opts.button.title, opts.button.tooltip)
+        panel.Button = button
     end
 
     --- ligne -> morceau -> texte. Créés à la demande, jamais détruits (règle 7) :

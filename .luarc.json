@@ -84,7 +84,6 @@
     "UnitHealth", "UnitHealthMax", "AbbreviateNumbers", "PersonalResourceDisplayFrame",
     "UnitHealthPercent", "UnitPowerPercent", "CurveConstants",
     "UnitXP", "UnitXPMax", "GetQuestLogRewardXP", "GetMaxPlayerLevel", "IsPlayerAtEffectiveMaxLevel",
-    "BreakUpLargeNumbers",
     "StatusTrackingBarManager", "StatusTrackingBarInfo",
     "UnitThreatSituation", "GetSpecializationRole",
     "UnitExists", "UnitIsPlayer", "UnitIsUnit", "UnitClass", "UnitGUID",

@@ -252,8 +252,13 @@ end
 ---@return string
 local function formatNumber(value)
     local whole = math.floor(value + 0.5)
-    if BreakUpLargeNumbers then return BreakUpLargeNumbers(whole) end
-    return tostring(whole)
+    if whole < 1000 then return tostring(whole) end
+
+    -- 1 000 → « 1k », 48 250 → « 48,3k », 1 200 000 → « 1,2M ».
+    local unit, scaled = L["Thousands"], whole / 1000
+    if whole >= 1000000 then unit, scaled = L["Millions"], whole / 1000000 end
+    local text = ("%.1f"):format(scaled):gsub("%.0$", ""):gsub("%.", L["Decimal separator"])
+    return unit:format(text)
 end
 
 ---@param seconds number
@@ -326,6 +331,15 @@ local function applyRate(mod)
             end,
             getScale   = function() return mod:Get("xpRateScale") end,
             setScale   = function(scale) mod:Set("xpRateScale", scale) end,
+            button     = {
+                texture = T.TEXTURE.TEXT_BLOCK_RESET,
+                title   = L["Reset XP rate"],
+                tooltip = L["Reset XP rate tip"],
+                onClick = function()
+                    startSession()
+                    if rateBlock then rateBlock:Refresh() end
+                end,
+            },
         })
         if not rateBlock then return end
     end

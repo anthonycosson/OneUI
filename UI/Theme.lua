@@ -582,6 +582,10 @@ T.SIZE = {
     TEXT_BLOCK_PIECE_GAP = 0,
     TEXT_BLOCK_SCALE_MIN = 0.5,
     TEXT_BLOCK_SCALE_MAX = 2.5,
+    -- Petit bouton posé à droite de la première ligne (la remise à zéro de
+    -- l'XP par heure) : la hauteur d'une ligne, un écart pour ne pas coller.
+    TEXT_BLOCK_BUTTON     = 14,
+    TEXT_BLOCK_BUTTON_GAP = 4,
 
     -- Aperçu de la fenêtre de jet de butin. Ces deux nombres ne sont pas un
     -- goût : ce sont les mesures du cadre de jet du client
@@ -2190,6 +2194,9 @@ end
 --- Toute nouvelle entrée passe par ici : aucun chemin littéral dans un widget.
 T.TEXTURE = {
     RESIZE_GRIP = "Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up",
+    -- Flèche circulaire du bouton « Actualiser » du client : la remise à zéro
+    -- d'un bloc de texte (`W.TextBlock`).
+    TEXT_BLOCK_RESET = "Interface\\Buttons\\UI-RefreshButton",
     -- Bandeau des en-têtes de catégorie. Une pierre tuilable du client, présente
     -- depuis toujours et jamais retouchée : c'est ce grain-là qui distingue un
     -- en-tête d'un aplat de couleur, et qui le rapproche du panneau Options.
