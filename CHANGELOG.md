@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.10.1 — 2026-11-19
+
 ### Added
 - Quests: a small reset button next to the XP per hour text starts the average over.
 

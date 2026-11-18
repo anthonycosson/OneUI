@@ -1,6 +1,8 @@
-## 3.10.0 — 2026-11-18
+## 3.10.1 — 2026-11-19
 
 ### Added
-- Quests: **Show XP per hour and time to next level**, a small text on screen in
-  the style of the profession levels. The average covers the current session.
+- Quests: a small reset button next to the XP per hour text starts the average over.
+
+### Changed
+- Quests: XP per hour reads in thousands, such as 48.3k instead of 48,250.
 
