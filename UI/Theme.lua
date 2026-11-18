@@ -931,6 +931,8 @@ T.TIMING = {
     -- plusieurs, une ouverture du journal aussi. Le total de XP des quêtes
     -- terminées ne se refait qu'une fois la rafale passée.
     QUEST_XP_SETTLE = 0.2,
+    -- Relecture de l'XP par heure, qui baisse aussi quand rien ne se passe.
+    XP_RATE_TICK = 5,
 
     -- Cadence du chrono d'aperçu des paliers de clé. Une seconde, parce que
     -- c'est la vitesse à laquelle un chrono court : l'aperçu doit se lire comme

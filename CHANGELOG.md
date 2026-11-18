@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+- Quests: **Show XP per hour and time to next level**, a small text on screen in
+  the style of the profession levels. The average covers the current session.
+
 ## 3.9.2 — 2026-11-18
 
 ### Fixed

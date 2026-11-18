@@ -84,6 +84,16 @@ OUI:RegisterLocale("enUS", {
     ["Completed quests XP tip"] =
         "On the game's experience bar, a green fill shows where your XP will be once you "
         .. "turn in the quests you have completed.",
+    ["Show XP rate"]            = "Show XP per hour and time to next level",
+    ["Show XP rate tip"] =
+        "A small text on screen, in the style of the profession levels. The average counts "
+        .. "the XP gained since you logged in or last reloaded the interface.",
+    ["XP per hour"]             = "XP per hour",
+    ["Time to level"]           = "Next level",
+    ["XP rate waiting"]         = "waiting for XP",
+    ["Stat line"]               = "%s: %s",
+    ["Duration minutes"]        = "%d min",
+    ["Duration hours"]          = "%d h %02d min",
     ["None"]                    = "None",
     ["Shift"]                   = "Shift",
     ["Ctrl"]                    = "Ctrl",

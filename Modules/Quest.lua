@@ -200,6 +200,151 @@ local queueQuestXP = U.Debounce(T.TIMING.QUEST_XP_SETTLE, function()
 end)
 
 -- =========================================================================
+--  XP par heure
+-- =========================================================================
+-- Moyenne de la session : l'XP gagnée depuis la connexion (ou le dernier
+-- `/reload`), divisée par le temps écoulé. Le temps avant le niveau suivant
+-- en découle. Un niveau franchi compte ce qui restait à faire au niveau
+-- d'avant, puis ce qui est déjà fait au nouveau.
+
+local session = {}
+
+--- L'XP du joueur et le maximum du niveau, ou rien quand le client les tait.
+---@return number|nil xp, number|nil max
+local function readXP()
+    local xp, max = UnitXP("player"), UnitXPMax("player")
+    if type(xp) ~= "number" or type(max) ~= "number" then return nil, nil end
+    if U.IsSecret(xp) or U.IsSecret(max) then return nil, nil end
+    return xp, max
+end
+
+---@return boolean
+local function atMaxLevel()
+    if IsPlayerAtEffectiveMaxLevel then return U.IsTrue(IsPlayerAtEffectiveMaxLevel()) end
+    if GetMaxPlayerLevel then return UnitLevel("player") >= GetMaxPlayerLevel() end
+    return false
+end
+
+local function startSession()
+    session.start  = GetTime()
+    session.gained = 0
+    session.xp, session.max = readXP()
+    session.level  = UnitLevel("player")
+end
+
+--- L'XP a bougé : ajoute ce qui a été gagné depuis la dernière lecture.
+local function countXP()
+    local xp, max = readXP()
+    if not xp then return end
+
+    local level = UnitLevel("player")
+    if session.xp and session.max then
+        if level > (session.level or level) then
+            session.gained = session.gained + (session.max - session.xp) + xp
+        elseif xp > session.xp then
+            session.gained = session.gained + (xp - session.xp)
+        end
+    end
+    session.xp, session.max, session.level = xp, max, level
+end
+
+---@param value number
+---@return string
+local function formatNumber(value)
+    local whole = math.floor(value + 0.5)
+    if BreakUpLargeNumbers then return BreakUpLargeNumbers(whole) end
+    return tostring(whole)
+end
+
+---@param seconds number
+---@return string
+local function formatDuration(seconds)
+    local minutes = math.ceil(seconds / 60)
+    if minutes < 60 then return L["Duration minutes"]:format(minutes) end
+    return L["Duration hours"]:format(math.floor(minutes / 60), minutes % 60)
+end
+
+--- Lignes du bloc, réemployées (règle 7).
+local rateLines, ratePieces = {}, {}
+
+---@param line number
+---@param label string
+---@param value string
+local function rateLine(line, label, value)
+    local pieces = ratePieces[line] or {}
+    ratePieces[line] = pieces
+    pieces[1] = L["Stat line"]:format(T.COLOR.NORMAL:WrapTextInColorCode(label), value)
+    rateLines[line] = pieces
+end
+
+---@return table
+local function collectRate()
+    wipe(rateLines)
+    if atMaxLevel() or not session.start then return rateLines end
+
+    local xp, max = readXP()
+    if not xp then return rateLines end
+
+    local elapsed = GetTime() - session.start
+    local perHour = elapsed > 0 and session.gained / elapsed * 3600 or 0
+
+    if perHour <= 0 then
+        rateLine(1, L["XP per hour"], L["XP rate waiting"])
+        rateLine(2, L["Time to level"], L["XP rate waiting"])
+        return rateLines
+    end
+
+    rateLine(1, L["XP per hour"], formatNumber(perHour))
+    rateLine(2, L["Time to level"], formatDuration((max - xp) / perHour * 3600))
+    return rateLines
+end
+
+local rateBlock
+---@type table|nil
+local rateTicker
+
+---@param mod table
+local function applyRate(mod)
+    if not (mod:IsEnabled() and mod:Get("showXPRate")) then
+        if rateBlock then rateBlock:Stop() end
+        if rateTicker then
+            rateTicker:Cancel()
+            rateTicker = nil
+        end
+        return
+    end
+
+    if not rateBlock then
+        rateBlock = W.TextBlock({
+            lines      = collectRate,
+            isLocked   = function() return mod:Get("lockXPRate") == true end,
+            isCentered = function() return mod:Get("centerXPRate") == true end,
+            getPos     = function() return mod:Get("xpRateX"), mod:Get("xpRateY") end,
+            setPos     = function(x, y)
+                mod:Set("xpRateX", x)
+                mod:Set("xpRateY", y)
+            end,
+            getScale   = function() return mod:Get("xpRateScale") end,
+            setScale   = function(scale) mod:Set("xpRateScale", scale) end,
+        })
+        if not rateBlock then return end
+    end
+
+    rateBlock:ApplyScale()
+    rateBlock:ApplyLock()
+    rateBlock:ApplyPosition()
+    rateBlock:Refresh()
+
+    -- La moyenne baisse aussi quand rien ne se passe : le bloc se relit à
+    -- intervalle lent, et seulement tant qu'il est allumé (règle 7).
+    if not rateTicker then
+        rateTicker = C_Timer.NewTicker(T.TIMING.XP_RATE_TICK, function()
+            if rateBlock then rateBlock:Refresh() end
+        end)
+    end
+end
+
+-- =========================================================================
 --  Déclaration du module
 -- =========================================================================
 
@@ -221,6 +366,15 @@ OUI:RegisterModule(MODULE, {
         skipTrivial    = false,
         bypassModifier = "SHIFT",
         questXPBar     = false,
+
+        showXPRate   = false,
+        lockXPRate   = false,
+        centerXPRate = false,
+        -- Position et échelle du bloc : il se fait glisser, et sa taille se
+        -- règle par son coin ou par la glissière.
+        xpRateX      = 0,
+        xpRateY      = 0,
+        xpRateScale  = 1,
     },
 
     options = {
@@ -265,10 +419,58 @@ OUI:RegisterModule(MODULE, {
             text    = L["Completed quests XP"],
             tooltip = L["Completed quests XP tip"],
         },
+        {
+            type    = "toggle",
+            key     = "showXPRate",
+            text    = L["Show XP rate"],
+            tooltip = L["Show XP rate tip"],
+        },
+        {
+            type     = "toggle",
+            key      = "lockXPRate",
+            edit     = "lock",
+            text     = L["Lock profession levels"],
+            tooltip  = L["Lock profession levels tip"],
+            disabled = function()
+                local mod = OUI.Modules:Get(MODULE)
+                return not (mod and mod:Get("showXPRate"))
+            end,
+        },
+        {
+            type     = "toggle",
+            key      = "centerXPRate",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
+            disabled = function()
+                local mod = OUI.Modules:Get(MODULE)
+                return not (mod and mod:Get("showXPRate"))
+            end,
+        },
+        {
+            type     = "slider",
+            key      = "xpRateScale",
+            text     = L["Frame scale"],
+            tooltip  = L["Frame scale tip"],
+            min      = T.SIZE.TEXT_BLOCK_SCALE_MIN,
+            max      = T.SIZE.TEXT_BLOCK_SCALE_MAX,
+            step     = T.SIZE.FRAME_SCALE_STEP,
+            decimals = 2,
+            disabled = function()
+                local mod = OUI.Modules:Get(MODULE)
+                return not (mod and mod:Get("showXPRate"))
+            end,
+        },
     },
 
     OnEnable = function(self)
         applyQuestXP(self)
+
+        startSession()
+        applyRate(self)
+        self:RegisterEvent("PLAYER_XP_UPDATE", function()
+            countXP()
+            if rateBlock and self:Get("showXPRate") then rateBlock:Refresh() end
+        end)
 
         -- Une quête remplie, rendue, abandonnée ; l'XP qui bouge ; un niveau
         -- de plus, qui change le maximum de la barre.
@@ -296,11 +498,13 @@ OUI:RegisterModule(MODULE, {
 
     -- Le vert posé sur la barre d'XP se cache ; le reste — les abonnements,
     -- le crochet de taille rendu inerte — est défait par le core.
-    OnDisable = function()
+    OnDisable = function(self)
         W.QuestXPFill.Hide()
+        applyRate(self)
     end,
 
     OnSettingChanged = function(self)
         applyQuestXP(self)
+        applyRate(self)
     end,
 })

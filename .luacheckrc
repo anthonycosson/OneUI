@@ -187,7 +187,8 @@ read_globals = {
     -- sur un secret est refusée, on ne peut donc pas le calculer nous-mêmes.
     "UnitHealth", "UnitHealthMax", "AbbreviateNumbers",
     "UnitHealthPercent", "UnitPowerPercent", "CurveConstants",
-    "UnitXP", "UnitXPMax", "GetQuestLogRewardXP",
+    "UnitXP", "UnitXPMax", "GetQuestLogRewardXP", "GetMaxPlayerLevel", "IsPlayerAtEffectiveMaxLevel",
+    "BreakUpLargeNumbers",
     "StatusTrackingBarManager", "StatusTrackingBarInfo",
     "UnitThreatSituation", "GetSpecializationRole",
 

@@ -198,6 +198,16 @@ OUI:RegisterLocale("frFR", {
     ["Completed quests XP tip"] =
         "Sur la barre d'expérience du jeu, un remplissage vert montre où sera votre XP "
         .. "une fois rendues les quêtes que vous avez terminées.",
+    ["Show XP rate"]            = "Afficher l'XP par heure et le temps avant le prochain niveau",
+    ["Show XP rate tip"] =
+        "Un petit texte à l'écran, au format des niveaux de métiers. La moyenne compte l'XP "
+        .. "gagnée depuis la connexion ou le dernier rechargement de l'interface.",
+    ["XP per hour"]             = "XP par heure",
+    ["Time to level"]           = "Prochain niveau",
+    ["XP rate waiting"]         = "en attente d'XP",
+    ["Stat line"]               = "%s : %s",
+    ["Duration minutes"]        = "%d min",
+    ["Duration hours"]          = "%d h %02d min",
     ["None"]                    = "Aucune",
     ["Shift"]                   = "Maj",
     ["Ctrl"]                    = true,
