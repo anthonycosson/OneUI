@@ -99,6 +99,7 @@ OUI:RegisterLocale("enUS", {
     ["Stat line"]               = "%s: %s",
     ["Duration minutes"]        = "%d min",
     ["Duration hours"]          = "%d h %02d min",
+    ["Duration days"]           = "%d d %d h",
     ["None"]                    = "None",
     ["Shift"]                   = "Shift",
     ["Ctrl"]                    = "Ctrl",
@@ -1271,6 +1272,25 @@ OUI:RegisterLocale("enUS", {
     ["Lock craft timer tip"] =
         "Freezes the frame where it is and puts its resize handle away. Drag the frame to "
         .. "move it, drag its bottom-right corner to resize it.",
+    ["Profession cooldowns"]           = "Cooldowns",
+    ["Show profession cooldowns"]      = "Show profession cooldowns",
+    ["Show profession cooldowns tip"] =
+        "An icon on screen for each long cooldown you know (transmutes, Mooncloth, Salt "
+        .. "Shaker), with \"Available\" in green or the time left.",
+    ["Profession cooldowns preview"]   = "Preview",
+    ["Profession cooldowns preview tip"] =
+        "Shows every cooldown with sample times so you can position the frame, even the "
+        .. "ones this character does not have.",
+    ["Lock profession cooldowns"]      = "Lock the cooldowns",
+    ["Lock profession cooldowns tip"] =
+        "Freezes the frame where it is and puts its resize handle away. Drag the frame to "
+        .. "move it, drag its bottom-right corner to resize it.",
+    ["Icon spacing"]                   = "Spacing",
+    ["Icon spacing tip"]               = "Space between two icons, in pixels.",
+    ["Cooldown ready"]                 = "Available",
+    ["Transmute cooldown"]             = "Transmutes",
+    ["Mooncloth cooldown"]             = "Mooncloth",
+    ["Salt shaker cooldown"]           = "Salt Shaker",
 
     -- =====================================================================
     --  Inutile mais indispensable — Emotes

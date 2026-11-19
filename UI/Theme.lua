@@ -555,6 +555,14 @@ T.SIZE = {
     BADGE_ICON = 56,
     BADGE_GAP  = 4,
     BADGE_PER_ROW_MAX = 12,
+    -- Texte posé sous une icône (les recharges de métier : « Disponible » ou
+    -- le temps restant), centré dessous. Sa largeur sert aussi l'écart par
+    -- défaut des recharges, pour que deux textes voisins ne se touchent pas.
+    BADGE_LABEL_W   = 80,
+    BADGE_LABEL_H   = 16,
+    BADGE_LABEL_GAP = 2,
+    -- Borne du réglage d'espacement entre deux icônes, en pixels.
+    BADGE_GAP_MAX   = 60,
 
     -- Le cran des glissières « Taille » des cadres, et les bornes de la
     -- fenêtre de jet de butin (les mêmes que la molette, voir `UI/Move.lua`).
@@ -937,6 +945,12 @@ T.TIMING = {
     QUEST_XP_SETTLE = 0.2,
     -- Relecture de l'XP par heure, qui baisse aussi quand rien ne se passe.
     XP_RATE_TICK = 5,
+    -- Relecture des recharges de métier, et la durée en dessous de laquelle
+    -- une recharge n'est que le temps global : le sort est alors disponible.
+    PROFESSION_CD_TICK = 1,
+    GCD_MAX            = 2,
+    -- Temps restant d'exemple, sur les cases d'aperçu : 1 j 6 h.
+    PROFESSION_CD_SAMPLE = 30 * 3600,
 
     -- Cadence du chrono d'aperçu des paliers de clé. Une seconde, parce que
     -- c'est la vitesse à laquelle un chrono court : l'aperçu doit se lire comme
@@ -1048,6 +1062,8 @@ local FONT_CANDIDATES = {
     -- d'amélioration). Une police à contour, pour la même raison que le
     -- décompte : le chiffre se lit par-dessus une illustration.
     SLOT_BADGE   = { "NumberFont_Outline_Med", "NumberFontNormalSmall", "GameFontNormalSmall" },
+    -- Texte sous une icône de `W.IconBadge`. À contour, comme le bloc de texte.
+    BADGE_LABEL  = { "GameFontHighlightOutline", "GameFontHighlightSmall" },
 
     -- Texte du bandeau posé à côté d'un emplacement. La plus petite police
     -- lisible du client : seize bandeaux tiennent dans la hauteur de la fiche.

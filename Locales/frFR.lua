@@ -213,6 +213,7 @@ OUI:RegisterLocale("frFR", {
     ["Stat line"]               = "%s : %s",
     ["Duration minutes"]        = "%d min",
     ["Duration hours"]          = "%d h %02d min",
+    ["Duration days"]           = "%d j %d h",
     ["None"]                    = "Aucune",
     ["Shift"]                   = "Maj",
     ["Ctrl"]                    = true,
@@ -1301,6 +1302,25 @@ OUI:RegisterLocale("frFR", {
     ["Lock craft timer tip"] =
         "Fige le cadre où il est et range sa poignée. Glissez le cadre pour le déplacer, "
         .. "son coin bas-droit pour le redimensionner.",
+    ["Profession cooldowns"]           = "Recharges",
+    ["Show profession cooldowns"]      = "Afficher les recharges de métier",
+    ["Show profession cooldowns tip"] =
+        "Une icône à l'écran pour chaque longue recharge que vous connaissez (transmutations, "
+        .. "étoffe lunaire, salière), avec « Disponible » en vert ou le temps restant.",
+    ["Profession cooldowns preview"]   = "Aperçu",
+    ["Profession cooldowns preview tip"] =
+        "Montre toutes les recharges avec des temps d'exemple pour placer le cadre, même "
+        .. "celles que ce personnage n'a pas.",
+    ["Lock profession cooldowns"]      = "Verrouiller les recharges",
+    ["Lock profession cooldowns tip"] =
+        "Fige le cadre où il est et range sa poignée. Glissez le cadre pour le déplacer, "
+        .. "son coin bas-droit pour le redimensionner.",
+    ["Icon spacing"]                   = "Espacement",
+    ["Icon spacing tip"]               = "L'écart entre deux icônes, en pixels.",
+    ["Cooldown ready"]                 = "Disponible",
+    ["Transmute cooldown"]             = "Transmutations",
+    ["Mooncloth cooldown"]             = "Étoffe lunaire",
+    ["Salt shaker cooldown"]           = "Salière",
 
     -- =====================================================================
     --  Inutile mais indispensable — Emotes

@@ -804,6 +804,204 @@ local function enableCraft(mod)
 end
 
 -- =========================================================================
+--  Les recharges
+-- =========================================================================
+
+--- Les créations à recharge longue. Une icône par entrée, montrée seulement
+--- si le personnage connaît le sort ou porte l'objet. Les transmutations
+--- partagent une seule recharge : une icône pour toutes, celle de la
+--- première connue. Identifiants de Classic Era, notés dans
+--- `dev/docs/API_NOTES.md`.
+local COOLDOWNS = {
+    {
+        title  = "Transmute cooldown",
+        spells = {
+            17187, -- Arcanite
+            11479, -- Fer en or
+            11480, -- Mithril en vrai-argent
+            17559, 17560, 17561, 17562, -- Air, feu, terre, eau
+            17563, 17564, 17565, 17566, -- Eau / non-mort, terre / vie
+            25146, -- Feu élémentaire
+        },
+    },
+    { title = "Mooncloth cooldown", spells = { 18560 } },
+    { title = "Salt shaker cooldown", item = 15846 },
+}
+
+local cooldownBadge
+---@type table|nil
+local cooldownTicker
+
+---@param id number
+---@return boolean
+local function knowsSpell(id)
+    if IsPlayerSpell then return IsPlayerSpell(id) == true end
+    return IsSpellKnown ~= nil and IsSpellKnown(id) == true
+end
+
+--- Le sort connu d'une entrée, ou `nil`.
+---@param entry table
+---@return number|nil
+local function knownSpell(entry)
+    if not entry.spells then return nil end
+    for i = 1, #entry.spells do
+        if knowsSpell(entry.spells[i]) then return entry.spells[i] end
+    end
+    return nil
+end
+
+---@return boolean
+local function cooldownPreview()
+    local mod = OUI.Modules:Get(MODULE)
+    return mod ~= nil and mod:Get("previewCooldowns") == true
+end
+
+--- Le personnage a-t-il cette recharge : le sort appris, ou l'objet en sac ?
+---@param entry table
+---@return boolean
+local function owned(entry)
+    if entry.item then
+        return C_Item ~= nil and C_Item.GetItemCount ~= nil and C_Item.GetItemCount(entry.item) > 0
+    end
+    return knownSpell(entry) ~= nil
+end
+
+---@param entry table
+---@return boolean
+local function cooldownShown(entry)
+    -- L'aperçu montre toutes les cases : il sert à placer le cadre.
+    return cooldownPreview() or owned(entry)
+end
+
+---@param entry table
+---@return any
+local function cooldownIcon(entry)
+    if entry.item then
+        return C_Item and C_Item.GetItemIconByID and C_Item.GetItemIconByID(entry.item)
+    end
+    -- En aperçu, un sort inconnu prête quand même son image : le client la
+    -- donne pour n'importe quel sort.
+    local spell = knownSpell(entry) or (cooldownPreview() and entry.spells[1])
+    if not spell then return nil end
+    if C_Spell and C_Spell.GetSpellTexture then return C_Spell.GetSpellTexture(spell) end
+    return GetSpellTexture and GetSpellTexture(spell)
+end
+
+--- Début et durée de la recharge, quelle que soit la forme de l'API.
+---@param entry table
+---@return number|nil start
+---@return number|nil duration
+local function readCooldown(entry)
+    if entry.item then
+        local get = (C_Container and C_Container.GetItemCooldown) or GetItemCooldown
+        if not get then return nil end
+        return get(entry.item)
+    end
+
+    local spell = knownSpell(entry)
+    if not spell then return nil end
+    if C_Spell and C_Spell.GetSpellCooldown then
+        local info = C_Spell.GetSpellCooldown(spell)
+        if not info then return nil end
+        return info.startTime, info.duration
+    end
+    if GetSpellCooldown then return GetSpellCooldown(spell) end
+    return nil
+end
+
+---@param seconds number
+---@return string
+local function formatCooldown(seconds)
+    local minutes = math.ceil(seconds / 60)
+    if minutes < 60 then return L["Duration minutes"]:format(minutes) end
+    local hours = math.floor(minutes / 60)
+    if hours < 24 then return L["Duration hours"]:format(hours, minutes % 60) end
+    return L["Duration days"]:format(math.floor(hours / 24), hours % 24)
+end
+
+--- « Disponible » en vert, ou le temps restant.
+---@param entry table
+---@return string|nil
+local function cooldownLabel(entry)
+    -- Une case d'aperçu que le personnage n'a pas : un exemple de chaque
+    -- état, disponible pour la première, un temps restant pour les autres.
+    if not owned(entry) then
+        if entry == COOLDOWNS[1] then return T.COLOR.GREEN:WrapTextInColorCode(L["Cooldown ready"]) end
+        return formatCooldown(T.TIMING.PROFESSION_CD_SAMPLE)
+    end
+
+    local start, duration = readCooldown(entry)
+    if U.IsSecret(start) or U.IsSecret(duration) then return nil end
+
+    -- Le temps global n'est pas une recharge : le sort est disponible.
+    if not start or not duration or start <= 0 or duration <= T.TIMING.GCD_MAX then
+        return T.COLOR.GREEN:WrapTextInColorCode(L["Cooldown ready"])
+    end
+
+    local remaining = start + duration - GetTime()
+    if remaining <= 0 then
+        return T.COLOR.GREEN:WrapTextInColorCode(L["Cooldown ready"])
+    end
+    return formatCooldown(remaining)
+end
+
+---@param mod table
+local function applyCooldowns(mod)
+    if not (mod:IsEnabled() and mod:Get("showCooldowns")) then
+        if cooldownBadge then cooldownBadge:Stop() end
+        if cooldownTicker then
+            cooldownTicker:Cancel()
+            cooldownTicker = nil
+        end
+        return
+    end
+
+    if not cooldownBadge then
+        local slots = {}
+        for i = 1, #COOLDOWNS do
+            local entry = COOLDOWNS[i]
+            slots[i] = {
+                shown = function() return cooldownShown(entry) end,
+                icon  = function() return cooldownIcon(entry) end,
+                label = function() return cooldownLabel(entry) end,
+                title = L[entry.title],
+            }
+        end
+
+        cooldownBadge = W.IconBadge({
+            slots      = slots,
+            -- Les icônes seules, sans fond ni bordure : elles se lisent
+            -- par-dessus le jeu comme le texte qu'elles portent.
+            chrome     = "none",
+            getGap     = function() return mod:Get("cooldownsGap") end,
+            isLocked   = function() return mod:Get("lockCooldowns") == true end,
+            isCentered = function() return mod:Get("centerCooldowns") == true end,
+            getPos     = function() return mod:Get("cooldownsX"), mod:Get("cooldownsY") end,
+            setPos     = function(x, y)
+                mod:Set("cooldownsX", x)
+                mod:Set("cooldownsY", y)
+            end,
+            getScale   = function() return mod:Get("cooldownsScale") end,
+            setScale   = function(scale) mod:Set("cooldownsScale", scale) end,
+        })
+        if not cooldownBadge then return end
+    end
+
+    cooldownBadge:ApplyScale()
+    cooldownBadge:ApplyLock()
+    cooldownBadge:ApplyPosition()
+    cooldownBadge:Refresh()
+
+    -- Le temps restant défile : relu à intervalle lent, et seulement tant
+    -- que le suivi est allumé (règle 7).
+    if not cooldownTicker then
+        cooldownTicker = C_Timer.NewTicker(T.TIMING.PROFESSION_CD_TICK, function()
+            if cooldownBadge then cooldownBadge:Refresh() end
+        end)
+    end
+end
+
+-- =========================================================================
 --  Déclaration du module
 -- =========================================================================
 
@@ -880,6 +1078,17 @@ OUI:RegisterModule(MODULE, {
         craftBarX       = 0,
         craftBarY       = -(T.SIZE.COUNTDOWN_TEXT + T.SIZE.SECTION_H + T.SIZE.TOOL_PAD * 2),
         craftBarScale   = 1,
+
+        showCooldowns   = false,
+        previewCooldowns = false,
+        lockCooldowns   = false,
+        centerCooldowns = false,
+        -- Mêmes réglages sans contrôle que ceux du cadre de récolte.
+        cooldownsX      = 0,
+        cooldownsY      = 0,
+        cooldownsScale  = 1,
+        -- Assez pour que deux « Disponible » côte à côte ne se touchent pas.
+        cooldownsGap    = T.SIZE.BADGE_LABEL_W - T.SIZE.BADGE_ICON + T.SIZE.BADGE_GAP,
     },
 
     options = {
@@ -978,6 +1187,48 @@ OUI:RegisterModule(MODULE, {
         },
         scaleRow("craftBarScale", "showCraftBar", T.SIZE.TIMER_SCALE_MIN, T.SIZE.TIMER_SCALE_MAX),
 
+        { type = "header", text = L["Profession cooldowns"] },
+        {
+            type    = "toggle",
+            key     = "showCooldowns",
+            text    = L["Show profession cooldowns"],
+            tooltip = L["Show profession cooldowns tip"],
+        },
+        {
+            type     = "toggle",
+            key      = "previewCooldowns",
+            edit     = "preview",
+            text     = L["Profession cooldowns preview"],
+            tooltip  = L["Profession cooldowns preview tip"],
+            disabled = requires("showCooldowns"),
+        },
+        {
+            type     = "toggle",
+            key      = "lockCooldowns",
+            edit     = "lock",
+            text     = L["Lock profession cooldowns"],
+            tooltip  = L["Lock profession cooldowns tip"],
+            disabled = requires("showCooldowns"),
+        },
+        {
+            type     = "toggle",
+            key      = "centerCooldowns",
+            text     = L["Center on screen"],
+            tooltip  = L["Center on screen tip"],
+            disabled = requires("showCooldowns"),
+        },
+        scaleRow("cooldownsScale", "showCooldowns", T.SIZE.BADGE_SCALE_MIN, T.SIZE.BADGE_SCALE_MAX),
+        {
+            type     = "slider",
+            key      = "cooldownsGap",
+            text     = L["Icon spacing"],
+            tooltip  = L["Icon spacing tip"],
+            min      = 0,
+            max      = T.SIZE.BADGE_GAP_MAX,
+            step     = 1,
+            disabled = requires("showCooldowns"),
+        },
+
         { type = "header", text = L["Fishing"] },
         {
             type    = "keybind",
@@ -1004,6 +1255,7 @@ OUI:RegisterModule(MODULE, {
         applyLevels(self)
         enableFishing(self)
         enableCraft(self)
+        applyCooldowns(self)
 
         -- Le client annonce chaque changement de suivi : c'est l'événement qui
         -- allume et éteint les icônes.
@@ -1024,7 +1276,8 @@ OUI:RegisterModule(MODULE, {
         self:RegisterEvent("CHAT_MSG_SKILL", queueLevels)
     end,
 
-    OnDisable = function()
+    OnDisable = function(self)
+        applyCooldowns(self)
         if badge then badge:Stop() end
         if levelsBlock then levelsBlock:Stop() end
         stopBatch()
@@ -1036,6 +1289,7 @@ OUI:RegisterModule(MODULE, {
         apply(self)
         applyLevels(self)
         applyCraftBar(self)
+        applyCooldowns(self)
         fishingSettingChanged(self)
     end,
 })

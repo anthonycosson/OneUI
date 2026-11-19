@@ -5561,3 +5561,21 @@ ce qui limite les cris et les auras à lui.
 Plats « Bien nourri » : identifiants relevés dans les données publiques de JustAC
 (`Data/ForeverConsumables.lua`), triés par points de vie rendus, pas vérifiés en
 jeu.
+
+## Les recharges de métier (Classic Era)
+
+Identifiants tirés de bases de données publiques de Classic Era, **non
+vérifiés en jeu** sur *Forever* :
+
+- Transmutations, une recharge partagée : Arcanite 17187, Fer en or 11479,
+  Mithril en vrai-argent 11480, Air en feu 17559, Feu en terre 17560, Terre
+  en eau 17561, Eau en air 17562, Eau en non-mort 17563, Non-mort en eau
+  17564, Terre en vie 17565, Vie en terre 17566, Feu élémentaire 25146.
+- Étoffe lunaire : sort 18560.
+- Salière (travail du cuir) : objet 15846, recharge lue par
+  `C_Container.GetItemCooldown`, ou `GetItemCooldown` à défaut.
+
+La recharge d'un sort se lit par `C_Spell.GetSpellCooldown` (une table), ou
+`GetSpellCooldown` (deux nombres) à défaut. Une durée de 2 s ou moins n'est
+que le temps global : le sort est disponible. Seul le personnage connecté est
+lu : le client ne donne pas la recharge d'un autre personnage.

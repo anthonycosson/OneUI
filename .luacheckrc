@@ -74,7 +74,7 @@ read_globals = {
     -- la rotation de donjons de la saison en cours, et la téléportation de
     -- chacun quand le client la publie.
     "C_ToyBox", "PlayerHasToy", "C_Spell", "GetSpellInfo",
-    "IsSpellKnown", "IsPlayerSpell", "C_ChallengeMode",
+    "IsSpellKnown", "IsPlayerSpell", "C_ChallengeMode", "GetSpellTexture", "GetSpellCooldown",
     -- Le grimoire : c'est là que se trouvent les téléportations de donjon hors
     -- saison, que le client ne publie nulle part ailleurs. Elles y sont rangées
     -- par extension dans des **tiroirs**, d'où les deux fonctions de flyout —

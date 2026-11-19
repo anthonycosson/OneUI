@@ -39,6 +39,7 @@
 
     "C_ToyBox", "PlayerHasToy", "C_Spell", "GetSpellInfo", "GetItemCooldown",
     "IsSpellKnown", "IsPlayerSpell", "C_ChallengeMode", "C_SpellBook", "GetNumExpansions",
+    "GetSpellTexture", "GetSpellCooldown",
     "GetFlyoutInfo", "GetFlyoutSlotInfo",
     "CreateMacro", "EditMacro", "GetMacroIndexByName",
     "GetMouseFoci", "GetMouseFocus", "WorldFrame",

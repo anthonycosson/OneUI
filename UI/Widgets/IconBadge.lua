@@ -40,6 +40,7 @@ local W    = OUI.Widgets
 ---@field reserved? fun(): boolean  garde-t-elle sa place dans la rangée ? (`fixedSlots`)
 ---@field action? fun(): table|nil   attributs de l'action sécurisée du clic (`type`, `spell`, `unit`, `macrotext`)
 ---@field count? fun(): number|nil   chiffre posé dans le coin de l'icône, montré à partir de 2
+---@field label? fun(): string|nil   texte posé sous l'icône (déjà coloré par l'appelant)
 
 ---@class OUI.IconBadgeOpts
 ---@field slots OUI.IconBadgeSlot[]
@@ -47,6 +48,8 @@ local W    = OUI.Widgets
 ---@field setPos? fun(x: number, y: number)
 ---@field isLocked? fun(): boolean
 ---@field isCentered? fun(): boolean
+---@field getGap? fun(): number|nil  écart entre deux cases, en pixels (`T.SIZE.BADGE_GAP` par défaut)
+---@field chrome? string            habillage du cadre (`W.Panel`) ; "none" pour les icônes seules
 ---@field fixedSlots? boolean        chaque case garde sa place, même quand une voisine est cachée
 ---@field getScale? fun(): number|nil
 ---@field setScale? fun(scale: number)
@@ -130,6 +133,7 @@ function W.IconBadge(opts)
     local panel = W.Panel({
         width    = T.SIZE.BADGE_ICON,
         height   = T.SIZE.BADGE_ICON,
+        chrome   = opts.chrome,
         getPos   = opts.getPos,
         setPos   = opts.setPos,
         isLocked = function()
@@ -163,6 +167,13 @@ function W.IconBadge(opts)
 
     local buttons = {}
 
+    -- Une case qui écrit sous son icône allonge toutes les cases de la
+    -- hauteur du texte : la grille reste régulière.
+    local labelled = false
+    for index = 1, #slots do
+        if slots[index].label then labelled = true end
+    end
+
     for index = 1, #slots do
         local slot   = slots[index]
         local template = slot.action and T.Template("SECURE_ACTION")
@@ -194,6 +205,15 @@ function W.IconBadge(opts)
             local count = button:CreateFontString(nil, "OVERLAY", T.FONT.SLOT_BADGE)
             count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -T.SIZE.BADGE_GAP, T.SIZE.BADGE_GAP)
             button.count = count
+        end
+
+        if slot.label then
+            local label = button:CreateFontString(nil, "OVERLAY", T.FONT.BADGE_LABEL)
+            label:SetPoint("TOP", button, "BOTTOM", 0, -T.SIZE.BADGE_LABEL_GAP)
+            label:SetWidth(T.SIZE.BADGE_LABEL_W)
+            label:SetJustifyH("CENTER")
+            label:SetWordWrap(false)
+            button.label = label
         end
 
         if slot.onClick then
@@ -252,10 +272,22 @@ function W.IconBadge(opts)
         local perRow, growth = layout()
         local columns = (perRow > 0 and perRow < count) and perRow or count
         local rows    = math.ceil(count / columns)
-        local icon, gap = T.SIZE.BADGE_ICON, T.SIZE.BADGE_GAP
-        local step    = icon + gap
+        local icon = T.SIZE.BADGE_ICON
+        local gap  = math.max(tonumber(opts.getGap and opts.getGap()) or T.SIZE.BADGE_GAP, 0)
 
-        panel:SetSize(columns * icon + (columns - 1) * gap, rows * icon + (rows - 1) * gap)
+        -- Une case a la largeur de l'icône : l'écart réglé est celui qu'on voit
+        -- entre deux icônes. Le texte, centré dessous, peut déborder de part
+        -- et d'autre ; c'est à l'écart de lui laisser la place. La case
+        -- grandit seulement de la hauteur du texte.
+        local labelH = labelled and (T.SIZE.BADGE_LABEL_GAP + T.SIZE.BADGE_LABEL_H) or 0
+        local cellW  = icon
+        local cellH  = icon + labelH
+        local insetX = 0
+        -- Vers le haut, la case part de son bas : l'icône monte de la hauteur
+        -- du texte pour le garder sous elle.
+        local insetY = growth.sy > 0 and labelH or 0
+
+        panel:SetSize(columns * cellW + (columns - 1) * gap, rows * cellH + (rows - 1) * gap)
 
         -- Posées depuis le coin d'où le cadre grandit, qui est aussi celui qui
         -- reste fixe à l'écran (voir `W.Panel`).
@@ -264,8 +296,8 @@ function W.IconBadge(opts)
             local button = buttons[visible[i]]
             button:ClearAllPoints()
             button:SetPoint(growth.corner, panel, growth.corner,
-                growth.sx * (place % columns) * step,
-                growth.sy * math.floor(place / columns) * step)
+                growth.sx * ((place % columns) * (cellW + gap) + insetX),
+                growth.sy * (math.floor(place / columns) * (cellH + gap) + insetY))
             button:Show()
         end
     end
@@ -291,6 +323,7 @@ function W.IconBadge(opts)
                     local n = slot.count()
                     button.count:SetText(n and n > 1 and tostring(n) or "")
                 end
+                if button.label then button.label:SetText(slot.label() or "") end
                 showing[#showing + 1] = index
             else
                 button:Hide()
