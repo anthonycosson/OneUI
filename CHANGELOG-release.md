@@ -1,8 +1,7 @@
-## 3.10.1 — 2026-11-19
+## 3.11.0 — 2026-11-19
 
 ### Added
-- Quests: a small reset button next to the XP per hour text starts the average over.
-
-### Changed
-- Quests: XP per hour reads in thousands, such as 48.3k instead of 48,250.
+- Professions: **Show profession cooldowns**, an icon on screen for each long
+  cooldown you know (transmutes, Mooncloth, Salt Shaker), with "Available" in
+  green or the time left.
 
