@@ -1,7 +1,6 @@
-## 3.11.0 — 2026-11-19
+## 3.11.1 — 2026-11-21
 
-### Added
-- Professions: **Show profession cooldowns**, an icon on screen for each long
-  cooldown you know (transmutes, Mooncloth, Salt Shaker), with "Available" in
-  green or the time left.
+### Fixed
+- Professions: a long cooldown started before logging in (such as a transmute)
+  now shows the right time left.
 
