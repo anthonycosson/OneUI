@@ -919,6 +919,9 @@ local function formatCooldown(seconds)
     return L["Duration days"]:format(math.floor(hours / 24), hours % 24)
 end
 
+--- Un tour complet du compteur du client, en secondes (2^32 ms).
+local CLOCK_WRAP = 2 ^ 32 / 1000
+
 --- « Disponible » en vert, ou le temps restant.
 ---@param entry table
 ---@return string|nil
@@ -938,7 +941,14 @@ local function cooldownLabel(entry)
         return T.COLOR.GREEN:WrapTextInColorCode(L["Cooldown ready"])
     end
 
-    local remaining = start + duration - GetTime()
+    -- Une longue recharge lancée avant la connexion revient avec un départ
+    -- **dans le futur** : le serveur l'a datée sur un compteur de 32 bits en
+    -- millisecondes, qui a fait le tour. Relevé sur *Forever* : départ
+    -- 4 227 623 s pour une heure de 10 047 s. Un tour en moins le remet en place.
+    local now = GetTime()
+    if start > now then start = start - CLOCK_WRAP end
+
+    local remaining = start + duration - now
     if remaining <= 0 then
         return T.COLOR.GREEN:WrapTextInColorCode(L["Cooldown ready"])
     end

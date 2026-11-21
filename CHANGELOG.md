@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+- Professions: a long cooldown started before logging in (such as a transmute)
+  now shows the right time left.
+
 ## 3.11.0 — 2026-11-19
 
 ### Added

@@ -5579,3 +5579,9 @@ La recharge d'un sort se lit par `C_Spell.GetSpellCooldown` (une table), ou
 `GetSpellCooldown` (deux nombres) à défaut. Une durée de 2 s ou moins n'est
 que le temps global : le sort est disponible. Seul le personnage connecté est
 lu : le client ne donne pas la recharge d'un autre personnage.
+
+Relevé sur *Forever* le 21 novembre 2026, transmutation (17187) en
+recharge après une reconnexion : `startTime` 4227623.95, `duration` 169200,
+`GetTime()` 10047.359. Le départ est **dans le futur** : un compteur de 32 bits
+en millisecondes a fait le tour. Retirer 2^32 / 1000 s au départ quand il
+dépasse `GetTime()` donne environ 25 h 30 restantes, la bonne valeur.
